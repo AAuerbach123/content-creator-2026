@@ -1,0 +1,24 @@
+# Abhaengigkeiten
+/node_modules
+
+# Next.js
+/.next/
+/out/
+
+# OpenNext / Wrangler
+/.open-next/
+/.wrangler/
+
+# Env
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# System
+.DS_Store
+Thumbs.db
+
+# TypeScript
+next-env.d.ts
+*.tsbuildinfo

@@ -1,0 +1,11 @@
+# Beispiel für lokalen wrangler-Preview.
+# Kopiere zu ".dev.vars" (im .gitignore) und fülle die Werte lokal aus.
+# Für "npm run dev" (Next.js dev) nutzt Next stattdessen .env.local.
+
+# Basic-Auth (Regel 5): nur online sinnvoll. Leer lassen = kein Schutz.
+APP_PASSWORD=
+
+# KI-Anbieter (spätere Phasen):
+# OPENAI_API_KEY=
+# ANTHROPIC_API_KEY=
+# ELEVENLABS_API_KEY=

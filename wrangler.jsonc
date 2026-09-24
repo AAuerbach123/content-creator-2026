@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "content-creator-2026",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-08-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "observability": {
+    "enabled": true
+  }
+  // Secrets (APP_PASSWORD, OPENAI_API_KEY, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY)
+  // werden ausschliesslich per `wrangler secret put …` gesetzt – nie ins Repo.
+}
