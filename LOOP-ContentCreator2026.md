@@ -81,7 +81,7 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 
 ### Phase 0 — Fundament
 - [x] Repo `content-creator-2026` initialisieren (Andreas legt GitHub-Repo an); Next.js 16 + vinext + wrangler.jsonc (BROWSER/ASSETS-Bindings), Basic-Auth-Middleware (Regel 5)
-- [ ] Ein-Klick-Start `ContentCreator starten.command` (Muster aus Ad-Creator; danach `chmod +x` durch Andreas)
+- [x] Ein-Klick-Start `ContentCreator starten.command` (Muster aus Ad-Creator; danach `chmod +x` durch Andreas)
 - [ ] Datenmodell + IndexedDB: Stores `jobs`, `assets` (contentadressiert), `snapshots`; Ein-Tab-Wächter
 - [ ] App-Shell: Start-Ansicht mit KI-Zentrum + Karten, DE/EN-Umschalter, T()-Wörterbuch
 - [ ] Leeres Deployment auf Workers (Passwort gesetzt) — Andreas führt Deploy/Secrets selbst aus
