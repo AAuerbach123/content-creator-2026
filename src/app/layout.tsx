@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { SpracheProvider } from '@/components/SpracheProvider'
 import TabGuardBanner from '@/components/TabGuardBanner'
 
 export const metadata: Metadata = {
@@ -12,8 +13,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de">
       <body>
-        <TabGuardBanner />
-        {children}
+        <SpracheProvider>
+          <TabGuardBanner />
+          {children}
+        </SpracheProvider>
       </body>
     </html>
   )

@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { tabGuardStarten } from '@/lib/tabguard'
+import { useSprache } from './SpracheProvider'
 
 export default function TabGuardBanner() {
+  const { T } = useSprache()
   const [fremderTab, setFremderTab] = useState(false)
 
   useEffect(() => tabGuardStarten(setFremderTab), [])
@@ -30,8 +32,7 @@ export default function TabGuardBanner() {
         boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
       }}
     >
-      ⚠ ContentCreator2026 ist bereits in einem anderen Tab dieses Browsers geöffnet.
-      Bitte schließe den anderen Tab, um Datenkonflikte zu vermeiden.
+      {T('tabGuard')}
     </div>
   )
 }

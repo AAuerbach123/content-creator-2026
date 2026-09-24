@@ -83,7 +83,7 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - [x] Repo `content-creator-2026` initialisieren (Andreas legt GitHub-Repo an); Next.js 16 + vinext + wrangler.jsonc (BROWSER/ASSETS-Bindings), Basic-Auth-Middleware (Regel 5)
 - [x] Ein-Klick-Start `ContentCreator starten.command` (Muster aus Ad-Creator; danach `chmod +x` durch Andreas)
 - [x] Datenmodell + IndexedDB: Stores `jobs`, `assets` (contentadressiert), `snapshots`; Ein-Tab-Wächter
-- [ ] App-Shell: Start-Ansicht mit KI-Zentrum + Karten, DE/EN-Umschalter, T()-Wörterbuch
+- [x] App-Shell: Start-Ansicht mit KI-Zentrum + Karten, DE/EN-Umschalter, T()-Wörterbuch
 - [ ] Leeres Deployment auf Workers (Passwort gesetzt) — Andreas führt Deploy/Secrets selbst aus
 - **FERTIG WENN:** Tool startet per Doppelklick, leerer Job lässt sich anlegen/speichern/exportieren, Online-Version fragt nach Passwort.
 
@@ -154,4 +154,6 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-24: `tsconfig.json` wird von Next 16 automatisch nachgezogen (`jsx: "react-jsx"`, `.next/dev/types/**/*.ts` im include) — Änderungen akzeptieren, nicht rückgängig machen.
 - 2026-09-24: IndexedDB via **Dexie** (v4). Datenbank heißt `ContentCreator2026`, Version 1, drei Stores: `jobs` (Primärschlüssel `id`), `assets` (Primärschlüssel = SHA-256-`hash`, dedupliziert), `snapshots` (letzte 5 pro Job, Rotation im `jobSpeichern`).
 - 2026-09-24: Ein-Tab-Wächter läuft über `BroadcastChannel("content-creator-2026:tabguard")`; Banner erscheint einmal und bleibt bis Reload — bewusst simpel, weil wir „anderer Tab schließt" nicht zuverlässig erkennen können.
+- 2026-09-24: DE/EN via React-Context (`SpracheProvider`) + `localStorage['content-creator-2026:sprache']`; zentrales Wörterbuch in `src/lib/i18n.ts` — jeder sichtbare Text bekommt einen Schlüssel + `T('key')`, harte Strings sind verboten (Regel 6). Anfangssprache = gespeichert → sonst `navigator.language` → sonst DE.
+- 2026-09-24: Startbildschirm-Struktur festgezurrt: Header (Phase-Label · Marke · DE/EN) — großes KI-Zentrum in der Mitte — Karten-Grid darunter (6 Karten, „Neuer Job" aktiv, Rest visuell mit „kommt bald"-Marker) — Debug-Sektion „IndexedDB-Test" ganz unten, bleibt bis Phase 1.
 - 2026-09-24: Ein-Klick-Start `ContentCreator starten.command` mit Self-Setup (npm install beim ersten Start) und Browser-Auto-Open. Einmalig `chmod +x` durch Andreas.
