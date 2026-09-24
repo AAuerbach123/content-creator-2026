@@ -1,10 +1,14 @@
+import JobDemo from '@/components/JobDemo'
+
 export default function Home() {
   return (
     <main
       style={{
         minHeight: '100dvh',
-        display: 'grid',
-        placeItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         background: '#0b0b0f',
@@ -35,10 +39,11 @@ export default function Home() {
           ContentCreator2026
         </h1>
         <p style={{ opacity: 0.75, lineHeight: 1.55, margin: 0 }}>
-          Das Fundament steht. Als Nächstes: IndexedDB-Stores (Jobs, Assets, Snapshots),
-          App-Shell mit KI-Zentrum, DE/EN-Umschalter.
+          Datenmodell, IndexedDB-Stores (jobs · assets · snapshots) und Ein-Tab-Wächter
+          laufen. Als Nächstes: App-Shell mit KI-Zentrum, DE/EN-Umschalter.
         </p>
       </div>
+      <JobDemo />
     </main>
   )
 }

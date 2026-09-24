@@ -13,6 +13,7 @@
     "deploy:vinext": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
+    "dexie": "^4.4.6",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
