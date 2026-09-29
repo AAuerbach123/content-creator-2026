@@ -107,5 +107,31 @@
 
 ---
 
+## Phase 4 — Exporte + Korrekturportal ✅
 
+**Was geht:**
+- Neuer Bereich „Exporte" im Artefakt-Panel:
+  - **PNG / JPG / WebP** je 1× und 2×, mit Größenanzeige direkt nach dem Download (Gewichts-Check gegen 150-KB-Banner-Budget).
+  - **Vektor-PDF** (pdf-lib): Texte werden als echte Font-Objekte gesetzt, Bilder als JPG/PNG eingebettet — bei mm-Kanälen kommt automatisch 3 mm Beschnitt + Schnittmarken dazu.
+  - **Adobe-Paket**: ZIP mit PDF + `ANLEITUNG.txt`.
+  - **Social-Paket**: ZIP mit allen Artefakten des Jobs + `<Job>_captions.txt`.
+  - **Job-Backup**: JSON + `assets/<hash>.<ext>` — alle Blobs im ZIP.
+- Neuer Bereich „Korrekturportal":
+  - Grafiker legt eine Freigabe an → Link `http://localhost:3000/review/<token>` (Kopier-Knopf).
+  - `/review/<token>` zeigt das Artefakt; Klick platziert Pin (Name + Änderungswunsch).
+  - Zurück im Editor sieht der Grafiker unter „Kundenkorrekturen" alle Pins live, kann antworten und Status setzen (offen/erledigt/abgelehnt).
+  - IndexedDB-Store `freigaben` (DB Version 3) — Pins bleiben persistent.
+
+**Wie testen (im selben Browser):**
+1. Job bis zum fertigen Artefakt (Phasen 1–3).
+2. „Exporte" ausklappen → alle Format-Knöpfe drücken.
+3. Vektor-PDF in Preview.app öffnen: Texte sind auswählbar.
+4. „Korrekturportal" → „+ Freigabe" → Link kopieren → neuer Tab → Pin setzen.
+5. Zurück in Grafiker-Tab: Pin taucht auf, antworten und Status ändern.
+
+**Grenze:** Freigaben liegen in IndexedDB → funktioniert nur im gleichen Browser. Für echte Kunden-Reviews braucht es Cloudflare KV — siehe `OFFENE_PUNKTE.md` #8.
+
+**Screenshot-Pfad:** (noch keine)
+
+---
 
