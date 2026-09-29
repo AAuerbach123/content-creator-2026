@@ -1,22 +1,30 @@
 import Dexie, { type Table } from 'dexie'
-import type { Asset, Job, Snapshot } from './types'
+import type { Asset, Job, KIAktion, Snapshot } from './types'
 import { sha256Hex } from './hash'
 
 const DB_NAME = 'ContentCreator2026'
 const SNAPSHOT_LIMIT = 5 // Regel 3: letzte 5 Stände pro Job
+const KI_VERLAUF_LIMIT = 500 // Verlaufs-Panel darf nicht unbegrenzt wachsen
 
 class ContentCreatorDB extends Dexie {
   jobs!: Table<Job, string>
   assets!: Table<Asset, string>
   snapshots!: Table<Snapshot, string>
+  kiAktionen!: Table<KIAktion, string>
 
   constructor() {
     super(DB_NAME)
     this.version(1).stores({
-      // Nur indizierte Felder listen; alles andere landet trotzdem im Datensatz.
       jobs: 'id, kanal, status, aktualisiertAm',
       assets: 'hash, mimeType, hinzugefuegtAm',
       snapshots: 'id, jobId, erstelltAm',
+    })
+    // Version 2: Verlaufs-Store für KI-Aktionen (Regel 8)
+    this.version(2).stores({
+      jobs: 'id, kanal, status, aktualisiertAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
     })
   }
 }
@@ -43,6 +51,7 @@ export async function jobErstellen(titel: string, ziel = ''): Promise<Job> {
     briefing: [],
     schrittplan: [],
     artefakte: [],
+    dialog: [],
     status: 'briefing',
     erstelltAm: now,
     aktualisiertAm: now,
@@ -56,6 +65,10 @@ export async function alleJobsLaden(): Promise<Job[]> {
   return getDb().jobs.orderBy('aktualisiertAm').reverse().toArray()
 }
 
+export async function jobLaden(id: string): Promise<Job | undefined> {
+  return getDb().jobs.get(id)
+}
+
 export async function jobSpeichern(job: Job): Promise<void> {
   const aktualisiert: Job = { ...job, aktualisiertAm: Date.now() }
   await getDb().jobs.put(aktualisiert)
@@ -64,10 +77,12 @@ export async function jobSpeichern(job: Job): Promise<void> {
 
 export async function jobLoeschen(id: string): Promise<void> {
   const db = getDb()
-  await db.transaction('rw', db.jobs, db.snapshots, async () => {
+  await db.transaction('rw', db.jobs, db.snapshots, db.kiAktionen, async () => {
     await db.jobs.delete(id)
     const snapIds = await db.snapshots.where('jobId').equals(id).primaryKeys()
     if (snapIds.length) await db.snapshots.bulkDelete(snapIds as string[])
+    const aktIds = await db.kiAktionen.where('jobId').equals(id).primaryKeys()
+    if (aktIds.length) await db.kiAktionen.bulkDelete(aktIds as string[])
   })
 }
 
@@ -95,6 +110,11 @@ export async function assetLaden(hash: string): Promise<Asset | undefined> {
   return getDb().assets.get(hash)
 }
 
+export async function assetsFuerJob(jobIds: string[]): Promise<Asset[]> {
+  if (!jobIds.length) return []
+  return getDb().assets.bulkGet(jobIds).then((a) => a.filter(Boolean) as Asset[])
+}
+
 // ------------------- Snapshots (Regel 3) -------------------
 
 async function snapshotSchreiben(job: Job): Promise<void> {
@@ -116,4 +136,24 @@ async function snapshotSchreiben(job: Job): Promise<void> {
 
 export async function snapshotsFuerJob(jobId: string): Promise<Snapshot[]> {
   return getDb().snapshots.where('jobId').equals(jobId).sortBy('erstelltAm')
+}
+
+// ------------------- KI-Verlauf (Regel 8) -------------------
+
+export async function aktionSpeichern(aktion: KIAktion): Promise<void> {
+  const db = getDb()
+  await db.kiAktionen.add(aktion)
+  const anzahl = await db.kiAktionen.count()
+  if (anzahl > KI_VERLAUF_LIMIT) {
+    const alte = await db.kiAktionen.orderBy('zeitpunkt').limit(anzahl - KI_VERLAUF_LIMIT).primaryKeys()
+    await db.kiAktionen.bulkDelete(alte as string[])
+  }
+}
+
+export async function aktionenFuerJob(jobId: string): Promise<KIAktion[]> {
+  return getDb().kiAktionen.where('jobId').equals(jobId).sortBy('zeitpunkt')
+}
+
+export async function alleAktionen(limit = 100): Promise<KIAktion[]> {
+  return getDb().kiAktionen.orderBy('zeitpunkt').reverse().limit(limit).toArray()
 }

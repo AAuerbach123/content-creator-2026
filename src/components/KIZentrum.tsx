@@ -1,27 +1,104 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { jobErstellen } from '@/lib/db'
+import { dialogAufrufen, type EinstiegAntwort } from '@/lib/dialog-client'
 import { useSprache } from './SpracheProvider'
+import MikrofonKnopf from './MikrofonKnopf'
 
-// Phase 0: das KI-Feld steht optisch als Ankerpunkt, ist aber noch nicht
-// an /api/dialog angebunden. Absenden zeigt nur den Text-Preview.
+// KI-Zentrum: der große Einstiegs-Prompt. Bei „Los" legt es einen Job an,
+// fragt /api/dialog nach dem erkannten Einstiegsweg und öffnet den JobEditor.
 
-export default function KIZentrum() {
-  const { T } = useSprache()
+const EINSTIEG_ZU_JOB: Record<
+  EinstiegAntwort['einstieg'],
+  'A-ohne-vorstellung' | 'B-vorstellung-im-kopf' | 'C-vorlage' | undefined
+> = {
+  'A-ohne-vorstellung': 'A-ohne-vorstellung',
+  'B-vorstellung-im-kopf': 'B-vorstellung-im-kopf',
+  'C-vorlage': 'C-vorlage',
+  nachfrage: undefined,
+}
+
+export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) => void }) {
+  const { T, sprache } = useSprache()
   const [text, setText] = useState('')
-  const [antwort, setAntwort] = useState<string | null>(null)
+  const [laedt, setLaedt] = useState(false)
+  const [fehler, setFehler] = useState<string | null>(null)
 
-  const senden = () => {
-    if (!text.trim()) return
-    setAntwort(text.trim())
-  }
+  const starten = useCallback(async () => {
+    const t = text.trim()
+    if (!t || laedt) return
+    setFehler(null)
+    setLaedt(true)
+    try {
+      const titel = t.slice(0, 60)
+      const neuerJob = await jobErstellen(titel, t)
+
+      // Erste KI-Nachricht in den Dialog aufnehmen (der Nutzer-Text als erste user-Nachricht)
+      const jetzt = Date.now()
+      const dialog: import('@/lib/types').Nachricht[] = [
+        { id: crypto.randomUUID(), rolle: 'nutzer', text: t, zeitpunkt: jetzt },
+      ]
+
+      const antwort = await dialogAufrufen<EinstiegAntwort>('einstieg-erkennen', {
+        jobId: neuerJob.id,
+        sprache,
+        nutzerText: t,
+      })
+
+      if (antwort.ok && antwort.daten) {
+        const daten = antwort.daten
+        const einstieg = EINSTIEG_ZU_JOB[daten.einstieg]
+        const kanal = daten.kanal || undefined
+        const kiText = daten.naechsteFrage || daten.vermutetesZiel || ''
+        if (kiText) {
+          dialog.push({
+            id: crypto.randomUUID(),
+            rolle: 'ki',
+            text: kiText,
+            zeitpunkt: Date.now(),
+          })
+        }
+        const gepatcht = {
+          ...neuerJob,
+          einstieg,
+          kanal: kanal && kanal in { zeitung:1,zeitschrift:1,'web-banner':1,'web-content':1,'ig-feed':1,'ig-story':1,'ig-reel':1,'fb-post':1,'linkedin-post':1,'x-post':1,kurzvideo:1 } ? (kanal as typeof neuerJob.kanal) : undefined,
+          dialog,
+        }
+        const { jobSpeichern } = await import('@/lib/db')
+        await jobSpeichern(gepatcht)
+      } else {
+        // KI hat gepatzt — der Job existiert trotzdem, wir öffnen ihn mit Fehler-Systemnachricht
+        dialog.push({
+          id: crypto.randomUUID(),
+          rolle: 'system',
+          text:
+            (sprache === 'de'
+              ? 'Der KI-Router hat gerade nicht geantwortet. Wähle den Einstieg manuell.'
+              : 'The AI router did not respond. Pick your entry manually.') +
+            (antwort.fehler ? ` (${antwort.fehler})` : ''),
+          zeitpunkt: Date.now(),
+        })
+        const gepatcht = { ...neuerJob, dialog }
+        const { jobSpeichern } = await import('@/lib/db')
+        await jobSpeichern(gepatcht)
+      }
+
+      onJobStart(neuerJob.id)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaedt(false)
+    }
+  }, [laedt, onJobStart, sprache, text])
 
   return (
     <section
       style={{
         width: '100%',
         maxWidth: 760,
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
+        background:
+          'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
         border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: 20,
         padding: '28px 28px 20px',
@@ -36,8 +113,15 @@ export default function KIZentrum() {
         id="ki-input"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+            e.preventDefault()
+            starten()
+          }
+        }}
         placeholder={T('kiPlaceholder')}
         rows={3}
+        disabled={laedt}
         style={{
           width: '100%',
           resize: 'vertical',
@@ -64,44 +148,11 @@ export default function KIZentrum() {
           flexWrap: 'wrap',
         }}
       >
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            disabled
-            title={T('kiHinweis')}
-            style={{
-              background: 'transparent',
-              color: 'rgba(245,245,247,0.55)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              padding: '8px 12px',
-              borderRadius: 8,
-              fontSize: 12,
-              cursor: 'not-allowed',
-            }}
-          >
-            {T('kiVorlage')}
-          </button>
-          <button
-            type="button"
-            disabled
-            title={T('kiHinweis')}
-            style={{
-              background: 'transparent',
-              color: 'rgba(245,245,247,0.55)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              padding: '8px 12px',
-              borderRadius: 8,
-              fontSize: 12,
-              cursor: 'not-allowed',
-            }}
-          >
-            🎙 {T('kiMikro')}
-          </button>
-        </div>
+        <MikrofonKnopf onText={(t) => setText((v) => (v ? `${v} ${t}` : t))} />
 
         <button
           type="button"
-          onClick={senden}
+          onClick={starten}
           style={{
             background: '#f5f5f7',
             color: '#0b0b0f',
@@ -110,32 +161,23 @@ export default function KIZentrum() {
             borderRadius: 10,
             fontWeight: 700,
             fontSize: 14,
-            cursor: text.trim() ? 'pointer' : 'not-allowed',
-            opacity: text.trim() ? 1 : 0.5,
+            cursor: text.trim() && !laedt ? 'pointer' : 'not-allowed',
+            opacity: text.trim() && !laedt ? 1 : 0.5,
             letterSpacing: '0.02em',
           }}
-          disabled={!text.trim()}
+          disabled={!text.trim() || laedt}
         >
-          {T('kiSenden')} →
+          {laedt ? T('dialogLaedt') : `${T('kiSenden')} →`}
         </button>
       </div>
 
-      {antwort && (
-        <div
-          style={{
-            marginTop: 16,
-            padding: '10px 12px',
-            background: 'rgba(59,130,246,0.12)',
-            border: '1px solid rgba(59,130,246,0.35)',
-            borderRadius: 8,
-            fontSize: 13,
-            color: '#dbeafe',
-          }}
-        >
-          <strong style={{ opacity: 0.85 }}>Echo (Phase 0):</strong> {antwort}
-          <div style={{ opacity: 0.65, marginTop: 4, fontSize: 12 }}>{T('kiHinweis')}</div>
-        </div>
+      {fehler && (
+        <p style={{ marginTop: 12, fontSize: 12, color: '#fecaca' }}>
+          ⚠ {fehler}
+        </p>
       )}
+
+      <p style={{ marginTop: 12, fontSize: 11, opacity: 0.5 }}>{T('kiHinweis')}</p>
     </section>
   )
 }

@@ -14,9 +14,16 @@ type KartenDef = {
   badge?: string
 }
 
-export default function KartenGrid({ onJobAngelegt }: { onJobAngelegt?: () => void }) {
-  const { T } = useSprache()
+export default function KartenGrid({
+  onJobAngelegt,
+  onJobOeffnen,
+}: {
+  onJobAngelegt?: () => void
+  onJobOeffnen?: (id: string) => void
+}) {
+  const { T, sprache } = useSprache()
   const [jobAnzahl, setJobAnzahl] = useState(0)
+  const [zeigeListe, setZeigeListe] = useState(false)
 
   const nachladen = useCallback(async () => {
     setJobAnzahl((await alleJobsLaden()).length)
@@ -28,10 +35,14 @@ export default function KartenGrid({ onJobAngelegt }: { onJobAngelegt?: () => vo
 
   const neuerJob = useCallback(async () => {
     const nummer = (await alleJobsLaden()).length + 1
-    await jobErstellen(`Job #${nummer}`, '')
+    const job = await jobErstellen(
+      sprache === 'de' ? `Job #${nummer}` : `Job #${nummer}`,
+      '',
+    )
     await nachladen()
     onJobAngelegt?.()
-  }, [nachladen, onJobAngelegt])
+    onJobOeffnen?.(job.id)
+  }, [nachladen, onJobAngelegt, onJobOeffnen, sprache])
 
   const karten: KartenDef[] = [
     { titel: 'cardNewJob', hinweis: 'cardNewJobHint', icon: '＋', aktiv: true, onClick: neuerJob },
@@ -39,8 +50,9 @@ export default function KartenGrid({ onJobAngelegt }: { onJobAngelegt?: () => vo
       titel: 'cardActiveJobs',
       hinweis: 'cardActiveJobsHint',
       icon: '▤',
-      aktiv: false,
+      aktiv: jobAnzahl > 0,
       badge: jobAnzahl > 0 ? String(jobAnzahl) : undefined,
+      onClick: () => setZeigeListe((v) => !v),
     },
     { titel: 'cardBrandKits', hinweis: 'cardBrandKitsHint', icon: '◐', aktiv: false },
     { titel: 'cardTemplates', hinweis: 'cardTemplatesHint', icon: '▧', aktiv: false },
@@ -125,7 +137,7 @@ export default function KartenGrid({ onJobAngelegt }: { onJobAngelegt?: () => vo
             </span>
           )}
 
-          {!karte.aktiv && (
+          {!karte.aktiv && karte.titel !== 'cardActiveJobs' && (
             <span
               style={{
                 position: 'absolute',

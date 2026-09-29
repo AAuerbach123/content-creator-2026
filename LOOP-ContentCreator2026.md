@@ -98,20 +98,20 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - **FERTIG WENN:** Tool startet per Doppelklick, leerer Job lässt sich anlegen/speichern/exportieren, Online-Version fragt nach Passwort.
 
 ### Phase 1 — KI-Dialog-Kern
-- [ ] `/api/dialog`: Einstiegs-Erkennung (Weg A/B/C aus Abschnitt 1) — die KI fragt zu Beginn höchstens EINMAL nach, ob es eine Vorlage/Vorstellung gibt, und verzweigt dann
-- [ ] Weg B: Briefing-Interview (offene Fragen, max. 5, eine nach der anderen); Antworten strukturiert im Job speichern
-- [ ] Weg A: **Drei-Richtungen-Vorschlag** — nach dem Interview generiert die KI drei klar unterschiedliche Mini-Entwürfe (Layout-Skizze + Farbwelt + Beispiel-Headline) als klickbare Karten; Wahl einer Richtung startet die MC-Verfeinerung (Enger/lockerer? Farbklima? Schriftcharakter?)
-- [ ] Weg C: Vorlagen-Upload + `/api/analyze-template`; aus der Analyse **Multiple-Choice-Fragen** generieren (je Gestaltungsmerkmal: aus Vorlage / aus Brand-Kit / neu) — UI als Karten mit Vorschau-Chips
-- [ ] Schrittplan-Generator: KI erstellt Checkliste zum Ziel; jeder Schritt mit Status (offen/KI-Vorschlag liegt vor/angenommen/manuell erledigt)
-- [ ] Spracheingabe (Web Speech, de/en) in der KI-Leiste; Mehrfach-Aktionen pro Befehl
-- [ ] KI-Verlaufs-Panel (Regel 8)
+- [x] `/api/dialog`: Einstiegs-Erkennung (Weg A/B/C aus Abschnitt 1) — die KI fragt zu Beginn höchstens EINMAL nach, ob es eine Vorlage/Vorstellung gibt, und verzweigt dann
+- [x] Weg B: Briefing-Interview (offene Fragen, max. 5, eine nach der anderen); Antworten strukturiert im Job speichern
+- [x] Weg A: **Drei-Richtungen-Vorschlag** — nach dem Interview generiert die KI drei klar unterschiedliche Mini-Entwürfe (Layout-Skizze + Farbwelt + Beispiel-Headline) als klickbare Karten; Wahl einer Richtung startet die MC-Verfeinerung (Enger/lockerer? Farbklima? Schriftcharakter?)
+- [x] Weg C: Vorlagen-Upload + `/api/analyze-template`; aus der Analyse **Multiple-Choice-Fragen** generieren (je Gestaltungsmerkmal: aus Vorlage / aus Brand-Kit / neu) — UI als Karten mit Vorschau-Chips
+- [x] Schrittplan-Generator: KI erstellt Checkliste zum Ziel; jeder Schritt mit Status (offen/KI-Vorschlag liegt vor/angenommen/manuell erledigt)
+- [x] Spracheingabe (Web Speech, de/en) in der KI-Leiste; Mehrfach-Aktionen pro Befehl
+- [x] KI-Verlaufs-Panel (Regel 8)
 - **FERTIG WENN:** Kompletter Dialog vom „Worum geht's?" bis zum bestätigten Schrittplan funktioniert — auf allen drei Wegen: ohne jede Vorstellung, mit Vorstellung im Kopf, mit Vorlage.
 
 ### Phase 2 — Erzeugung: Bild, Layout, Text
 - [ ] Format-Presets je Kanal (Abschnitt 4) als Datenbasis; Job wählt Kanal → korrektes Artefakt-Format inkl. Einheiten (mm/px), Safe-Zones als Overlay
 - [ ] `/api/generate-image` mit den 17 Stil-Presets (aus Ad-Creator übernehmen: motiv-neutral, full-bleed) + Format-Ratio; Bild-Varianten (3 auf einmal, eine wählen)
 - [ ] `/api/generate-copy`: Headline/Sub/CTA/Caption/Hashtags, je 3 Varianten, Ton wählbar (nüchtern/frech/seriös)
-- [ ] Brand-Kits: Farben, Schriften, Logos, Abstände; Import-Funktion für die 48 Verlags-CIs aus dem Ad-Creator (verlage-presets.json)
+- [ ] Brand-Kits: Farben, Schriften, Logos, Abstände; Import der 46 Verlags-CIs aus `~/Desktop/wissensquiz/public/verlage-presets.json` samt Logo-PNGs (`verlag-logos/`) — Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titelKanonisch`
 - [ ] Artefakt-Renderer: Ebenen → Canvas-Vorschau in Echtgröße/Zoom
 - **FERTIG WENN:** Aus einem Briefing entsteht ein erstes komplettes Artefakt (z. B. IG-Post + Zeitungsanzeige aus demselben Job) ohne manuelles Eingreifen.
 
@@ -129,7 +129,8 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - [ ] Social-Paket: alle Formate eines Jobs als benanntes ZIP (`<Job>_<Plattform>_<Maß>.png` …) + Captions als Textdatei
 - [ ] Adobe-Übergabe: „Als InDesign-Paket" (dokumentierter Weg über den Adobe-Connector)
 - [ ] Job-Backup: JSON + Assets-ZIP; Auto-Snapshots
-- **FERTIG WENN:** Ein Job liefert druckfertige UND webfertige Abgaben in einem Rutsch, Dateinamen sauber.
+- [ ] **Korrekturportal** für Verlage/Kunden: pro Artefakt eine teilbare Review-Ansicht (Token-Link, kein Login) — der Empfänger klickt auf eine Stelle der Anzeige und hinterlässt einen Änderungswunsch (Text + optional Skizze). Alle Anmerkungen kommen als Pins mit Koordinaten und Kommentar-Thread zurück; Status je Pin (offen/erledigt/abgelehnt). Grafiker sieht Pins live im Editor.
+- **FERTIG WENN:** Ein Job liefert druckfertige UND webfertige Abgaben in einem Rutsch, Dateinamen sauber; Verlags-Freigabe läuft über das Korrekturportal.
 
 ### Phase 5 — Kurzvideo
 - [ ] Storyboard-Schritt im Dialog (Hook/Kern/CTA, Szenen aus Job-Artefakten vorschlagen)
@@ -175,3 +176,6 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-29: Umstellung auf **autonomen Modus** (Andreas): keine Freigabe-Stopps am Phasenende, keine Rückfragen; offene Punkte → `OFFENE_PUNKTE.md`, Demo-Stände → `ZWISCHENSTAENDE.md`. Deploy/Push weiterhin nur durch Andreas.
 - 2026-09-29 (Andreas): Video ist Kernbestandteil. Phase 5 um die Lehren aus der Telemedia-Präsentation erweitert (Logo-Einflug 2 s + Woooosch, Einflüge synchron zur Stimme, Anneke als Standardstimme, Stimmproben 3+3, nicht ablesen, Längenziel, Prüfbericht). Details: `.claude/skills/content-creator-projekt/SKILL.md`.
 - 2026-09-29: `OFFENE_PUNKTE.md` und `ZWISCHENSTAENDE.md` angelegt. Deploy-Befehle (`wrangler secret put …` verkettet + `build:vinext && deploy:vinext`) stehen als Ein-Zeiler bereit. Phase 0 damit abgeschlossen, Loop läuft direkt in Phase 1.
+- 2026-09-29 (Andreas): **Korrekturportal muss wieder rein.** Nachfolger des Verlags-Freigabe-Tools aus dem Ad-Creator. Kunden bekommen einen Token-Link zur Anzeige, klicken auf eine Stelle und hinterlassen den Änderungswunsch (Text, später auch Skizze). Der Grafiker sieht die Pins mit Koordinaten und Status (offen/erledigt/abgelehnt) direkt im Editor. Aufgabe steht in Phase 4.
+- 2026-09-29 (Andreas): **Verlage komplett übernehmen.** Alle 46 Verlags-Einträge aus `~/Desktop/wissensquiz/public/verlage-presets.json` (Titel, Verlag, Schrift, Hausfarben, Format, Logo-Pfad, Hotlines) plus die Logo-PNGs aus `~/Desktop/wissensquiz/public/verlag-logos/` in Phase 2 als Brand-Kits importieren. Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titel/verlag/titelKanonisch`.
+- 2026-09-29: Phase 1 fertig. `/api/dialog` (Router / Briefing / drei Richtungen / MC-Vorlage / Schrittplan / Editor-Befehl) und `/api/analyze-template` (Claude Vision) laufen mit Claude Sonnet 4.6. Kosten je Aktion landen im IndexedDB-Store `kiAktionen` (Regel 8). UI: `WegAuswahl`, `KIDialog`, `RichtungenPanel`, `MCFragenPanel`, `SchrittplanPanel`, `KIVerlaufPanel`, `VorlagenUpload`, `MikrofonKnopf` (Web Speech). Startbildschirm-Prompt „Was produzieren wir heute?" ruft den Router und öffnet den JobEditor.

@@ -37,6 +37,7 @@ export type Schritt = {
   titel: string
   status: SchrittStatus
   reihenfolge: number
+  beschreibung?: string
 }
 
 export type EbeneTyp = 'text' | 'bild' | 'form' | 'logo' | 'video-platzhalter'
@@ -52,6 +53,7 @@ export type Ebene = {
   drehung?: number
   eigenschaften: Record<string, unknown>
   assetHash?: string // Referenz in den assets-Store (Regel 2)
+  sichtbar?: boolean
 }
 
 export type Einheit = 'mm' | 'px'
@@ -64,9 +66,66 @@ export type Artefakt = {
   einheit: Einheit
   ebenen: Ebene[]
   assetRefs: string[] // alle in ebenen referenzierten Hashes, redundant für schnelle Cleanup-Checks
+  kanal?: Kanal
+  erstelltAm?: number
 }
 
 export type JobStatus = 'briefing' | 'in-arbeit' | 'fertig' | 'archiviert'
+
+// Chat-Nachricht im Dialog mit der KI
+export type Rolle = 'nutzer' | 'ki' | 'system'
+export type Nachricht = {
+  id: string
+  rolle: Rolle
+  text: string
+  zeitpunkt: number
+  metadaten?: Record<string, unknown>
+}
+
+// Vorschlag für eine visuelle Richtung (Weg A) — drei davon werden dem Grafiker gezeigt
+export type Richtung = {
+  id: string
+  name: string
+  layoutBeschreibung: string
+  farbwelt: string[] // Hex-Farben
+  tonalitaet: string
+  beispielHeadline: string
+  begruendung?: string
+}
+
+// Analyse einer hochgeladenen Vorlage (Weg C)
+export type VorlagenAnalyse = {
+  format?: { breite: number; hoehe: number; einheit: Einheit }
+  farben: string[]
+  schriftKandidaten: string[]
+  textGefaesse: { name: string; text?: string }[]
+  bemerkungen?: string
+}
+
+// Verlaufs-Eintrag (Regel 8: jede KI-Aktion sichtbar)
+export type KIAktion = {
+  id: string
+  jobId?: string
+  route: string // z.B. "/api/dialog", "/api/generate-image"
+  modell?: string
+  prompt: string
+  antwortKurz?: string
+  eingabeTokens?: number
+  ausgabeTokens?: number
+  kostenUsd?: number
+  fehler?: string
+  zeitpunkt: number
+}
+
+// Brand-Kit: CI-Farben/Schriften/Logos
+export type BrandKit = {
+  id: string
+  name: string
+  farben: string[]
+  schriften: string[]
+  logoAssetHash?: string
+  quelle?: 'verlag' | 'kunde' | 'eigene'
+}
 
 export type Job = {
   id: string
@@ -76,8 +135,12 @@ export type Job = {
   einstieg?: Einstiegsweg
   briefing: FrageAntwort[]
   vorlageRef?: string // Hash der hochgeladenen Vorlage in assets-Store
+  vorlagenAnalyse?: VorlagenAnalyse
+  richtungen?: Richtung[]
+  gewaehlteRichtung?: string // id der gewählten Richtung
   schrittplan: Schritt[]
   artefakte: Artefakt[]
+  dialog: Nachricht[]
   status: JobStatus
   erstelltAm: number
   aktualisiertAm: number

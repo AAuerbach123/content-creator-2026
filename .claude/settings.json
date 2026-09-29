@@ -1,0 +1,53 @@
+{
+ "permissions": {
+  "defaultMode": "acceptEdits",
+  "allow": [
+   "Read",
+   "Edit",
+   "Write",
+   "Glob",
+   "Grep",
+   "WebFetch",
+   "WebSearch",
+   "Bash(node:*)",
+   "Bash(npm:*)",
+   "Bash(npx:*)",
+   "Bash(python3:*)",
+   "Bash(pip3:*)",
+   "Bash(pip:*)",
+   "Bash(ffmpeg:*)",
+   "Bash(ffprobe:*)",
+   "Bash(brew install:*)",
+   "Bash(curl:*)",
+   "Bash(mkdir:*)",
+   "Bash(cp:*)",
+   "Bash(mv:*)",
+   "Bash(ls:*)",
+   "Bash(cat:*)",
+   "Bash(unzip:*)",
+   "Bash(zip:*)",
+   "Bash(open:*)",
+   "Bash(soffice:*)",
+   "Bash(pdftoppm:*)",
+   "Bash",
+   "Bash(git add:*)",
+   "Bash(git commit:*)",
+   "Bash(git status:*)",
+   "Bash(git log:*)",
+   "Bash(git diff:*)"
+  ],
+  "deny": [
+   "Bash(rm -rf:*)",
+   "Bash(sudo:*)",
+   "Bash(npx wrangler deploy:*)",
+   "Bash(wrangler deploy:*)",
+   "Bash(npm run deploy:*)",
+   "Bash(git push:*)",
+   "Bash(npx --yes wrangler@3 deploy:*)",
+   "Bash(npm run deploy:vinext:*)",
+   "Bash(npx wrangler secret:*)",
+   "Bash(wrangler secret:*)",
+   "Bash(npx opennextjs-cloudflare deploy:*)"
+  ]
+ }
+}

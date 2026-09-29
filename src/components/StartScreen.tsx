@@ -1,16 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useSprache } from './SpracheProvider'
 import SpracheUmschalter from './SpracheUmschalter'
 import KIZentrum from './KIZentrum'
 import KartenGrid from './KartenGrid'
 import JobDemo from './JobDemo'
+import JobEditor from './JobEditor'
+
+// Root-Ansicht: entweder Startbildschirm (KI-Zentrum + Karten) oder JobEditor
+// für einen konkreten Job. Wechsel via useState — kein Routing nötig.
 
 export default function StartScreen() {
   const { T } = useSprache()
   const [nonce, setNonce] = useState(0)
-  const wecken = () => setNonce((n) => n + 1)
+  const [offenerJob, setOffenerJob] = useState<string | null>(null)
+
+  const wecken = useCallback(() => setNonce((n) => n + 1), [])
+  const jobOeffnen = useCallback((id: string) => setOffenerJob(id), [])
+  const zurueck = useCallback(() => {
+    setOffenerJob(null)
+    setNonce((n) => n + 1)
+  }, [])
+
+  if (offenerJob) {
+    return <JobEditor jobId={offenerJob} onZurueck={zurueck} />
+  }
 
   return (
     <div
@@ -58,9 +73,9 @@ export default function StartScreen() {
           padding: '48px 24px 64px',
         }}
       >
-        <KIZentrum />
-        <KartenGrid onJobAngelegt={wecken} />
-        <JobDemo aktualisierenNonce={nonce} />
+        <KIZentrum onJobStart={jobOeffnen} />
+        <KartenGrid onJobAngelegt={wecken} onJobOeffnen={jobOeffnen} />
+        <JobDemo aktualisierenNonce={nonce} onJobOeffnen={jobOeffnen} />
       </main>
     </div>
   )

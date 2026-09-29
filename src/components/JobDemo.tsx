@@ -5,10 +5,16 @@ import { alleJobsLaden, jobLoeschen } from '@/lib/db'
 import type { Job } from '@/lib/types'
 import { useSprache } from './SpracheProvider'
 
-// Debug-Sektion: zeigt Persistenz-Beleg (Store „jobs") bis Phase 1 die richtige
-// „Laufende Jobs"-Ansicht liefert. Angelegt wird woanders (Karte „Neuer Job").
+// Debug-/Übersichts-Sektion: zeigt Persistenz-Beleg (Store „jobs") und dient bis
+// Phase 2 zusätzlich als „Laufende Jobs"-Liste — Klick öffnet den Job-Editor.
 
-export default function JobDemo({ aktualisierenNonce }: { aktualisierenNonce: number }) {
+export default function JobDemo({
+  aktualisierenNonce,
+  onJobOeffnen,
+}: {
+  aktualisierenNonce: number
+  onJobOeffnen?: (id: string) => void
+}) {
   const { T } = useSprache()
   const [jobs, setJobs] = useState<Job[]>([])
   const [fehler, setFehler] = useState<string | null>(null)
@@ -75,12 +81,41 @@ export default function JobDemo({ aktualisierenNonce }: { aktualisierenNonce: nu
                 gap: 12,
               }}
             >
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <button
+                type="button"
+                onClick={() => onJobOeffnen?.(job.id)}
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#f5f5f7',
+                  textAlign: 'left',
+                  padding: 0,
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  fontSize: 13,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
                 <strong style={{ fontWeight: 600 }}>{job.titel}</strong>
-                <span style={{ opacity: 0.45, marginLeft: 10 }}>
-                  {new Date(job.erstelltAm).toLocaleTimeString()}
+                <span style={{ opacity: 0.45, marginLeft: 10, fontSize: 12 }}>
+                  {new Date(job.aktualisiertAm).toLocaleString()}
                 </span>
-              </span>
+                {job.einstieg && (
+                  <span
+                    style={{
+                      marginLeft: 8,
+                      fontSize: 10,
+                      opacity: 0.6,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {job.einstieg.split('-')[0]}
+                  </span>
+                )}
+              </button>
               <button
                 type="button"
                 onClick={() => loeschen(job.id)}
