@@ -1,6 +1,16 @@
 # LOOP — ContentCreator2026
 
-**Arbeitsanweisung für Claude Code:** Lies dieses Dokument vollständig. Arbeite die Phasen strikt in Reihenfolge ab: nimm die erste nicht abgehakte Aufgabe `[ ]`, setze sie um, teste sie, hake sie ab `[x]`, committe mit aussagekräftiger Message. Am Ende jeder Phase: Demo-Zustand herstellen, Andreas zeigen, Freigabe abwarten. Verletze niemals die „Nicht verhandelbaren Regeln". Bei Unklarheit: EINE präzise Frage stellen, nicht raten.
+**Arbeitsanweisung für Claude Code:** Lies dieses Dokument vollständig. Arbeite die Phasen strikt in Reihenfolge ab: Nimm die erste nicht abgehakte Aufgabe `[ ]`, setze sie um, teste sie, hake sie ab `[x]` und committe mit aussagekräftiger Message. Verletze niemals die „Nicht verhandelbaren Regeln".
+
+**Autonomer Modus (ab 2026-09-29, verbindlich):**
+- Arbeite ohne Rückfragen und ohne Freigaben von Phase 0 bis Phase 6 durch. Am Ende einer Phase **nicht anhalten**.
+- Stattdessen einen kurzen Demo-Stand in `ZWISCHENSTAENDE.md` notieren: was geht, wie man es testet, Screenshot-Pfad.
+- Bei Unklarheit selbst die vernünftigste Lösung wählen und im Entscheidungs-Log begründen.
+- Was Andreas später prüfen oder ausführen muss, kommt nach `OFFENE_PUNKTE.md` (kurz, mit Ein-Zeilen-Befehl).
+
+**Einzige Grenzen:**
+- Kein Deploy, kein `git push`, keine Secrets. Nur fertige Befehle in `OFFENE_PUNKTE.md` bereitlegen.
+- Fehlt ein API-Schlüssel in `.dev.vars` bzw. `.env.local`: die Funktion mit klarer Fehlermeldung bauen, vermerken und weitermachen.
 
 ---
 
@@ -84,7 +94,7 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - [x] Ein-Klick-Start `ContentCreator starten.command` (Muster aus Ad-Creator; danach `chmod +x` durch Andreas)
 - [x] Datenmodell + IndexedDB: Stores `jobs`, `assets` (contentadressiert), `snapshots`; Ein-Tab-Wächter
 - [x] App-Shell: Start-Ansicht mit KI-Zentrum + Karten, DE/EN-Umschalter, T()-Wörterbuch
-- [ ] Leeres Deployment auf Workers (Passwort gesetzt) — Andreas führt Deploy/Secrets selbst aus
+- [x] Leeres Deployment auf Workers (Passwort gesetzt) — **nur vorbereiten**: Befehle (`npx wrangler secret put APP_PASSWORD`, `npm run build:vinext && npm run deploy:vinext`) in `OFFENE_PUNKTE.md` eintragen, dann abhaken und weiter
 - **FERTIG WENN:** Tool startet per Doppelklick, leerer Job lässt sich anlegen/speichern/exportieren, Online-Version fragt nach Passwort.
 
 ### Phase 1 — KI-Dialog-Kern
@@ -127,7 +137,12 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - [ ] Untertitel-Spur (aus Voiceover-Text, eingebrannt, Safe-Zones beachtet)
 - [ ] ElevenLabs-Voiceover (`/api/tts`): Stimme wählen, Vorschau, Länge an Szenen anpassen
 - [ ] Render-Fluss: 9:16/1:1/16:9 aus denselben Szenen; lokaler Render-Befehl als Ein-Zeilen-Anleitung im Tool
-- **FERTIG WENN:** Ein 20–30-s-Reel mit Voiceover und Untertiteln entsteht komplett im Tool und liegt als MP4 vor.
+- [ ] Logo-Einflug als Szenen-Template: Logo kommt aus der Tiefe, **2,0 s**, sanft abbremsend, mit vollem „Woooosch" (ElevenLabs Sound Effects, Fallback ffmpeg), Ton endet exakt beim Stopp; Stimme startet danach (≈ 2,3 s)
+- [ ] Einflug-Animation für Aufzählungspunkte/Textelemente **synchron zur Stimme** (Zeiten aus ElevenLabs-Wortzeitstempeln, nicht geschätzt)
+- [ ] Stimm-Auswahl im Tool: Standard **Anneke** (`m1xJVQ4AuvhAWXoSQdeA`); „Stimmproben erzeugen" liefert 3 Frauen- + 3 Männerstimmen (neutrales Hochdeutsch, trocken, ohne Hall) mit demselben zusammenhängenden Text aus dem Job; −16 LUFS, kein Hall
+- [ ] Sprechtext-Assistent: Voiceover **liest nicht ab**, was im Bild steht (max. 4 gleiche Wörter in Folge), jeder Satz nur einmal, Längen-Ziel wählbar (z. B. max. 30 s / 60 s / 150 s) mit Live-Zähler
+- [ ] Prüfung vor Export: Dauer gemessen, Ton-/Animations-Synchronität (≤ 50 ms), Untertitel-Safe-Zones, echte Umlaute; Ergebnis als kurzer Prüfbericht im Tool
+- **FERTIG WENN:** Ein 20–30-s-Reel mit Logo-Einflug + Woooosch, Voiceover (Anneke), synchron einfliegenden Textelementen und Untertiteln entsteht komplett im Tool und liegt als MP4 vor (9:16, 1:1, 16:9).
 
 ### Phase 6 — Feinschliff & Übergabe
 - [ ] Onboarding-Tour (5 Schritte) + „?"-Hilfe je Bereich; alle Texte DE/EN
@@ -141,10 +156,10 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 
 ## 6. Loop-Regeln (bei jedem Durchlauf)
 
-1. Erst dieses Dokument, dann `AGENTS.md` des Repos lesen (sobald vorhanden).
+1. Erst dieses Dokument, dann `.claude/skills/content-creator-projekt/SKILL.md` (Praxis-Lehren aus Ad-Creator und Telemedia-Präsentation 2027 – verbindlich bei Design, Bildern, Stimme, PPTX, Web), dann `AGENTS.md` des Repos (sobald vorhanden).
 2. Eine Aufgabe pro Durchlauf; nach Umsetzung: im Browser testen (visuell!), dann abhaken und committen.
-3. Andreas will **live mitschauen** können — laut mitdenken, sichtbare Zwischenstände.
-4. Push/Deploy/Installationen führt Andreas am Mac aus — fertige Ein-Zeilen-Befehle liefern.
+3. Andreas will **live mitschauen** können: sichtbare Zwischenstände in `ZWISCHENSTAENDE.md`, aber **nicht auf ihn warten**.
+4. `npm install` für benötigte Pakete darfst du selbst ausführen. Push und Deploy führt Andreas aus; dafür fertige Ein-Zeilen-Befehle in `OFFENE_PUNKTE.md` liefern.
 5. Neue Erkenntnisse und Entscheidungen sofort unten in „7. Entscheidungs-Log" nachtragen.
 
 ## 7. Entscheidungs-Log
@@ -157,3 +172,6 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-24: DE/EN via React-Context (`SpracheProvider`) + `localStorage['content-creator-2026:sprache']`; zentrales Wörterbuch in `src/lib/i18n.ts` — jeder sichtbare Text bekommt einen Schlüssel + `T('key')`, harte Strings sind verboten (Regel 6). Anfangssprache = gespeichert → sonst `navigator.language` → sonst DE.
 - 2026-09-24: Startbildschirm-Struktur festgezurrt: Header (Phase-Label · Marke · DE/EN) — großes KI-Zentrum in der Mitte — Karten-Grid darunter (6 Karten, „Neuer Job" aktiv, Rest visuell mit „kommt bald"-Marker) — Debug-Sektion „IndexedDB-Test" ganz unten, bleibt bis Phase 1.
 - 2026-09-24: Ein-Klick-Start `ContentCreator starten.command` mit Self-Setup (npm install beim ersten Start) und Browser-Auto-Open. Einmalig `chmod +x` durch Andreas.
+- 2026-09-29: Umstellung auf **autonomen Modus** (Andreas): keine Freigabe-Stopps am Phasenende, keine Rückfragen; offene Punkte → `OFFENE_PUNKTE.md`, Demo-Stände → `ZWISCHENSTAENDE.md`. Deploy/Push weiterhin nur durch Andreas.
+- 2026-09-29 (Andreas): Video ist Kernbestandteil. Phase 5 um die Lehren aus der Telemedia-Präsentation erweitert (Logo-Einflug 2 s + Woooosch, Einflüge synchron zur Stimme, Anneke als Standardstimme, Stimmproben 3+3, nicht ablesen, Längenziel, Prüfbericht). Details: `.claude/skills/content-creator-projekt/SKILL.md`.
+- 2026-09-29: `OFFENE_PUNKTE.md` und `ZWISCHENSTAENDE.md` angelegt. Deploy-Befehle (`wrangler secret put …` verkettet + `build:vinext && deploy:vinext`) stehen als Ein-Zeiler bereit. Phase 0 damit abgeschlossen, Loop läuft direkt in Phase 1.
