@@ -75,3 +75,15 @@ Bei der Live-Prüfung meldet die OpenAI-API `insufficient_quota` / `credit_balan
 - Empfehlung für Erprobung: 20 USD Startguthaben (ein `gpt-image-1`-Bild „medium" kostet ca. 0,04 USD, also ≈ 500 Bilder)
 
 Der Code fällt sonst sauber zurück auf `gpt-image-1.5` → `gpt-image-1` und meldet den Fehler an die Oberfläche.
+
+---
+
+## 8. Korrekturportal cross-browser (Phase 4 offen)
+
+Die Freigabe-Links (`/review/<token>`) funktionieren heute nur, wenn Kunde und Grafiker im **gleichen Browser** sind — die Pins liegen in Andreas' IndexedDB. Für echte Kunden-Reviews brauchen wir einen Server-Store:
+
+- Cloudflare KV oder D1 Datenbank für Freigaben (Schema: `token → { jobTitel, artefaktSnapshot, pins[] }`).
+- Neue API-Routen `/api/freigabe` (POST erzeugen, GET abrufen, PATCH neuen Pin, PATCH Status).
+- Beim Erzeugen wandert eine Kopie des Artefakts (JSON + Bild-Base64) in den Server-Store; Kundenlink funktioniert überall.
+
+Bis das steht: Andreas kann Freigaben lokal testen (zweiter Browser-Tab, gleicher Rechner).

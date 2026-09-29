@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie'
-import type { Asset, Job, KIAktion, Snapshot } from './types'
+import type { Asset, Freigabe, Job, KIAktion, Snapshot } from './types'
 import { sha256Hex } from './hash'
 
 const DB_NAME = 'ContentCreator2026'
@@ -11,6 +11,7 @@ class ContentCreatorDB extends Dexie {
   assets!: Table<Asset, string>
   snapshots!: Table<Snapshot, string>
   kiAktionen!: Table<KIAktion, string>
+  freigaben!: Table<Freigabe, string>
 
   constructor() {
     super(DB_NAME)
@@ -25,6 +26,14 @@ class ContentCreatorDB extends Dexie {
       assets: 'hash, mimeType, hinzugefuegtAm',
       snapshots: 'id, jobId, erstelltAm',
       kiAktionen: 'id, jobId, route, zeitpunkt',
+    })
+    // Version 3: Korrekturportal-Freigaben
+    this.version(3).stores({
+      jobs: 'id, kanal, status, aktualisiertAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
     })
   }
 }
@@ -156,4 +165,35 @@ export async function aktionenFuerJob(jobId: string): Promise<KIAktion[]> {
 
 export async function alleAktionen(limit = 100): Promise<KIAktion[]> {
   return getDb().kiAktionen.orderBy('zeitpunkt').reverse().limit(limit).toArray()
+}
+
+// ------------------- Korrekturportal-Freigaben -------------------
+
+export async function freigabeErstellen(jobId: string, artefaktId: string, jobTitel: string): Promise<Freigabe> {
+  const freigabe: Freigabe = {
+    id: crypto.randomUUID(),
+    jobId,
+    artefaktId,
+    jobTitel,
+    erstelltAm: Date.now(),
+    pins: [],
+  }
+  await getDb().freigaben.add(freigabe)
+  return freigabe
+}
+
+export async function freigabeLaden(id: string): Promise<Freigabe | undefined> {
+  return getDb().freigaben.get(id)
+}
+
+export async function freigabeSpeichern(freigabe: Freigabe): Promise<void> {
+  await getDb().freigaben.put(freigabe)
+}
+
+export async function freigabenFuerJob(jobId: string): Promise<Freigabe[]> {
+  return getDb().freigaben.where('jobId').equals(jobId).sortBy('erstelltAm')
+}
+
+export async function freigabeLoeschen(id: string): Promise<void> {
+  await getDb().freigaben.delete(id)
 }

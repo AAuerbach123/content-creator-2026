@@ -10,7 +10,10 @@ import ArtefaktRenderer from './ArtefaktRenderer'
 import BildErzeugung from './BildErzeugung'
 import CopyErzeugung from './CopyErzeugung'
 import EditorAnsicht from './EditorAnsicht'
+import ExportPanel from './ExportPanel'
+import GrafikerPinAnsicht from './GrafikerPinAnsicht'
 import KanalWahl from './KanalWahl'
+import KorrekturportalPanel from './KorrekturportalPanel'
 import VerlagWahl from './VerlagWahl'
 import { useSprache } from './SpracheProvider'
 
@@ -359,6 +362,14 @@ export default function ArtefaktWerkstatt({
           <KanalWahl aktueller={job.kanal} onWahl={kanalAendern} />
         </div>
       </details>
+
+      <ExportPanel job={job} artefakt={aktuellesArtefakt} />
+
+      <KorrekturportalPanel job={job} artefaktId={aktuellesArtefakt?.id} />
+
+      {aktuellesArtefakt && (
+        <GrafikerPinAnsicht jobId={job.id} artefaktId={aktuellesArtefakt.id} artefakt={aktuellesArtefakt} />
+      )}
     </section>
   )
 }

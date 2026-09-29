@@ -124,12 +124,12 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - **FERTIG WENN:** Jedes von der KI erzeugte Artefakt lässt sich vollständig von Hand umbauen, und ein KI-Sprachbefehl verändert dieselben Ebenen sichtbar.
 
 ### Phase 4 — Exporte & Abgabe
-- [ ] Raster: PNG/JPG/WebP in exakter Pixelgröße (1× und 2×), Gewichts-Anzeige gegen Budget
-- [ ] Print: Vektor-PDF in mm (Dual-Mode-Route), optional Beschnitt+Schnittmarken; Bilder als TIFF
-- [ ] Social-Paket: alle Formate eines Jobs als benanntes ZIP (`<Job>_<Plattform>_<Maß>.png` …) + Captions als Textdatei
-- [ ] Adobe-Übergabe: „Als InDesign-Paket" (dokumentierter Weg über den Adobe-Connector)
-- [ ] Job-Backup: JSON + Assets-ZIP; Auto-Snapshots
-- [ ] **Korrekturportal** für Verlage/Kunden: pro Artefakt eine teilbare Review-Ansicht (Token-Link, kein Login) — der Empfänger klickt auf eine Stelle der Anzeige und hinterlässt einen Änderungswunsch (Text + optional Skizze). Alle Anmerkungen kommen als Pins mit Koordinaten und Kommentar-Thread zurück; Status je Pin (offen/erledigt/abgelehnt). Grafiker sieht Pins live im Editor.
+- [x] Raster: PNG/JPG/WebP in exakter Pixelgröße (1× und 2×), Gewichts-Anzeige gegen Budget
+- [x] Print: Vektor-PDF in mm (Dual-Mode-Route), optional Beschnitt+Schnittmarken; Bilder als TIFF
+- [x] Social-Paket: alle Formate eines Jobs als benanntes ZIP (`<Job>_<Plattform>_<Maß>.png` …) + Captions als Textdatei
+- [x] Adobe-Übergabe: „Als InDesign-Paket" (dokumentierter Weg über den Adobe-Connector)
+- [x] Job-Backup: JSON + Assets-ZIP; Auto-Snapshots
+- [x] **Korrekturportal** für Verlage/Kunden: pro Artefakt eine teilbare Review-Ansicht (Token-Link, kein Login) — der Empfänger klickt auf eine Stelle der Anzeige und hinterlässt einen Änderungswunsch (Text + optional Skizze). Alle Anmerkungen kommen als Pins mit Koordinaten und Kommentar-Thread zurück; Status je Pin (offen/erledigt/abgelehnt). Grafiker sieht Pins live im Editor.
 - **FERTIG WENN:** Ein Job liefert druckfertige UND webfertige Abgaben in einem Rutsch, Dateinamen sauber; Verlags-Freigabe läuft über das Korrekturportal.
 
 ### Phase 5 — Kurzvideo
@@ -181,3 +181,4 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-29: Phase 1 fertig. `/api/dialog` (Router / Briefing / drei Richtungen / MC-Vorlage / Schrittplan / Editor-Befehl) und `/api/analyze-template` (Claude Vision) laufen mit Claude Sonnet 4.6. Kosten je Aktion landen im IndexedDB-Store `kiAktionen` (Regel 8). UI: `WegAuswahl`, `KIDialog`, `RichtungenPanel`, `MCFragenPanel`, `SchrittplanPanel`, `KIVerlaufPanel`, `VorlagenUpload`, `MikrofonKnopf` (Web Speech). Startbildschirm-Prompt „Was produzieren wir heute?" ruft den Router und öffnet den JobEditor.
 - 2026-09-29: Phase 2 fertig. `/api/generate-image` (gpt-image-2 → 1.5 → 1 Kette, 17 Stil-Presets aus Ad-Creator übernommen, IP-Sanitizer) und `/api/generate-copy` (Claude Sonnet, 6 Slots × 3 Varianten). ArtefaktRenderer skaliert Layer-Modell in Echtzeit. 46 Verlags-Presets + Logos aus wissensquiz sind unter `/public/verlage-presets.json` + `/public/verlag-logos/` verfügbar. „✨ KI schlägt komplettes Design vor"-Knopf feuert Bild + Headline + Sub + CTA parallel und schreibt sie in die passenden Ebenen. OpenAI-Konto hat kein Guthaben mehr → Notiz in `OFFENE_PUNKTE.md` #7.
 - 2026-09-29: Phase 3 fertig. Konva-basierter Editor (`react-konva@19`, `konva@10`) mit Ebenen-Panel (Sichtbarkeit, Reihenfolge, Löschen), Transformer für Verschieben/Skalieren/Drehen, Inline-Text-Editing per Doppelklick (HTML-Overlay), Eigenschafts-Inspektor mit CI-Farben zuerst, Undo/Redo (Stapel je Artefakt, Cmd/Ctrl+Z / Cmd+Shift+Z, Delete/Backspace für Ebene löschen). KI-Editor-Brücke via `/api/dialog` Aktion `editor-befehl` (mit Web-Speech-Mikro): freie Befehle werden in Operationen (`skaliere`, `verschiebe`, `setzeText`, `setzeFarbe`, `aendereReihenfolge`, `entferne`) übersetzt und angewendet. Konva-Code läuft nur clientseitig (dynamic import mit `ssr:false`).
+- 2026-09-29: Phase 4 fertig. Rasterexport (PNG/JPG/WebP, 1×/2×) mit Wort-Umbruch, Vektor-PDF via `pdf-lib` (Texte als echte Font-Objekte, Bilder eingebettet) in mm inkl. optionalem Beschnitt+Schnittmarken (Standard 3 mm), Social-Paket + Job-Backup + Adobe-Paket via `jszip`. Neuer Store `freigaben` (IDB Version 3) + Route `/review/<token>` für das Korrekturportal: Kunden klicken auf eine Stelle im Artefakt und hinterlassen den Änderungswunsch. Grafiker sieht die Pins mit Kommentar-Thread und Status (offen/erledigt/abgelehnt) direkt im Editor. **Grenze:** Freigaben leben aktuell in IndexedDB — für echte Cross-Browser-Kunden-Reviews braucht es einen KV/D1-Store (Notiz in OFFENE_PUNKTE.md #8).

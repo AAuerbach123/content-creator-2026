@@ -163,3 +163,31 @@ export type Snapshot = {
   erstelltAm: number
   jobData: Job // tiefe Kopie zum Zeitpunkt des Snapshots
 }
+
+// Korrekturportal (Andreas-Wunsch 2026-09-29). Ein Verlag/Kunde bekommt einen
+// tokenisierten Link auf ein Artefakt, klickt auf eine Stelle und hinterlässt
+// einen Änderungswunsch. Alles ist rein clientseitig (IndexedDB) — kein Server
+// hält Kundendaten. Der „Link" ist deshalb eine URL mit dem Job-Backup als
+// Base64-Anhang; oder — später — ein Cloudflare-KV-Token. Für Phase 4 nutzen
+// wir zunächst lokale Freigaben.
+export type Freigabe = {
+  id: string // = token, aus dem Link
+  jobId: string
+  artefaktId: string
+  jobTitel: string
+  erstelltAm: number
+  pins: Korrekturpin[]
+}
+
+export type Pinstatus = 'offen' | 'erledigt' | 'abgelehnt'
+
+export type Korrekturpin = {
+  id: string
+  x: number // 0..1 relativ zur Artefakt-Breite
+  y: number // 0..1 relativ zur Artefakt-Höhe
+  kommentar: string
+  autor?: string
+  status: Pinstatus
+  erstelltAm: number
+  antworten?: { autor?: string; text: string; erstelltAm: number }[]
+}
