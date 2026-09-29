@@ -13,6 +13,8 @@
     "deploy:vinext": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.530",
+    "@remotion/player": "^4.0.530",
     "dexie": "^4.4.6",
     "jszip": "^3.10.2",
     "konva": "^10.7.0",
@@ -20,7 +22,8 @@
     "pdf-lib": "^1.17.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-konva": "^19.3.0"
+    "react-konva": "^19.3.0",
+    "remotion": "^4.0.530"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.0.0",

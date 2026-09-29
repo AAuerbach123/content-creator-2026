@@ -15,6 +15,7 @@ import GrafikerPinAnsicht from './GrafikerPinAnsicht'
 import KanalWahl from './KanalWahl'
 import KorrekturportalPanel from './KorrekturportalPanel'
 import VerlagWahl from './VerlagWahl'
+import VideoStudio from './VideoStudio'
 import { useSprache } from './SpracheProvider'
 
 // Phase-2-Panel: Artefakt erzeugen und Layer per Bild-/Text-Vorschlägen füllen.
@@ -362,6 +363,8 @@ export default function ArtefaktWerkstatt({
           <KanalWahl aktueller={job.kanal} onWahl={kanalAendern} />
         </div>
       </details>
+
+      {job.kanal === 'kurzvideo' && <VideoStudio job={job} onJobPatch={onJobPatch} />}
 
       <ExportPanel job={job} artefakt={aktuellesArtefakt} />
 

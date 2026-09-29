@@ -141,6 +141,7 @@ export type Job = {
   schrittplan: Schritt[]
   artefakte: Artefakt[]
   dialog: Nachricht[]
+  videoStoryboard?: import('./video-types').Storyboard
   status: JobStatus
   erstelltAm: number
   aktualisiertAm: number

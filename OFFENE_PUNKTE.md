@@ -87,3 +87,14 @@ Die Freigabe-Links (`/review/<token>`) funktionieren heute nur, wenn Kunde und G
 - Beim Erzeugen wandert eine Kopie des Artefakts (JSON + Bild-Base64) in den Server-Store; Kundenlink funktioniert überall.
 
 Bis das steht: Andreas kann Freigaben lokal testen (zweiter Browser-Tab, gleicher Rechner).
+
+---
+
+## 9. Remotion-Render mit echtem Job-Storyboard (Phase 5 offen)
+
+Der `npx remotion render …`-Befehl im Tool nutzt aktuell das eingebettete Beispiel-Storyboard in `src/remotion/Root.tsx`. Um das echte Job-Storyboard zu rendern:
+
+1. Backup-ZIP des Jobs herunterladen („Job-Backup" im Exporte-Panel).
+2. Aus dem ZIP `videoStoryboard` aus `<job>.json` in `src/remotion/Root.tsx` als `BEISPIEL_STORYBOARD` ersetzen (oder besser: der nächste Loop schreibt einen kleinen Helper `src/remotion/aktuellesStoryboard.ts`, den `Root.tsx` importiert).
+3. Assets (`assets/<hash>.png`, `assets/<hash>.mp3`) neben die Remotion-Root ablegen und die `asset://`-URLs auf `staticFile("<hash>.png")` mappen. Alternativ direkt aus IndexedDB in einem Studio-Preview-Modus laden.
+4. `npx remotion render src/remotion/index.tsx Reel out/<Job>.mp4` starten. 9:16, 1:1 und 16:9 werden aus derselben Composition erzeugt, wenn wir drei Compositions in `Root.tsx` registrieren — reicht als kleine Erweiterung, wenn Andreas den ersten echten Job rendert.

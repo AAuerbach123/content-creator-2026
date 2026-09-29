@@ -135,3 +135,36 @@
 
 ---
 
+## Phase 5 — Kurzvideo (Remotion + ElevenLabs) ✅
+
+**Was geht:**
+- Neuer Bereich „🎬 Video-Studio" erscheint, sobald der Kanal auf **Kurzvideo** steht.
+- Live-Player im Tool (@remotion/player), 9:16 / 1:1 / 16:9 umschaltbar.
+- Fünf Szenen-Templates: Logo-Einflug (2 s spring-Animation, sanft abbremsend), Text-Reveal (Aufzählung fliegt synchron zu Wortzeitstempeln ein), Bild-Ken-Burns (Richtung + Zoom), Karussell-Swipe, Logo-Outro. Reihenfolge per ↑/↓, Dauer per Zahleneingabe.
+- **ElevenLabs-Voiceover** (`/api/tts`): Standard-Stimme **Anneke** (`m1xJVQ4AuvhAWXoSQdeA`), Modell `eleven_multilingual_v2`, stability 0.55, similarity 0.8, style 0.05 — Werte aus dem Skill.
+- **Stimmproben (3+3):** ruft die Voice-Liste ab, filtert deutschsprachige Frauen- und Männerstimmen ohne Bayern-Akzent, erzeugt für jede eine kurze Probe mit demselben Text; ein Klick übernimmt die Stimme für das Voiceover.
+- **Woooosch** (2 s): `/api/sfx` mit fixiertem Prompt „cinematic whoosh, ends abruptly" — für den Logo-Einflug.
+- **Untertitel-Spur** eingebrannt, kompakt (6 vorangegangene + aktuelles + 2 folgende Wörter), 9:16-Safe-Zone unten (310 px + 40 px Puffer) beachtet.
+- **Sprechtext-Assistent:** Live-Längen-Schätzung (150 Wörter/min), Prüfregeln — max. 4 gemeinsame Wörter mit Folientext, Satz-Wiederholungen, Umlaut-Ersatzschreibungen (ae/oe/ue) — im „Prüfbericht" vor Export.
+- **Voiceover-Sync:** Voiceover startet 0,3 s nach dem Logo-Einflug-Ende (also bei ≈ 2,3 s), damit das Woooosch ausklingt bevor Anneke spricht.
+- **Lokaler Render-Befehl** im Tool: `npx remotion render src/remotion/index.tsx Reel out/<Job>.mp4`.
+
+**Wie testen:**
+1. Neuen Job „Reel-Test" anlegen, Kanal auf **Kurzvideo** stellen.
+2. Der Bereich „🎬 Video-Studio" erscheint. Sprechtext ins Feld tippen (z. B. „Guten Tag, hier ein kleines Beispiel für unser neues Produkt.").
+3. „Voiceover erzeugen (Anneke)" klicken → Audio erscheint direkt darunter mit Player.
+4. „Stimmproben (3+3)" klicken → sechs Karten mit Vorschau-Play; „Nehmen" wählt die Stimme.
+5. Szenen-Reihenfolge anpassen, Dauern ändern → der Player oben zeigt live die neue Animation.
+6. Unter „Prüfbericht" auf „Vor Export prüfen" klicken → Ampel-Liste.
+7. Für den finalen Export den Remotion-Befehl kopieren und im Terminal ausführen (siehe OFFENE_PUNKTE.md #9 zum Reingeben des echten Storyboards).
+
+**API-Tests direkt (curl):**
+- `/api/tts` mit „Guten Tag, ich bin Anneke." → 1,63 s Audio, 5 Wortzeitstempel, ~35 KB MP3 in ≈ 3 s.
+- `/api/tts-voices` liefert die komplette Voice-Liste (gecached 5 min).
+
+**Grenze:** Der CLI-Render nutzt aktuell das Beispiel-Storyboard aus `Root.tsx` — echtes Job-Storyboard reingeben ist der letzte manuelle Schritt (siehe `OFFENE_PUNKTE.md` #9).
+
+**Screenshot-Pfad:** (noch keine)
+
+---
+
