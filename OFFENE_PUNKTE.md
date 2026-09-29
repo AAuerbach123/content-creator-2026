@@ -65,3 +65,13 @@ Wenn nach einem `git pull` Fehler kommen wie „Cannot find module" oder ein nat
 ```bash
 rm -rf node_modules package-lock.json && npm install
 ```
+
+---
+
+## 7. OpenAI-Guthaben aufladen (blockiert Bildgenerierung)
+
+Bei der Live-Prüfung meldet die OpenAI-API `insufficient_quota` / `credit_balance_exhausted` — Bildgenerierung geht deshalb noch nicht:
+- Aufladen unter https://platform.openai.com/settings/organization/billing/
+- Empfehlung für Erprobung: 20 USD Startguthaben (ein `gpt-image-1`-Bild „medium" kostet ca. 0,04 USD, also ≈ 500 Bilder)
+
+Der Code fällt sonst sauber zurück auf `gpt-image-1.5` → `gpt-image-1` und meldet den Fehler an die Oberfläche.

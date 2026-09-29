@@ -20,6 +20,7 @@ import type {
   Schritt,
   VorlagenAnalyse,
 } from '@/lib/types'
+import ArtefaktWerkstatt from './ArtefaktWerkstatt'
 import KIDialog from './KIDialog'
 import KIVerlaufPanel from './KIVerlaufPanel'
 import MCFragenPanel, { type MCFrage } from './MCFragenPanel'
@@ -547,6 +548,10 @@ export default function JobEditor({
                 {T('briefingSchrittplan')} →
               </button>
             )}
+
+          {(job.schrittplan.length > 0 || job.gewaehlteRichtung) && (
+            <ArtefaktWerkstatt job={job} onJobPatch={jobPatch} />
+          )}
         </main>
 
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 12, position: 'sticky', top: 16 }}>

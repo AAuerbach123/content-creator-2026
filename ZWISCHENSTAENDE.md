@@ -56,3 +56,29 @@
 
 ---
 
+## Phase 2 — Erzeugung: Bild, Layout, Text ✅
+
+**Was geht:**
+- `/api/generate-image` mit den 17 Stil-Presets aus dem Ad-Creator (Aquarell, Fotorealistisch, Ghibli, Pixar, Disney, Retro-Anime, Claymation, Filz, Lego, Muppet, Cyberpunk, Pop Art, Bauhaus, Jugendstil, Tusche, Wes Anderson, Charlie & Lola). Motiv-neutral + full-bleed. Fallback-Kette gpt-image-2 → 1.5 → 1. IP-Sanitizer für Markenbegriffe.
+- `/api/generate-copy` (Claude Sonnet 4.6): sechs Slots (Headline, Subline, CTA, Body, Caption, Hashtags), je 3 Varianten, 5 Töne (nüchtern, frech, seriös, werblich, empathisch).
+- Kanal-Wahl: 11 Presets (Zeitung, Zeitschrift, 2× Web, 5× Social, Kurzvideo) mit korrekten Maßen, Safe-Zones (IG Story/Reel oben 250 px / unten 310 px).
+- Verlags-Auswahl: 46 CIs aus dem Ad-Creator (Farben, Schrift, Logo-URL, Hotlines) unter `/public/verlage-presets.json` samt Logos in `/public/verlag-logos/`. UI mit Suche und Gruppierung nach Verlag; ein Klick färbt Headline/Sub um, wechselt Schrift und legt das Logo in den Asset-Store.
+- Artefakt-Modell: `neuesArtefakt(kanal)` erzeugt ein Standard-Layout mit vier Ebenen (Hintergrund, Headline, Subline, CTA) + Logo, richtig positioniert je Kanal-Orientierung.
+- `ArtefaktRenderer`: skaliert das Artefakt auf die verfügbare Breite, zeigt Text- und Bild-Ebenen, Assets kommen aus IndexedDB (per Blob-URL).
+- „✨ KI schlägt komplettes Design vor"-Knopf: schießt Bild + Headline + Sub + CTA parallel und schreibt sie in die passenden Layer.
+
+**Wie testen:**
+1. Job wie in Phase 1 anlegen, Briefing durchspielen, Schrittplan erzeugen.
+2. Unter dem Schrittplan erscheint jetzt der Bereich „Artefakt". Kanal wählen (z. B. „Instagram Feed 4:5").
+3. Auf „✨ KI schlägt komplettes Design vor" klicken — nach ~15 s stehen Bild + drei Textzeilen in der Vorschau.
+4. Alternativ die Aufklapper „Bilder erzeugen" und „Text erzeugen" benutzen, um gezielt einzelne Ebenen zu füllen.
+5. „Verlag / Brand-Kit anwenden" → Verlag suchen (z. B. „NOZ") → Farben und Schrift werden auf Headline/Sub übernommen, Logo landet oben.
+6. „Kanal wechseln" ersetzt das Artefakt durch eines im neuen Format — sinnvoll, um denselben Job als Zeitungsanzeige UND als IG-Post zu prüfen.
+
+**Screenshot-Pfad:** (noch keine)
+
+**Bekannte Grenze:** Das OpenAI-Konto hat derzeit kein Guthaben (`insufficient_quota`). Text-, Analyse- und Dialog-Aufrufe (Claude) laufen; Bilder erzeugen erst nach Aufladen — siehe `OFFENE_PUNKTE.md` #7.
+
+---
+
+

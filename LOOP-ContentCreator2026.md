@@ -108,11 +108,11 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - **FERTIG WENN:** Kompletter Dialog vom „Worum geht's?" bis zum bestätigten Schrittplan funktioniert — auf allen drei Wegen: ohne jede Vorstellung, mit Vorstellung im Kopf, mit Vorlage.
 
 ### Phase 2 — Erzeugung: Bild, Layout, Text
-- [ ] Format-Presets je Kanal (Abschnitt 4) als Datenbasis; Job wählt Kanal → korrektes Artefakt-Format inkl. Einheiten (mm/px), Safe-Zones als Overlay
-- [ ] `/api/generate-image` mit den 17 Stil-Presets (aus Ad-Creator übernehmen: motiv-neutral, full-bleed) + Format-Ratio; Bild-Varianten (3 auf einmal, eine wählen)
-- [ ] `/api/generate-copy`: Headline/Sub/CTA/Caption/Hashtags, je 3 Varianten, Ton wählbar (nüchtern/frech/seriös)
-- [ ] Brand-Kits: Farben, Schriften, Logos, Abstände; Import der 46 Verlags-CIs aus `~/Desktop/wissensquiz/public/verlage-presets.json` samt Logo-PNGs (`verlag-logos/`) — Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titelKanonisch`
-- [ ] Artefakt-Renderer: Ebenen → Canvas-Vorschau in Echtgröße/Zoom
+- [x] Format-Presets je Kanal (Abschnitt 4) als Datenbasis; Job wählt Kanal → korrektes Artefakt-Format inkl. Einheiten (mm/px), Safe-Zones als Overlay
+- [x] `/api/generate-image` mit den 17 Stil-Presets (aus Ad-Creator übernehmen: motiv-neutral, full-bleed) + Format-Ratio; Bild-Varianten (3 auf einmal, eine wählen)
+- [x] `/api/generate-copy`: Headline/Sub/CTA/Caption/Hashtags, je 3 Varianten, Ton wählbar (nüchtern/frech/seriös)
+- [x] Brand-Kits: Farben, Schriften, Logos, Abstände; Import der 46 Verlags-CIs aus `~/Desktop/wissensquiz/public/verlage-presets.json` samt Logo-PNGs (`verlag-logos/`) — Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titelKanonisch`
+- [x] Artefakt-Renderer: Ebenen → Canvas-Vorschau in Echtgröße/Zoom
 - **FERTIG WENN:** Aus einem Briefing entsteht ein erstes komplettes Artefakt (z. B. IG-Post + Zeitungsanzeige aus demselben Job) ohne manuelles Eingreifen.
 
 ### Phase 3 — Manueller Editor (die „eigene Hand")
@@ -179,3 +179,4 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-29 (Andreas): **Korrekturportal muss wieder rein.** Nachfolger des Verlags-Freigabe-Tools aus dem Ad-Creator. Kunden bekommen einen Token-Link zur Anzeige, klicken auf eine Stelle und hinterlassen den Änderungswunsch (Text, später auch Skizze). Der Grafiker sieht die Pins mit Koordinaten und Status (offen/erledigt/abgelehnt) direkt im Editor. Aufgabe steht in Phase 4.
 - 2026-09-29 (Andreas): **Verlage komplett übernehmen.** Alle 46 Verlags-Einträge aus `~/Desktop/wissensquiz/public/verlage-presets.json` (Titel, Verlag, Schrift, Hausfarben, Format, Logo-Pfad, Hotlines) plus die Logo-PNGs aus `~/Desktop/wissensquiz/public/verlag-logos/` in Phase 2 als Brand-Kits importieren. Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titel/verlag/titelKanonisch`.
 - 2026-09-29: Phase 1 fertig. `/api/dialog` (Router / Briefing / drei Richtungen / MC-Vorlage / Schrittplan / Editor-Befehl) und `/api/analyze-template` (Claude Vision) laufen mit Claude Sonnet 4.6. Kosten je Aktion landen im IndexedDB-Store `kiAktionen` (Regel 8). UI: `WegAuswahl`, `KIDialog`, `RichtungenPanel`, `MCFragenPanel`, `SchrittplanPanel`, `KIVerlaufPanel`, `VorlagenUpload`, `MikrofonKnopf` (Web Speech). Startbildschirm-Prompt „Was produzieren wir heute?" ruft den Router und öffnet den JobEditor.
+- 2026-09-29: Phase 2 fertig. `/api/generate-image` (gpt-image-2 → 1.5 → 1 Kette, 17 Stil-Presets aus Ad-Creator übernommen, IP-Sanitizer) und `/api/generate-copy` (Claude Sonnet, 6 Slots × 3 Varianten). ArtefaktRenderer skaliert Layer-Modell in Echtzeit. 46 Verlags-Presets + Logos aus wissensquiz sind unter `/public/verlage-presets.json` + `/public/verlag-logos/` verfügbar. „✨ KI schlägt komplettes Design vor"-Knopf feuert Bild + Headline + Sub + CTA parallel und schreibt sie in die passenden Ebenen. OpenAI-Konto hat kein Guthaben mehr → Notiz in `OFFENE_PUNKTE.md` #7.

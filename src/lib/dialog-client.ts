@@ -152,6 +152,107 @@ export async function vorlageAnalysieren(args: {
   return antwort
 }
 
+// ------------------ Bild-Erzeugung ------------------
+
+export type BildAntwort = {
+  ok: boolean
+  dataUrl?: string
+  modell?: string
+  stilLabel?: string
+  orientierung?: string
+  kostenUsd?: number
+  sanitizationHinweis?: string | null
+  fehler?: string
+}
+
+export async function bildErzeugen(args: {
+  jobId?: string
+  motiv?: string
+  stil?: string
+  prompt?: string
+  orientierung?: 'landscape' | 'portrait' | 'square'
+}): Promise<BildAntwort> {
+  const antwortRaw = await fetch('/api/generate-image', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(args),
+  })
+  const daten = (await antwortRaw.json().catch(() => ({}))) as Record<string, unknown>
+  const antwort: BildAntwort = {
+    ok: antwortRaw.ok && (daten.ok as boolean | undefined) !== false,
+    dataUrl: daten.dataUrl as string | undefined,
+    modell: daten.modell as string | undefined,
+    stilLabel: daten.stilLabel as string | undefined,
+    orientierung: daten.orientierung as string | undefined,
+    kostenUsd: daten.kostenUsd as number | undefined,
+    sanitizationHinweis: daten.sanitizationHinweis as string | null | undefined,
+    fehler: (daten.fehler as string | undefined) || (antwortRaw.ok ? undefined : antwortRaw.statusText),
+  }
+  await aktionInVerlauf(
+    args.jobId,
+    '/api/generate-image',
+    (args.motiv || args.prompt || '').slice(0, 400),
+    { ...antwort, daten: antwort.dataUrl ? { modell: antwort.modell } : undefined },
+  )
+  return antwort
+}
+
+// ------------------ Text-Erzeugung ------------------
+
+export type CopyAntwort = {
+  ok: boolean
+  slot?: string
+  varianten?: string[]
+  begruendung?: string
+  rohtext?: string
+  modell?: string
+  eingabeTokens?: number
+  ausgabeTokens?: number
+  kostenUsd?: number
+  fehler?: string
+}
+
+export async function copyErzeugen(args: {
+  jobId?: string
+  slot: 'headline' | 'subline' | 'cta' | 'body' | 'caption' | 'hashtags'
+  briefing?: string
+  ziel?: string
+  kanal?: string
+  ton?: 'nuechtern' | 'frech' | 'seriös' | 'werblich' | 'empathisch'
+  sprache?: 'de' | 'en'
+  laenge?: 'kurz' | 'mittel' | 'lang'
+  anzahl?: number
+}): Promise<CopyAntwort> {
+  const antwortRaw = await fetch('/api/generate-copy', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(args),
+  })
+  const daten = (await antwortRaw.json().catch(() => ({}))) as Record<string, unknown>
+  const antwort: CopyAntwort = {
+    ok: antwortRaw.ok && (daten.ok as boolean | undefined) !== false,
+    slot: daten.slot as string | undefined,
+    varianten: (daten.varianten as string[] | undefined) || [],
+    begruendung: daten.begruendung as string | undefined,
+    rohtext: daten.rohtext as string | undefined,
+    modell: daten.modell as string | undefined,
+    eingabeTokens: daten.eingabeTokens as number | undefined,
+    ausgabeTokens: daten.ausgabeTokens as number | undefined,
+    kostenUsd: daten.kostenUsd as number | undefined,
+    fehler: (daten.fehler as string | undefined) || (antwortRaw.ok ? undefined : antwortRaw.statusText),
+  }
+  await aktionInVerlauf(args.jobId, '/api/generate-copy', `${args.slot}: ${args.briefing || args.ziel || ''}`, {
+    ok: antwort.ok,
+    daten: antwort.varianten,
+    modell: antwort.modell,
+    eingabeTokens: antwort.eingabeTokens,
+    ausgabeTokens: antwort.ausgabeTokens,
+    kostenUsd: antwort.kostenUsd,
+    fehler: antwort.fehler,
+  })
+  return antwort
+}
+
 // Reduzierte Job-Zusammenfassung für den Prompt (spart Tokens, behält relevante Felder)
 export function jobFuerPrompt(job: Job): Record<string, unknown> {
   return {
