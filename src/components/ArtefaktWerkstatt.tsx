@@ -9,6 +9,7 @@ import { kanalById } from '@/lib/kanaele'
 import ArtefaktRenderer from './ArtefaktRenderer'
 import BildErzeugung from './BildErzeugung'
 import CopyErzeugung from './CopyErzeugung'
+import EditorAnsicht from './EditorAnsicht'
 import KanalWahl from './KanalWahl'
 import VerlagWahl from './VerlagWahl'
 import { useSprache } from './SpracheProvider'
@@ -37,6 +38,7 @@ export default function ArtefaktWerkstatt({
   const [aktuelleId, setAktuelleId] = useState<string | undefined>(job.artefakte[0]?.id)
   const [rundumLaedt, setRundumLaedt] = useState(false)
   const [rundumFehler, setRundumFehler] = useState<string | null>(null)
+  const [modus, setModus] = useState<'vorschau' | 'editor'>('vorschau')
 
   const aktuellesArtefakt = useMemo(
     () => job.artefakte.find((a) => a.id === aktuelleId) || job.artefakte[0],
@@ -237,7 +239,51 @@ export default function ArtefaktWerkstatt({
         </div>
       </div>
 
-      {aktuellesArtefakt && <ArtefaktRenderer artefakt={aktuellesArtefakt} maxBreite={520} />}
+      {aktuellesArtefakt && (
+        <>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {(['vorschau', 'editor'] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setModus(m)}
+                style={{
+                  background: modus === m ? '#f5f5f7' : 'transparent',
+                  color: modus === m ? '#0b0b0f' : '#f5f5f7',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  padding: '4px 12px',
+                  borderRadius: 5,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                {m === 'vorschau'
+                  ? sprache === 'de'
+                    ? 'Vorschau'
+                    : 'Preview'
+                  : sprache === 'de'
+                    ? 'Editor'
+                    : 'Editor'}
+              </button>
+            ))}
+          </div>
+          {modus === 'vorschau' ? (
+            <ArtefaktRenderer artefakt={aktuellesArtefakt} maxBreite={560} />
+          ) : (
+            <EditorAnsicht
+              jobId={job.id}
+              artefakt={aktuellesArtefakt}
+              onAendern={(neu) =>
+                onJobPatch((alt) => ({
+                  ...alt,
+                  artefakte: alt.artefakte.map((a) => (a.id === aktuellesArtefakt.id ? neu : a)),
+                }))
+              }
+            />
+          )}
+        </>
+      )}
 
       <button
         type="button"

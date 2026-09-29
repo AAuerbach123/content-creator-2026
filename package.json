@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "dexie": "^4.4.6",
+    "konva": "^10.7.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.3.0"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.0.0",

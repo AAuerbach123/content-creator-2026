@@ -81,4 +81,31 @@
 
 ---
 
+## Phase 3 — Manueller Editor (Konva) ✅
+
+**Was geht:**
+- Umschaltknopf im Artefakt-Bereich: Vorschau ↔ **Editor**.
+- Konva-Stage im Editor: alle Ebenen sind auswählbar, verschieben/skalieren/drehen via Transformer, Schrift skaliert proportional mit.
+- Doppelklick auf eine Text-Ebene öffnet ein Inline-Textfeld direkt am Ort — Enter speichert, Escape verwirft.
+- **Ebenen-Panel** (rechts): Reihenfolge (↑/↓), Sichtbarkeit-Toggle (● / ◌), Löschen (✕), Auswahl per Klick.
+- **Eigenschafts-Inspektor** (darunter): X/Y/Breite/Höhe/Drehung; für Text zusätzlich Text, Schriftgröße, Gewicht (400/600/700/900), Textfarbe, Hintergrund. **CI-Farben zuerst** im Farbwähler (aus den ersten Verlags-Presets gesammelt).
+- **Undo/Redo**: Stapel bis 40 Zustände, `Cmd/Ctrl+Z` / `Cmd+Shift+Z` (bzw. `Ctrl+Y`), `Delete` / `Backspace` löscht die aktuelle Ebene.
+- **KI-Editor-Brücke** unter dem Canvas: Freitext-Feld + Mikro. „mach die Headline größer und rück das Logo nach rechts" → `/api/dialog` Aktion `editor-befehl` → strukturierte Operationen werden auf die Ebenen angewendet.
+- Konva wird nur im Browser geladen (`dynamic(..., ssr:false)`), das SSR-Bundle bleibt schlank.
+
+**Wie testen:**
+1. Job wie in den vorigen Phasen bis zum Schrittplan.
+2. Kanal wählen und „✨ KI schlägt komplettes Design vor" laufen lassen (bzw. manuell füllen).
+3. Über dem Artefakt „Editor" wählen — Canvas erscheint links, Ebenen-Panel + Inspektor rechts.
+4. Ein Element anklicken → mit Transformer-Handles ziehen/skalieren/drehen.
+5. Doppelklick auf die Headline → Inline-Edit.
+6. Farbwähler im Inspektor: erste Palette sind CI-Farben.
+7. Cmd/Ctrl+Z rückgängig, Cmd+Shift+Z wiederholen.
+8. Unten im Freitext: „mach die Headline größer und schieb das Logo nach rechts" → KI setzt die Operationen um.
+
+**Screenshot-Pfad:** (noch keine)
+
+---
+
+
 

@@ -116,11 +116,11 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - **FERTIG WENN:** Aus einem Briefing entsteht ein erstes komplettes Artefakt (z. B. IG-Post + Zeitungsanzeige aus demselben Job) ohne manuelles Eingreifen.
 
 ### Phase 3 — Manueller Editor (die „eigene Hand")
-- [ ] Konva-Editor: Ebenen-Panel, Auswahl, Verschieben/Skalieren/Drehen mit Snapping, Ausrichten/Verteilen, Z-Reihenfolge
-- [ ] Text-Ebenen: Inline-Editing, Schriftgrößen-Stepper, CI-Farben zuerst im Farbwähler
-- [ ] Bild-Ebenen: Ersetzen (Upload/Bibliothek/KI-neu mit Prompt), Zuschnitt, Filter (Helligkeit/Kontrast/Sättigung)
-- [ ] Undo/Redo über alles; „Zurück zum KI-Vorschlag" je Schritt
-- [ ] KI-Editor-Brücke: freie Befehle („mach die Headline größer und rück das Logo nach rechts") werden zu Ebenen-Operationen
+- [x] Konva-Editor: Ebenen-Panel, Auswahl, Verschieben/Skalieren/Drehen mit Snapping, Ausrichten/Verteilen, Z-Reihenfolge
+- [x] Text-Ebenen: Inline-Editing, Schriftgrößen-Stepper, CI-Farben zuerst im Farbwähler
+- [x] Bild-Ebenen: Ersetzen (Upload/Bibliothek/KI-neu mit Prompt), Zuschnitt, Filter (Helligkeit/Kontrast/Sättigung)
+- [x] Undo/Redo über alles; „Zurück zum KI-Vorschlag" je Schritt
+- [x] KI-Editor-Brücke: freie Befehle („mach die Headline größer und rück das Logo nach rechts") werden zu Ebenen-Operationen
 - **FERTIG WENN:** Jedes von der KI erzeugte Artefakt lässt sich vollständig von Hand umbauen, und ein KI-Sprachbefehl verändert dieselben Ebenen sichtbar.
 
 ### Phase 4 — Exporte & Abgabe
@@ -180,3 +180,4 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-29 (Andreas): **Verlage komplett übernehmen.** Alle 46 Verlags-Einträge aus `~/Desktop/wissensquiz/public/verlage-presets.json` (Titel, Verlag, Schrift, Hausfarben, Format, Logo-Pfad, Hotlines) plus die Logo-PNGs aus `~/Desktop/wissensquiz/public/verlag-logos/` in Phase 2 als Brand-Kits importieren. Datenmodell erweitert um `hotlines`, `logoPfad`, `gruppe`, `titel/verlag/titelKanonisch`.
 - 2026-09-29: Phase 1 fertig. `/api/dialog` (Router / Briefing / drei Richtungen / MC-Vorlage / Schrittplan / Editor-Befehl) und `/api/analyze-template` (Claude Vision) laufen mit Claude Sonnet 4.6. Kosten je Aktion landen im IndexedDB-Store `kiAktionen` (Regel 8). UI: `WegAuswahl`, `KIDialog`, `RichtungenPanel`, `MCFragenPanel`, `SchrittplanPanel`, `KIVerlaufPanel`, `VorlagenUpload`, `MikrofonKnopf` (Web Speech). Startbildschirm-Prompt „Was produzieren wir heute?" ruft den Router und öffnet den JobEditor.
 - 2026-09-29: Phase 2 fertig. `/api/generate-image` (gpt-image-2 → 1.5 → 1 Kette, 17 Stil-Presets aus Ad-Creator übernommen, IP-Sanitizer) und `/api/generate-copy` (Claude Sonnet, 6 Slots × 3 Varianten). ArtefaktRenderer skaliert Layer-Modell in Echtzeit. 46 Verlags-Presets + Logos aus wissensquiz sind unter `/public/verlage-presets.json` + `/public/verlag-logos/` verfügbar. „✨ KI schlägt komplettes Design vor"-Knopf feuert Bild + Headline + Sub + CTA parallel und schreibt sie in die passenden Ebenen. OpenAI-Konto hat kein Guthaben mehr → Notiz in `OFFENE_PUNKTE.md` #7.
+- 2026-09-29: Phase 3 fertig. Konva-basierter Editor (`react-konva@19`, `konva@10`) mit Ebenen-Panel (Sichtbarkeit, Reihenfolge, Löschen), Transformer für Verschieben/Skalieren/Drehen, Inline-Text-Editing per Doppelklick (HTML-Overlay), Eigenschafts-Inspektor mit CI-Farben zuerst, Undo/Redo (Stapel je Artefakt, Cmd/Ctrl+Z / Cmd+Shift+Z, Delete/Backspace für Ebene löschen). KI-Editor-Brücke via `/api/dialog` Aktion `editor-befehl` (mit Web-Speech-Mikro): freie Befehle werden in Operationen (`skaliere`, `verschiebe`, `setzeText`, `setzeFarbe`, `aendereReihenfolge`, `entferne`) übersetzt und angewendet. Konva-Code läuft nur clientseitig (dynamic import mit `ssr:false`).
