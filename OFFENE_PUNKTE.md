@@ -112,7 +112,19 @@ Erster Aufruf dauert 30–60 s (Bundling). Danach ist Rendern schnell.
 
 ---
 
-## 10. Rufnummern von Yasmina Salah bestätigen (Phase 7)
+## 10. ESLint einrichten (Prüf-Loop 2026-09-30)
+
+Next 16 hat `next lint` entfernt. Aktuell macht `npm run pruefen` alles Wichtige (Typecheck, Custom-Checks, Build). Wenn ESLint gewünscht ist, einmalig auf dem Mac:
+
+```bash
+npm i -D eslint @eslint/js typescript-eslint eslint-plugin-react eslint-plugin-react-hooks && printf "%s\n" "import js from '@eslint/js'" "import tseslint from 'typescript-eslint'" "export default [js.configs.recommended, ...tseslint.configs.recommended]" > eslint.config.mjs && npx eslint src
+```
+
+Danach in `package.json` das `lint`-Skript auf `eslint src` umstellen und in `pruefen` einbinden.
+
+---
+
+## 11. Rufnummern von Yasmina Salah bestätigen (Phase 7)
 
 `public/rufnummern.json` enthält 55 Zeitungen aus den alten Listen (Ad-Creator + monday-Board *2. Projektdetails*). Status im Tool: **„zu bestätigen"**. Vor dem ersten echten Druck bitte einmal mit Yasmina abgleichen und ggf. korrigieren. Auf `/rufnummern` steht ganz oben ein gelbes Warnbanner.
 

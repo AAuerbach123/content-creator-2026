@@ -40,7 +40,10 @@ export default function ExportPanel({ job, artefakt }: { job: Job; artefakt?: Ar
     setFehler(null)
     setLaedt('pdf')
     try {
-      const blob = await artefaktAlsPdf(artefakt, { beschnittMm: 3, schnittmarken: true })
+      // 3 mm Beschnitt + Schnittmarken nur bei Print-Kanälen (mm) — für
+      // Pixel-Web-Banner ergibt Beschnitt keinen Sinn.
+      const istPrint = artefakt.einheit === 'mm'
+      const blob = await artefaktAlsPdf(artefakt, istPrint ? { beschnittMm: 3, schnittmarken: true } : {})
       const suffix = artefakt.format.replace(/\s+/g, '_')
       blobHerunterladen(blob, `${dateinameBase}_${suffix}.pdf`)
       setGewicht(`${(blob.size / 1024).toFixed(1)} KB (PDF)`)
