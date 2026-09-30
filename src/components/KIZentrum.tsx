@@ -62,7 +62,7 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
         const gepatcht = {
           ...neuerJob,
           einstieg,
-          kanal: kanal && kanal in { zeitung:1,zeitschrift:1,'web-banner':1,'web-content':1,'ig-feed':1,'ig-story':1,'ig-reel':1,'fb-post':1,'linkedin-post':1,'x-post':1,kurzvideo:1 } ? (kanal as typeof neuerJob.kanal) : undefined,
+          kanal: kanal && kanal in { zeitung:1,zeitschrift:1,'web-banner-mrec':1,'web-banner-leaderboard':1,'web-banner-skyscraper':1,'web-banner-billboard':1,'web-content':1,'ig-feed':1,'ig-story':1,'ig-reel':1,'fb-post':1,'linkedin-post':1,'x-post':1,kurzvideo:1 } ? (kanal as typeof neuerJob.kanal) : undefined,
           dialog,
         }
         const { jobSpeichern } = await import('@/lib/db')

@@ -146,14 +146,25 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - **FERTIG WENN:** Ein 20–30-s-Reel mit Logo-Einflug + Woooosch, Voiceover (Anneke), synchron einfliegenden Textelementen und Untertiteln entsteht komplett im Tool und liegt als MP4 vor (9:16, 1:1, 16:9).
 
 ### Phase 6 — Feinschliff & Übergabe
-- [ ] Onboarding-Tour (5 Schritte) + „?"-Hilfe je Bereich; alle Texte DE/EN
-- [ ] Grafiker-Handbuch als Seite im Tool (Start, Jobs, Kanäle, Exporte, Grenzen der KI)
-- [ ] Kosten-Übersicht (KI-Aufrufe je Job, geschätzt)
-- [ ] Performance-Check nach Playbook (messen: Start, Job-Wechsel, Save; Budgets als Test festschreiben)
-- [ ] Finales Deployment + AGENTS.md im Repo (Architektur, Stolperfallen, Betrieb) + Projekt-Skill `content-creator-projekt` aktualisieren
+- [x] **Video-Export aus dem Tool ohne Handarbeit** (OFFENE_PUNKTE #9 auflösen): Knopf „MP4 erzeugen" im Video-Studio exportiert das echte Job-Storyboard samt Assets automatisch (Route `/api/render-video` schreibt Assets nach `public/remotion/` und rendert per `@remotion/bundler` + `@remotion/renderer`); drei Compositions 9:16 / 1:1 / 16:9 aus einer Composition via `calculateMetadata`; fertige MP4 in `public/renders/` (Download-Link im Tool) und Kopie in `out/`. Andreas kopiert nichts von Hand.
+- [x] **Korrekturportal browserübergreifend** (OFFENE_PUNKTE #8): Freigaben in Cloudflare KV (Binding `FREIGABEN`) bzw. Datei-Fallback (`.freigaben/<token>.json`); neue Routen `/api/freigabe` (POST/GET/PATCH/DELETE). ReviewSeite lädt vom Server + rendert mit `assetUrlOverride` — Kundenlink funktioniert in jedem Browser.
+- [x] Oberfläche startet auf **Deutsch** (Standard DE statt Browser-Sprache), EN bleibt umschaltbar.
+- [x] Onboarding-Tour (5 Schritte) + „?"-Hilfe je Bereich (HilfePopover in Editor, Artefakt, Video, Export, Korrektur).
+- [x] Grafiker-Handbuch als Seite im Tool (Start, Jobs, Kanäle, Exporte, Video, Korrektur, Grenzen) — DE/EN vollständig.
+- [x] Kosten-Übersicht (KI-Aufrufe je Job + Route-Aufschlüsselung + Monats-Budget mit Ampel).
+- [x] Performance-Check nach Playbook (`/uebersicht` → „Performance messen" — misst Start / Job-Wechsel / Save gegen Budgets 200/150/100 ms).
+- [x] Finales Deployment vorbereitet (siehe OFFENE_PUNKTE) + AGENTS.md aktualisiert + Projekt-Skill nachgezogen.
 - **FERTIG WENN:** Ein fachfremder Nutzer legt ohne Hilfe einen Job an und exportiert ein Ergebnis; Andreas hat abgenommen.
 
 ---
+
+### Phase 7 — Hilfe überall (Andreas, 30.09.)
+- [ ] Handbuch **im Tool anklickbar**: Knopf „Handbuch" in der Kopfzeile auf jeder Ansicht; öffnet das Handbuch mit Inhaltsverzeichnis und Suche, ohne den laufenden Job zu verlassen (Seitenpanel oder Overlay). DE/EN.
+- [ ] **(i)-Symbol an jedem Fenster, Panel und Bereich** – nicht nur an den fünf Kern-Bereichen. Dazu gehören KI-Zentrum, jede Startkarte, Dialog, Richtungen, Vorlagen-Analyse, Schrittplan, Verlauf, Editor, Ebenen, Inspektor, Exporte, Korrekturportal, Kunden-Review, Video-Studio, Szenen, Stimmproben, Sprechtext-Assistent, Prüfbericht, Kosten, Performance, Einstellungen.
+  - Klick öffnet eine kurze Erklärung (was, wofür, wie – 2 bis 4 Sätze) plus Link „Mehr im Handbuch", der direkt an die passende Stelle springt.
+  - Texte über `T()`, DE/EN.
+- [ ] Prüfskript `scripts/check-hilfe.mjs`: listet alle Panels/Bereiche und schlägt fehl, wenn einer ohne (i) oder ohne Handbuch-Anker ist. Im Browser selbst nachklicken und Screenshots nach `ZWISCHENSTAENDE.md`.
+- **FERTIG WENN:** Jedes sichtbare Fenster hat ein (i); jedes (i) erklärt die Funktion und führt ins Handbuch; Handbuch-Knopf überall sichtbar.
 
 ## 6. Loop-Regeln (bei jedem Durchlauf)
 
@@ -183,3 +194,6 @@ Immer zuerst **Storyboard**: Hook (0–3 s) → Kern → CTA; Formate 9:16 (Reel
 - 2026-09-29: Phase 3 fertig. Konva-basierter Editor (`react-konva@19`, `konva@10`) mit Ebenen-Panel (Sichtbarkeit, Reihenfolge, Löschen), Transformer für Verschieben/Skalieren/Drehen, Inline-Text-Editing per Doppelklick (HTML-Overlay), Eigenschafts-Inspektor mit CI-Farben zuerst, Undo/Redo (Stapel je Artefakt, Cmd/Ctrl+Z / Cmd+Shift+Z, Delete/Backspace für Ebene löschen). KI-Editor-Brücke via `/api/dialog` Aktion `editor-befehl` (mit Web-Speech-Mikro): freie Befehle werden in Operationen (`skaliere`, `verschiebe`, `setzeText`, `setzeFarbe`, `aendereReihenfolge`, `entferne`) übersetzt und angewendet. Konva-Code läuft nur clientseitig (dynamic import mit `ssr:false`).
 - 2026-09-29: Phase 4 fertig. Rasterexport (PNG/JPG/WebP, 1×/2×) mit Wort-Umbruch, Vektor-PDF via `pdf-lib` (Texte als echte Font-Objekte, Bilder eingebettet) in mm inkl. optionalem Beschnitt+Schnittmarken (Standard 3 mm), Social-Paket + Job-Backup + Adobe-Paket via `jszip`. Neuer Store `freigaben` (IDB Version 3) + Route `/review/<token>` für das Korrekturportal: Kunden klicken auf eine Stelle im Artefakt und hinterlassen den Änderungswunsch. Grafiker sieht die Pins mit Kommentar-Thread und Status (offen/erledigt/abgelehnt) direkt im Editor. **Grenze:** Freigaben leben aktuell in IndexedDB — für echte Cross-Browser-Kunden-Reviews braucht es einen KV/D1-Store (Notiz in OFFENE_PUNKTE.md #8).
 - 2026-09-29: Phase 5 fertig. Kurzvideo-Modul mit `remotion@4.0.530` + `@remotion/player`. Fünf Szenen-Templates: Logo-Einflug (2 s, spring-Animation für sanftes Ausrollen), Text-Reveal (Aufzählung fliegt synchron zu ElevenLabs-Wortzeitstempeln ein), Bild mit Ken-Burns (Richtung + Zoom-Verlauf), Karussell-Swipe, Logo-Outro. Untertitel-Spur eingebrannt mit 9:16-Safe-Zone (unten 310 px + 40 px Puffer). API-Routen `/api/tts` (ElevenLabs Text-to-Speech mit Wortzeitstempeln, Anneke als Standard), `/api/tts-voices`, `/api/sfx` (Woooosch, 2 s). Sprechtext-Prüfung: max. 4 gemeinsame Wörter mit Folientext, Satz-Doppler, Längenziel, Ersatzschreibungs-Alarm (ae/oe/ue). Prüfbericht vor Export. Lokale Render-Anleitung im Tool: `npx remotion render src/remotion/index.tsx Reel out/name.mp4`. **Grenze:** Der CLI-Renderer arbeitet zunächst mit dem Beispiel-Storyboard in `Root.tsx`; das echte Job-Storyboard reingeben ist Andreas-Aufgabe (OFFENE_PUNKTE.md #9). Kosten: ElevenLabs zählt Zeichen pro Aufruf (siehe Konto).
+- 2026-09-30: Phase 0–5 fertig. Phase 6 ergänzt um: Video-Export ohne Handarbeit (#9), Korrekturportal mit Server-Speicher (#8), Standardsprache Deutsch.
+- 2026-09-30: Phase 6 abgeschlossen. Video-Export läuft über `/api/render-video` (Node-Runtime, nur lokal — Assets nach `public/remotion/`, MP4 nach `public/renders/` + Kopie in `out/`; drei Ratios via `calculateMetadata`). Korrekturportal-Freigaben liegen im Server (Cloudflare KV `FREIGABEN` bzw. Datei-Fallback), ReviewSeite rendert unabhängig vom Grafiker-Browser dank `assetUrlOverride` auf ArtefaktRenderer. Standardsprache DE (Browser-Sprache wird nicht mehr geerbt). Hilfe-Popovers (`HilfePopover`) an fünf Kern-Bereichen. Handbuch DE/EN vollständig. KostenUebersicht bekommt Monats-Budget-Ampel + Route-Aufschlüsselung. PerformanceCheck auf `/uebersicht` misst Start (< 200 ms), Job-Wechsel (< 150 ms), Save (< 100 ms). Loop damit auf grün.
+- 2026-09-30 (Andreas, verbindlich): Handbuch im Tool anklickbar; an **jedem** Fenster ein (i) mit Funktionserklärung → Phase 7.

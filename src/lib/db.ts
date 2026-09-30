@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie'
-import type { Asset, Freigabe, Job, KIAktion, Snapshot } from './types'
+import type { Asset, EigeneVorlage, Freigabe, Job, KIAktion, Snapshot } from './types'
 import { sha256Hex } from './hash'
 
 const DB_NAME = 'ContentCreator2026'
@@ -35,7 +35,18 @@ class ContentCreatorDB extends Dexie {
       kiAktionen: 'id, jobId, route, zeitpunkt',
       freigaben: 'id, jobId, artefaktId, erstelltAm',
     })
+    // Version 4: Eigene Vorlagen-Bibliothek
+    this.version(4).stores({
+      jobs: 'id, kanal, status, aktualisiertAm, faelligAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
+      vorlagen: 'id, name, kanal, erstelltAm',
+    })
   }
+
+  vorlagen!: Table<EigeneVorlage, string>
 }
 
 let instance: ContentCreatorDB | undefined
@@ -196,4 +207,18 @@ export async function freigabenFuerJob(jobId: string): Promise<Freigabe[]> {
 
 export async function freigabeLoeschen(id: string): Promise<void> {
   await getDb().freigaben.delete(id)
+}
+
+// ------------------- Eigene Vorlagen -------------------
+
+export async function vorlageSpeichern(v: EigeneVorlage): Promise<void> {
+  await getDb().vorlagen.put(v)
+}
+
+export async function vorlagenLaden(): Promise<EigeneVorlage[]> {
+  return getDb().vorlagen.orderBy('erstelltAm').reverse().toArray()
+}
+
+export async function vorlageLoeschen(id: string): Promise<void> {
+  await getDb().vorlagen.delete(id)
 }

@@ -5,6 +5,7 @@ import { artefaktAlsBlob, blobHerunterladen, dateinameSanitisieren } from '@/lib
 import { artefaktAlsPdf } from '@/lib/export-pdf'
 import { adobeUebergabe, jobBackup, socialPaket } from '@/lib/export-paket'
 import type { Artefakt, Job } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Phase 4: Export-Optionen für ein Artefakt bzw. den ganzen Job.
@@ -127,7 +128,13 @@ export default function ExportPanel({ job, artefakt }: { job: Job; artefakt?: Ar
         gap: 8,
       }}
     >
-      <div style={{ fontSize: 13, fontWeight: 700 }}>{sprache === 'de' ? 'Exporte' : 'Exports'}</div>
+      <div style={{ fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span>{sprache === 'de' ? 'Exporte' : 'Exports'}</span>
+        <HilfePopover
+          de="Raster (PNG/JPG/WebP) 1× für Web, 2× für Retina. Vektor-PDF geht in mm mit 3 mm Beschnitt + Schnittmarken — genau so wollen Verlage die Anzeige. Social-Paket bündelt alle Artefakte + Captions. Adobe-Paket enthält PDF + Anleitung. Job-Backup = alles wieder öffnen können."
+          en="Raster (PNG/JPG/WebP) 1× for web, 2× for Retina. Vector PDF in mm with 3 mm bleed + crop marks — the way publishers want ads. Social bundle: all artefacts + captions. Adobe bundle: PDF + how-to. Job backup = full reopen."
+        />
+      </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
         {knopf('png-1', 'PNG 1×', () => raster('png', 1))}
         {knopf('png-2', 'PNG 2×', () => raster('png', 2))}

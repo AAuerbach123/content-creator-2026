@@ -1,7 +1,7 @@
 // Client-Helpers für Voice + SFX + Sprechtext-Check (Regel „nicht ablesen").
 
-import { aktionSpeichern, assetSpeichern } from './db'
-import type { VoiceoverInfo, WortZeit } from './video-types'
+import { aktionSpeichern, assetLaden, assetSpeichern } from './db'
+import type { Storyboard, VoiceoverInfo, WortZeit } from './video-types'
 
 export type TtsAntwort = {
   ok: boolean
@@ -165,4 +165,88 @@ export function sprechtextPruefen(sprechtext: string, folientexte: string[], zie
     hinweise,
     laengeSekundenGeschaetzt: geschaetzt,
   }
+}
+
+// ------------------- MP4 rendern (lokal, per /api/render-video) -------------------
+
+export type RenderErgebnis = {
+  ratio: string
+  dateiname: string
+  download: string
+  bytes: number
+}
+
+export type RenderAntwort = {
+  ok: boolean
+  ergebnisse?: RenderErgebnis[]
+  fehler?: string | Array<{ ratio: string; fehler: string }>
+}
+
+function hashesAusStoryboard(sb: Storyboard): string[] {
+  const set = new Set<string>()
+  for (const s of sb.szenen) {
+    const anySz = s as unknown as Record<string, unknown>
+    if (typeof anySz.logoAssetHash === 'string') set.add(anySz.logoAssetHash)
+    if (typeof anySz.bildAssetHash === 'string') set.add(anySz.bildAssetHash)
+    if (Array.isArray(anySz.bildAssetHashes)) {
+      for (const h of anySz.bildAssetHashes as string[]) if (typeof h === 'string') set.add(h)
+    }
+  }
+  if (sb.voiceover?.assetHash) set.add(sb.voiceover.assetHash)
+  return Array.from(set)
+}
+
+async function blobZuBase64(blob: Blob): Promise<string> {
+  const buf = await blob.arrayBuffer()
+  let bin = ''
+  const bytes = new Uint8Array(buf)
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  }
+  return btoa(bin)
+}
+
+export async function mp4Rendern(args: {
+  storyboard: Storyboard
+  seitenverhaeltnisse?: Array<'9:16' | '1:1' | '16:9'>
+  dateiname?: string
+  jobId?: string
+}): Promise<RenderAntwort> {
+  const hashes = hashesAusStoryboard(args.storyboard)
+  const assets: Array<{ hash: string; mimeType: string; base64: string }> = []
+  for (const hash of hashes) {
+    const a = await assetLaden(hash)
+    if (!a) continue
+    const base64 = await blobZuBase64(a.blob)
+    assets.push({ hash, mimeType: a.mimeType, base64 })
+  }
+  const antwortRaw = await fetch('/api/render-video', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      storyboard: args.storyboard,
+      assets,
+      seitenverhaeltnisse: args.seitenverhaeltnisse,
+      dateiname: args.dateiname,
+    }),
+  })
+  const daten = (await antwortRaw.json().catch(() => ({}))) as Record<string, unknown>
+  const antwort: RenderAntwort = {
+    ok: antwortRaw.ok && (daten.ok as boolean | undefined) !== false,
+    ergebnisse: daten.ergebnisse as RenderErgebnis[] | undefined,
+    fehler:
+      (daten.fehler as string | Array<{ ratio: string; fehler: string }> | undefined) ||
+      (antwortRaw.ok ? undefined : antwortRaw.statusText),
+  }
+  await aktionSpeichern({
+    id: crypto.randomUUID(),
+    jobId: args.jobId,
+    route: '/api/render-video',
+    prompt: `MP4 (${(args.seitenverhaeltnisse || ['9:16']).join(', ')})`,
+    antwortKurz: antwort.ergebnisse ? antwort.ergebnisse.map((e) => `${e.ratio}=${Math.round(e.bytes / 1024)}kB`).join(' · ') : undefined,
+    fehler: typeof antwort.fehler === 'string' ? antwort.fehler : undefined,
+    zeitpunkt: Date.now(),
+  })
+  return antwort
 }

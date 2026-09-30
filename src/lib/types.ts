@@ -6,7 +6,10 @@ export type Sprache = 'de' | 'en'
 export type Kanal =
   | 'zeitung'
   | 'zeitschrift'
-  | 'web-banner'
+  | 'web-banner-mrec'
+  | 'web-banner-leaderboard'
+  | 'web-banner-skyscraper'
+  | 'web-banner-billboard'
   | 'web-content'
   | 'ig-feed'
   | 'ig-story'
@@ -127,6 +130,13 @@ export type BrandKit = {
   quelle?: 'verlag' | 'kunde' | 'eigene'
 }
 
+export type Notiz = {
+  id: string
+  autor?: string
+  text: string
+  erstelltAm: number
+}
+
 export type Job = {
   id: string
   titel: string
@@ -142,9 +152,24 @@ export type Job = {
   artefakte: Artefakt[]
   dialog: Nachricht[]
   videoStoryboard?: import('./video-types').Storyboard
+  notizen?: Notiz[]
+  faelligAm?: number // Redaktionsplan: wann geht das Ding raus
+  hashtags?: string[]
   status: JobStatus
   erstelltAm: number
   aktualisiertAm: number
+}
+
+// Wiederverwendbare Vorlage — aus einem Job-Artefakt gespeichert.
+export type EigeneVorlage = {
+  id: string
+  name: string
+  kanal?: Kanal
+  ebenen: Ebene[]
+  breite: number
+  hoehe: number
+  einheit: Einheit
+  erstelltAm: number
 }
 
 // Content-adressiertes Asset (Regel 2): Primärschlüssel = SHA-256 des Blob-Inhalts.

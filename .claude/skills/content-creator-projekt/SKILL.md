@@ -102,3 +102,13 @@ description: "Immer verwenden bei Arbeiten am ContentCreator2026 (KI-geführtes 
 - Lösungen automatisch und per Sichtprüfung verifizieren; Prüfprotokoll-Datei.
 - Präsentationsdauer messen; Ton-Ende gegen Animations-Ende prüfen (≤ 50 ms).
 
+## Phase-6-Nachtrag (2026-09-30, autonomer Loop)
+
+- **Video-Rendering aus dem Tool**: `/api/render-video` (Node-Runtime, nur lokal) bündelt Remotion und rendert 9:16 / 1:1 / 16:9 aus einer Composition per `calculateMetadata`. Assets landen in `public/remotion/<hash>.<ext>`, MP4 in `public/renders/` + Kopie in `out/`. Auf Cloudflare Workers deaktiviert (kein Chromium) — die Route meldet klaren Fehler.
+- **Korrekturportal-Server-Store**: `src/lib/freigabe-store.ts` mit Cloudflare-KV-Binding `FREIGABEN` und Datei-Fallback `.freigaben/<token>.json`. Routen `/api/freigabe` POST/GET/PATCH/DELETE. `ReviewSeite` rendert komplett aus Server-Snapshot (Base64-Assets als `data:`-URLs, kein IndexedDB).
+- **Sprach-Default**: `SpracheProvider` erbt nicht mehr die Browser-Sprache — Default ist DE. localStorage-Wahl bleibt bindend.
+- **Hilfe-Popovers**: Reusable `HilfePopover.tsx` (`?`-Knopf mit Tooltip). Im Editor-Header, in `ArtefaktWerkstatt`, `VideoStudio`, `ExportPanel`, `KorrekturportalPanel` eingebaut — DE/EN.
+- **KostenUebersicht**: Monats-Budget mit Ampel + Route-Aufschlüsselung; localStorage-Key `content-creator-2026:budget-usd`.
+- **PerformanceCheck** (`/uebersicht`): misst Start / Job-Wechsel / Save gegen Budgets 200 / 150 / 100 ms; setzt Test-Job an und räumt ihn wieder weg.
+- **Regel**: JSX-Attribute mit `"…"` dürfen keine ASCII-`"` enthalten (JSX-Parser bricht). Für Zitate typografische „…" oder Curly-Braces `{'…'}` benutzen. Beispiel-Fehler: `de="… (/review/<token>) …"` bricht sogar bei `<token>` (angular brackets = JSX-Element).
+

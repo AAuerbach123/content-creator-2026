@@ -78,23 +78,34 @@ Der Code fällt sonst sauber zurück auf `gpt-image-1.5` → `gpt-image-1` und m
 
 ---
 
-## 8. Korrekturportal cross-browser (Phase 4 offen)
+## 8. Korrekturportal cross-browser — Cloudflare KV anlegen (Phase 6, lokal fertig)
 
-Die Freigabe-Links (`/review/<token>`) funktionieren heute nur, wenn Kunde und Grafiker im **gleichen Browser** sind — die Pins liegen in Andreas' IndexedDB. Für echte Kunden-Reviews brauchen wir einen Server-Store:
+Der Server-Store liegt fertig im Code (`src/lib/freigabe-store.ts` + `/api/freigabe`). **Lokal (`npm run dev`) funktioniert alles ohne weiteres Setup** — Freigaben landen in `.freigaben/<token>.json`. Für das Cloudflare-Deployment fehlt der KV-Namespace:
 
-- Cloudflare KV oder D1 Datenbank für Freigaben (Schema: `token → { jobTitel, artefaktSnapshot, pins[] }`).
-- Neue API-Routen `/api/freigabe` (POST erzeugen, GET abrufen, PATCH neuen Pin, PATCH Status).
-- Beim Erzeugen wandert eine Kopie des Artefakts (JSON + Bild-Base64) in den Server-Store; Kundenlink funktioniert überall.
+```bash
+npx wrangler kv namespace create FREIGABEN
+```
 
-Bis das steht: Andreas kann Freigaben lokal testen (zweiter Browser-Tab, gleicher Rechner).
+Wrangler gibt eine `id` aus. Diese in `wrangler.jsonc` als Binding eintragen:
+
+```jsonc
+"kv_namespaces": [
+  { "binding": "FREIGABEN", "id": "<HIER_DIE_ID_EINFUEGEN>" }
+]
+```
+
+Danach `npm run build:vinext && npm run deploy:vinext`. Der Code erkennt das Binding automatisch (`getCloudflareContext().env.FREIGABEN`) und nutzt es statt der Datei.
 
 ---
 
-## 9. Remotion-Render mit echtem Job-Storyboard (Phase 5 offen)
+## 9. Video-Export ohne Handarbeit — Ein-Klick im Tool (Phase 6, fertig)
 
-Der `npx remotion render …`-Befehl im Tool nutzt aktuell das eingebettete Beispiel-Storyboard in `src/remotion/Root.tsx`. Um das echte Job-Storyboard zu rendern:
+Der Knopf **„💾 MP4 erzeugen"** im Video-Studio ist da (siehe `src/components/VideoStudio.tsx`):
 
-1. Backup-ZIP des Jobs herunterladen („Job-Backup" im Exporte-Panel).
-2. Aus dem ZIP `videoStoryboard` aus `<job>.json` in `src/remotion/Root.tsx` als `BEISPIEL_STORYBOARD` ersetzen (oder besser: der nächste Loop schreibt einen kleinen Helper `src/remotion/aktuellesStoryboard.ts`, den `Root.tsx` importiert).
-3. Assets (`assets/<hash>.png`, `assets/<hash>.mp3`) neben die Remotion-Root ablegen und die `asset://`-URLs auf `staticFile("<hash>.png")` mappen. Alternativ direkt aus IndexedDB in einem Studio-Preview-Modus laden.
-4. `npx remotion render src/remotion/index.tsx Reel out/<Job>.mp4` starten. 9:16, 1:1 und 16:9 werden aus derselben Composition erzeugt, wenn wir drei Compositions in `Root.tsx` registrieren — reicht als kleine Erweiterung, wenn Andreas den ersten echten Job rendert.
+- Schickt das echte Job-Storyboard + alle Asset-Blobs als Base64 an `/api/render-video`.
+- Die Route (`src/app/api/render-video/route.ts`) schreibt Assets nach `public/remotion/<hash>.<ext>`, bundelt Remotion (`@remotion/bundler`), rendert je gewählter Ratio (9:16 / 1:1 / 16:9) über `@remotion/renderer` und legt die MP4 in `public/renders/` (Download-Link direkt im Tool) + Kopie in `out/` ab.
+- Composition `Reel` liest Breite/Höhe/Dauer via `calculateMetadata` aus den `inputProps` — eine Composition reicht für drei Ratios.
+
+**Grenze:** Der Render läuft **nur lokal** (Node-Runtime + headless Chrome). Auf Cloudflare Workers gibt es kein Chromium — die Route meldet dort einen klaren Fehler. Wenn Video-Rendering auch online laufen soll, ist Remotion Lambda der Weg (siehe IDEEN_NAECHSTE_LOOPS.md #27).
+
+Erster Aufruf dauert 30–60 s (Bundling). Danach ist Rendern schnell.

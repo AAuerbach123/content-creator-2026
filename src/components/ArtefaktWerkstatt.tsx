@@ -16,6 +16,8 @@ import KanalWahl from './KanalWahl'
 import KorrekturportalPanel from './KorrekturportalPanel'
 import VerlagWahl from './VerlagWahl'
 import VideoStudio from './VideoStudio'
+import WerkzeugePanel from './WerkzeugePanel'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Phase-2-Panel: Artefakt erzeugen und Layer per Bild-/Text-Vorschlägen füllen.
@@ -84,6 +86,37 @@ export default function ArtefaktWerkstatt({
     onJobPatch((alt) => ({ ...alt, artefakte: [...alt.artefakte, neu] }))
     setAktuelleId(neu.id)
   }, [job.gewaehlteRichtung, job.kanal, job.richtungen, onJobPatch])
+
+  // Banner-Set: alle IAB-Standardgrößen aus dem aktuellen Design ableiten.
+  const bannerSetAnlegen = useCallback(() => {
+    const richtungFarben = job.richtungen?.find((r) => r.id === job.gewaehlteRichtung)?.farbwelt
+    const groessen: import('@/lib/types').Kanal[] = [
+      'web-banner-mrec',
+      'web-banner-leaderboard',
+      'web-banner-skyscraper',
+      'web-banner-billboard',
+    ]
+    const neueArtefakte = groessen.map((g) => neuesArtefakt(g, richtungFarben))
+    // Wenn ein aktuelles Artefakt Text-Inhalte hat, in die neuen übernehmen
+    if (aktuellesArtefakt) {
+      const texte: Record<string, string> = {}
+      for (const e of aktuellesArtefakt.ebenen) {
+        if (e.typ === 'text') texte[e.id] = (e.eigenschaften.text as string) || ''
+      }
+      const hg = aktuellesArtefakt.ebenen.find((e) => e.id === 'bg')
+      for (const a of neueArtefakte) {
+        for (const e of a.ebenen) {
+          if (e.typ === 'text' && texte[e.id]) e.eigenschaften.text = texte[e.id]
+          if (e.id === 'bg' && hg?.assetHash) {
+            e.assetHash = hg.assetHash
+            a.assetRefs.push(hg.assetHash)
+          }
+        }
+      }
+    }
+    onJobPatch((alt) => ({ ...alt, artefakte: [...alt.artefakte, ...neueArtefakte] }))
+    setAktuelleId(neueArtefakte[0].id)
+  }, [aktuellesArtefakt, job.gewaehlteRichtung, job.richtungen, onJobPatch])
 
   // KI-Rundum-Vorschlag: Motiv aus Ziel + Richtung ableiten, Bild + Copy parallel
   const rundumVorschlag = useCallback(async () => {
@@ -202,8 +235,13 @@ export default function ArtefaktWerkstatt({
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 8 }}>
-        <div style={{ fontSize: 15, fontWeight: 700 }}>
-          {sprache === 'de' ? 'Artefakt' : 'Artifact'}
+        <div style={{ fontSize: 15, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span>{sprache === 'de' ? 'Artefakt' : 'Artifact'}</span>
+          <HilfePopover
+            de={'Ein Artefakt ist EIN Motiv (Anzeige, Post, Kachel, Video-Rahmen). Ein Job kann mehrere Artefakte enthalten (z. B. IG-Post + Zeitungsanzeige). Umschalter oben rechts: Vorschau ↔ Editor. Der Knopf „KI-Design" füllt Bild + Text in einem Rutsch. Kanal wechseln passt Maße und Safe-Zones an.'}
+            en={'An artifact is ONE piece of artwork (ad, post, tile, video frame). A job can hold several artifacts (e.g. IG post + newspaper ad). Toggle at top right: preview ↔ editor. The „AI design" button fills image + text in one go. Changing channel adjusts size and safe zones.'}
+            ausrichtung="links"
+          />
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
           {job.artefakte.map((a) => (
@@ -240,6 +278,25 @@ export default function ArtefaktWerkstatt({
           >
             +
           </button>
+          {job.kanal?.startsWith('web-banner') && (
+            <button
+              type="button"
+              onClick={bannerSetAnlegen}
+              title={sprache === 'de' ? 'IAB-Banner-Set (MRec, Leaderboard, Skyscraper, Billboard) aus dem Design' : 'IAB banner set from this design'}
+              style={{
+                background: '#60a5fa',
+                color: '#0b0b0f',
+                border: 'none',
+                padding: '3px 10px',
+                borderRadius: 5,
+                fontSize: 11,
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              📐 Banner-Set
+            </button>
+          )}
         </div>
       </div>
 
@@ -373,6 +430,19 @@ export default function ArtefaktWerkstatt({
       {aktuellesArtefakt && (
         <GrafikerPinAnsicht jobId={job.id} artefaktId={aktuellesArtefakt.id} artefakt={aktuellesArtefakt} />
       )}
+
+      <WerkzeugePanel
+        job={job}
+        artefakt={aktuellesArtefakt}
+        onJobPatch={(p) => onJobPatch(p)}
+        onArtefaktPatch={(neu) =>
+          aktuellesArtefakt &&
+          onJobPatch((alt) => ({
+            ...alt,
+            artefakte: alt.artefakte.map((a) => (a.id === aktuellesArtefakt.id ? neu : a)),
+          }))
+        }
+      />
     </section>
   )
 }

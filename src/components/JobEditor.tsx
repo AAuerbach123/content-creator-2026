@@ -21,9 +21,11 @@ import type {
   VorlagenAnalyse,
 } from '@/lib/types'
 import ArtefaktWerkstatt from './ArtefaktWerkstatt'
+import HilfePopover from './HilfePopover'
 import KIDialog from './KIDialog'
 import KIVerlaufPanel from './KIVerlaufPanel'
 import MCFragenPanel, { type MCFrage } from './MCFragenPanel'
+import OnboardingTour from './OnboardingTour'
 import RichtungenPanel from './RichtungenPanel'
 import SchrittplanPanel from './SchrittplanPanel'
 import SpracheUmschalter from './SpracheUmschalter'
@@ -51,6 +53,7 @@ export default function JobEditor({
   const [verlaufNonce, setVerlaufNonce] = useState(0)
   const [titelBearbeiten, setTitelBearbeiten] = useState(false)
   const [titelPuffer, setTitelPuffer] = useState('')
+  const [tourManuell, setTourManuell] = useState(false)
 
   useEffect(() => {
     let abgebrochen = false
@@ -190,7 +193,7 @@ export default function JobEditor({
             ...alt,
             kanal:
               empfKanal &&
-              (['zeitung','zeitschrift','web-banner','web-content','ig-feed','ig-story','ig-reel','fb-post','linkedin-post','x-post','kurzvideo'] as string[]).includes(empfKanal)
+              (['zeitung','zeitschrift','web-banner-mrec','web-banner-leaderboard','web-banner-skyscraper','web-banner-billboard','web-content','ig-feed','ig-story','ig-reel','fb-post','linkedin-post','x-post','kurzvideo'] as string[]).includes(empfKanal)
                 ? (empfKanal as Job['kanal'])
                 : alt.kanal,
             status: 'in-arbeit',
@@ -466,8 +469,34 @@ export default function JobEditor({
             </button>
           )}
         </div>
-        <SpracheUmschalter />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <HilfePopover
+            de="Links: KI-Dialog + Editor. Rechts: Schrittplan + KI-Verlauf. Der Titel oben ist editierbar. Titelklick ✎ = umbenennen. Zurück zur Übersicht mit dem Zurück-Knopf."
+            en="Left: AI dialog + editor. Right: step plan + AI log. Title editable at top. Back to overview with the back button."
+          />
+          <button
+            type="button"
+            onClick={() => setTourManuell(true)}
+            title={sprache === 'de' ? 'Kurz-Tour zeigen' : 'Show short tour'}
+            style={{
+              width: 26,
+              height: 26,
+              padding: 0,
+              borderRadius: '50%',
+              background: 'transparent',
+              color: '#f5f5f7',
+              border: '1px solid rgba(255,255,255,0.15)',
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            ★
+          </button>
+          <SpracheUmschalter />
+        </div>
       </header>
+      <OnboardingTour manuell={tourManuell} onSchliessen={() => setTourManuell(false)} />
 
       <div
         style={{

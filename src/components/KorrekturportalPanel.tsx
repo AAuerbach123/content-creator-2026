@@ -1,17 +1,42 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { freigabeErstellen, freigabeLoeschen, freigabenFuerJob } from '@/lib/db'
+import { assetLaden, freigabeErstellen, freigabeLoeschen, freigabenFuerJob } from '@/lib/db'
 import type { Freigabe, Job } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Panel für den Grafiker: Freigabe-Link erzeugen, teilen, Freigaben löschen.
 // Der Link ist http://localhost:3000/review/<token> — kunden brauchen kein Login.
+//
+// Phase 6 #8: Beim Erzeugen wird die Freigabe zusätzlich auf den Server geschickt
+// (Artefakt-Snapshot + Assets als Base64), damit der Kunden-Link in JEDEM Browser
+// funktioniert. Lokal fällt der Server-Store auf `.freigaben/<token>.json` zurück.
+
+async function blobZuBase64(blob: Blob): Promise<string> {
+  const buf = await blob.arrayBuffer()
+  const bytes = new Uint8Array(buf)
+  let bin = ''
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  }
+  return btoa(bin)
+}
+
+function hashesAusEbenen(ebenen: Job['artefakte'][number]['ebenen']): string[] {
+  const set = new Set<string>()
+  for (const e of ebenen) if (e.assetHash) set.add(e.assetHash)
+  return Array.from(set)
+}
 
 export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; artefaktId?: string }) {
   const { sprache } = useSprache()
   const [freigaben, setFreigaben] = useState<Freigabe[]>([])
   const [kopiert, setKopiert] = useState<string | null>(null)
+  const [uploadStatus, setUploadStatus] = useState<Record<string, 'lauft' | 'ok' | 'fehler'>>({})
+  const [uploadModus, setUploadModus] = useState<Record<string, 'kv' | 'datei'>>({})
+  const [fehlerMeldungen, setFehlerMeldungen] = useState<Record<string, string>>({})
 
   const laden = useCallback(async () => {
     setFreigaben(await freigabenFuerJob(job.id))
@@ -21,11 +46,68 @@ export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; ar
     laden()
   }, [laden])
 
+  const zumServerHochladen = useCallback(
+    async (freigabe: Freigabe) => {
+      const artefakt = job.artefakte.find((a) => a.id === freigabe.artefaktId)
+      if (!artefakt) return
+      setUploadStatus((alt) => ({ ...alt, [freigabe.id]: 'lauft' }))
+      try {
+        const assets: Record<string, { mimeType: string; base64: string }> = {}
+        for (const hash of hashesAusEbenen(artefakt.ebenen)) {
+          const a = await assetLaden(hash)
+          if (!a) continue
+          assets[hash] = { mimeType: a.mimeType, base64: await blobZuBase64(a.blob) }
+        }
+        const res = await fetch('/api/freigabe', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            id: freigabe.id,
+            jobId: freigabe.jobId,
+            jobTitel: freigabe.jobTitel,
+            artefaktId: freigabe.artefaktId,
+            artefakt,
+            assets,
+            pins: freigabe.pins,
+            erstelltAm: freigabe.erstelltAm,
+          }),
+        })
+        const daten = (await res.json().catch(() => ({}))) as { ok?: boolean; modus?: 'kv' | 'datei'; fehler?: string }
+        if (!res.ok || !daten.ok) {
+          setUploadStatus((alt) => ({ ...alt, [freigabe.id]: 'fehler' }))
+          setFehlerMeldungen((alt) => ({ ...alt, [freigabe.id]: daten.fehler || `HTTP ${res.status}` }))
+          return
+        }
+        setUploadStatus((alt) => ({ ...alt, [freigabe.id]: 'ok' }))
+        if (daten.modus) setUploadModus((alt) => ({ ...alt, [freigabe.id]: daten.modus! }))
+      } catch (e) {
+        setUploadStatus((alt) => ({ ...alt, [freigabe.id]: 'fehler' }))
+        setFehlerMeldungen((alt) => ({ ...alt, [freigabe.id]: e instanceof Error ? e.message : String(e) }))
+      }
+    },
+    [job.artefakte],
+  )
+
+  const pinsVomServerHolen = useCallback(async (freigabe: Freigabe) => {
+    try {
+      const res = await fetch(`/api/freigabe?token=${encodeURIComponent(freigabe.id)}`)
+      const daten = (await res.json().catch(() => ({}))) as { ok?: boolean; freigabe?: { pins: Freigabe['pins'] } }
+      if (daten.ok && daten.freigabe) {
+        const updated: Freigabe = { ...freigabe, pins: daten.freigabe.pins }
+        // Lokale IDB nur zur Anzeige
+        await import('@/lib/db').then((db) => db.freigabeSpeichern(updated))
+        setFreigaben((alt) => alt.map((f) => (f.id === freigabe.id ? updated : f)))
+      }
+    } catch {}
+  }, [])
+
   const erzeugen = useCallback(async () => {
     if (!artefaktId) return
-    await freigabeErstellen(job.id, artefaktId, job.titel)
+    const neu = await freigabeErstellen(job.id, artefaktId, job.titel)
     await laden()
-  }, [artefaktId, job.id, job.titel, laden])
+    // Server-Upload direkt anstoßen
+    await zumServerHochladen(neu)
+  }, [artefaktId, job.id, job.titel, laden, zumServerHochladen])
 
   const link = (f: Freigabe) => {
     if (typeof window === 'undefined') return '/review/' + f.id
@@ -42,6 +124,8 @@ export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; ar
 
   const loeschen = async (f: Freigabe) => {
     await freigabeLoeschen(f.id)
+    // Server-Löschung — Antwort ignoriert (best effort)
+    try { await fetch(`/api/freigabe?token=${encodeURIComponent(f.id)}`, { method: 'DELETE' }) } catch {}
     await laden()
   }
 
@@ -61,8 +145,12 @@ export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; ar
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <div style={{ fontSize: 13, fontWeight: 700 }}>
-          {sprache === 'de' ? 'Korrekturportal' : 'Correction portal'}
+        <div style={{ fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span>{sprache === 'de' ? 'Korrekturportal' : 'Correction portal'}</span>
+          <HilfePopover
+            de={'Erzeugt einen Token-Link (/review/TOKEN), den du dem Verlag/Kunden schickst. Der Kunde klickt auf eine Stelle im Motiv und hinterlässt Text — du siehst die Pins hier mit Kommentar-Thread und Status. Cross-Browser dank Server-Speicher (Cloudflare KV online, Datei-Fallback lokal).'}
+            en={'Creates a token link (/review/TOKEN) you share with the client. Client clicks on the artwork and leaves a note — you see the pins here with a comment thread and status. Cross-browser via server store (Cloudflare KV online, file fallback locally).'}
+          />
         </div>
         <button
           type="button"
@@ -127,7 +215,47 @@ export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; ar
                   outline: 'none',
                 }}
               />
-              <div style={{ display: 'flex', gap: 5, justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', gap: 5, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 10, opacity: 0.55, marginRight: 'auto', alignSelf: 'center' }}>
+                  {uploadStatus[f.id] === 'lauft' && (sprache === 'de' ? 'Lade hoch …' : 'Uploading …')}
+                  {uploadStatus[f.id] === 'ok' &&
+                    (sprache === 'de'
+                      ? `Server: ${uploadModus[f.id] === 'kv' ? 'KV' : 'lokal'}`
+                      : `Server: ${uploadModus[f.id] === 'kv' ? 'KV' : 'local'}`)}
+                  {uploadStatus[f.id] === 'fehler' && `⚠ ${fehlerMeldungen[f.id] || 'Fehler'}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => pinsVomServerHolen(f)}
+                  style={{
+                    background: 'transparent',
+                    color: '#f5f5f7',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    padding: '3px 8px',
+                    borderRadius: 4,
+                    fontSize: 10,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {sprache === 'de' ? 'Pins neu laden' : 'Refresh pins'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => zumServerHochladen(f)}
+                  style={{
+                    background: 'transparent',
+                    color: '#f5f5f7',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    padding: '3px 8px',
+                    borderRadius: 4,
+                    fontSize: 10,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {sprache === 'de' ? 'Neu hochladen' : 'Re-upload'}
+                </button>
                 <button
                   type="button"
                   onClick={() => kopieren(f)}

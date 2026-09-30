@@ -1,84 +1,83 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ArtefaktRenderer from '@/components/ArtefaktRenderer'
 import KorrekturPinLayer from '@/components/KorrekturPinLayer'
-import { freigabeLaden, freigabeSpeichern, jobLaden } from '@/lib/db'
-import type { Artefakt, Freigabe, Job, Korrekturpin } from '@/lib/types'
+import type { Artefakt, Korrekturpin } from '@/lib/types'
 
-// Review-Seite: /review/<token>. Zeigt das Artefakt und lässt den Kunden Pins
-// setzen. Kein Login. Daten liegen ausschließlich in der lokalen IndexedDB
-// dieses Browsers — für Cross-Browser-Sharing kommt später eine echte
-// Cloudflare-KV-Route.
+// Review-Seite: /review/<token>.
+// Neu (Phase 6 #8): lädt die Freigabe über /api/freigabe vom Server (KV oder
+// Datei-Fallback). Der Kunde braucht keinen gemeinsamen Browser mit dem
+// Grafiker — der Link funktioniert überall.
+
+type ServerFreigabe = {
+  id: string
+  jobId: string
+  jobTitel: string
+  artefaktId: string
+  artefakt: Artefakt
+  assets: Record<string, { mimeType: string; base64: string }>
+  pins: Korrekturpin[]
+  erstelltAm: number
+  aktualisiertAm: number
+}
+
+function base64ZuUrl(mimeType: string, base64: string): string {
+  return `data:${mimeType || 'application/octet-stream'};base64,${base64}`
+}
 
 export default function ReviewSeite({ token }: { token: string }) {
-  const [freigabe, setFreigabe] = useState<Freigabe | null>(null)
-  const [job, setJob] = useState<Job | null>(null)
-  const [artefakt, setArtefakt] = useState<Artefakt | null>(null)
+  const [freigabe, setFreigabe] = useState<ServerFreigabe | null>(null)
   const [laden, setLaden] = useState(true)
   const [fehler, setFehler] = useState<string | null>(null)
 
-  useEffect(() => {
-    let abgebrochen = false
-    ;(async () => {
-      try {
-        const f = await freigabeLaden(token)
-        if (!f) {
-          if (!abgebrochen) setFehler('Freigabe nicht gefunden. Bitte den Absender bitten, den Link neu zu erzeugen.')
-          return
-        }
-        const j = await jobLaden(f.jobId)
-        if (!j) {
-          if (!abgebrochen) setFehler('Job nicht gefunden.')
-          return
-        }
-        const a = j.artefakte.find((x) => x.id === f.artefaktId)
-        if (!a) {
-          if (!abgebrochen) setFehler('Artefakt nicht gefunden.')
-          return
-        }
-        if (!abgebrochen) {
-          setFreigabe(f)
-          setJob(j)
-          setArtefakt(a)
-        }
-      } catch (e) {
-        if (!abgebrochen) setFehler(e instanceof Error ? e.message : String(e))
-      } finally {
-        if (!abgebrochen) setLaden(false)
+  const laden_ = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/freigabe?token=${encodeURIComponent(token)}`)
+      const daten = (await res.json()) as { ok?: boolean; freigabe?: ServerFreigabe; fehler?: string }
+      if (!res.ok || !daten.ok || !daten.freigabe) {
+        setFehler(daten.fehler || `Freigabe nicht gefunden (HTTP ${res.status}). Bitte den Absender bitten, den Link neu zu erzeugen.`)
+        return
       }
-    })()
-    return () => {
-      abgebrochen = true
+      setFreigabe(daten.freigabe)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaden(false)
     }
   }, [token])
+
+  useEffect(() => {
+    laden_()
+  }, [laden_])
+
+  const assetUrls = useMemo(() => {
+    const map: Record<string, string> = {}
+    if (freigabe) {
+      for (const [hash, a] of Object.entries(freigabe.assets)) {
+        map[hash] = base64ZuUrl(a.mimeType, a.base64)
+      }
+    }
+    return map
+  }, [freigabe])
 
   const pinAnhaengen = useCallback(
     async ({ x, y, kommentar, autor }: { x: number; y: number; kommentar: string; autor?: string }) => {
       if (!freigabe) return
-      const neu: Korrekturpin = {
-        id: crypto.randomUUID(),
-        x,
-        y,
-        kommentar,
-        autor,
-        status: 'offen',
-        erstelltAm: Date.now(),
-        antworten: [],
-      }
-      const aktualisiert = { ...freigabe, pins: [...freigabe.pins, neu] }
-      setFreigabe(aktualisiert)
-      await freigabeSpeichern(aktualisiert)
+      const res = await fetch('/api/freigabe', {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token, neuerPin: { x, y, kommentar, autor } }),
+      })
+      const daten = (await res.json()) as { ok?: boolean; freigabe?: ServerFreigabe; fehler?: string }
+      if (daten.ok && daten.freigabe) setFreigabe(daten.freigabe)
+      else if (daten.fehler) setFehler(daten.fehler)
     },
-    [freigabe],
+    [freigabe, token],
   )
 
-  if (laden) {
-    return <FullScreenText text="Lade Freigabe …" />
-  }
-  if (fehler || !freigabe || !artefakt || !job) {
-    return <FullScreenText text={fehler || 'Freigabe kann nicht geladen werden.'} />
-  }
+  if (laden) return <FullScreenText text="Lade Freigabe …" />
+  if (fehler || !freigabe) return <FullScreenText text={fehler || 'Freigabe kann nicht geladen werden.'} />
 
   return (
     <div
@@ -92,7 +91,7 @@ export default function ReviewSeite({ token }: { token: string }) {
     >
       <header style={{ maxWidth: 720, margin: '0 auto 20px' }}>
         <div style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.5 }}>Freigabe</div>
-        <h1 style={{ margin: '4px 0', fontSize: 18, fontWeight: 700 }}>{job.titel}</h1>
+        <h1 style={{ margin: '4px 0', fontSize: 18, fontWeight: 700 }}>{freigabe.jobTitel || 'Motiv'}</h1>
         <p style={{ margin: 0, opacity: 0.7, fontSize: 13, lineHeight: 1.5 }}>
           Klicken Sie auf eine Stelle im Motiv, um einen Änderungswunsch zu hinterlassen. Bereits
           gesetzte Pins können Sie anklicken, um zu antworten. Kein Konto nötig.
@@ -101,10 +100,10 @@ export default function ReviewSeite({ token }: { token: string }) {
 
       <div style={{ maxWidth: 720, margin: '0 auto', position: 'relative' }}>
         <div style={{ position: 'relative' }}>
-          <ArtefaktRenderer artefakt={artefakt} maxBreite={720} />
+          <ArtefaktRenderer artefakt={freigabe.artefakt} maxBreite={720} assetUrlOverride={assetUrls} />
           <KorrekturPinLayer
-            breite={artefakt.breite}
-            hoehe={artefakt.hoehe}
+            breite={freigabe.artefakt.breite}
+            hoehe={freigabe.artefakt.hoehe}
             pins={freigabe.pins}
             bearbeitbar
             onNeu={pinAnhaengen}

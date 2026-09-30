@@ -168,3 +168,28 @@
 
 ---
 
+## Phase 6 — Feinschliff & Übergabe ✅
+
+**Was geht:**
+- **MP4-Ein-Klick-Export:** Neuer Knopf „💾 MP4 erzeugen" im Video-Studio schickt Storyboard + Assets (Base64) an `/api/render-video` (Node-Runtime), rendert per `@remotion/bundler`+`@remotion/renderer` und liefert Download-Links für 9:16 / 1:1 / 16:9. Assets landen in `public/remotion/<hash>.<ext>`, MP4 in `public/renders/` + Kopie in `out/`. Eine Composition „Reel" mit `calculateMetadata` erzeugt alle drei Ratios aus denselben inputProps. Bundle-Cache-Tipp: der erste Aufruf dauert 30–60 s, danach schnell.
+- **Korrekturportal cross-browser:** Beim Anlegen einer Freigabe wird das Artefakt + Assets als Snapshot an `/api/freigabe` gepostet. Speicher: Cloudflare KV Binding `FREIGABEN`, lokal Datei-Fallback `.freigaben/<token>.json`. `ReviewSeite` lädt die Freigabe aus dem Server und rendert Artefakt via `assetUrlOverride` (kein IndexedDB-Bezug mehr). Neuer „Pins neu laden"-Knopf im KorrekturportalPanel.
+- **Standardsprache DE:** Neue Nutzer starten auf Deutsch, unabhängig von der Browser-Sprache. Der Umschalter EN bleibt (localStorage-Persistenz).
+- **Onboarding-Tour + Hilfe-Popover:** Fünf-Schritte-Tour beim ersten Öffnen, „?"-Icon im JobEditor-Header + „★"-Knopf zum manuellen Neustart. Vier weitere `HilfePopover` in ArtefaktWerkstatt, VideoStudio, ExportPanel, KorrekturportalPanel — DE/EN.
+- **Handbuch vollständig DE/EN** (`/handbuch`).
+- **Kosten-Übersicht** (`/uebersicht`): Monatsbudget mit Ampel (grün < 75 %, gelb < 100 %, rot), Route-Aufschlüsselung, Kosten je Job.
+- **Performance-Check** (`/uebersicht`): Knopf misst Start (`alleJobsLaden`), Job-Wechsel (`jobLaden`) und Save (`jobSpeichern`+Snapshot) und prüft gegen Budgets 200 / 150 / 100 ms.
+
+**Wie testen:**
+1. `ContentCreator starten.command` doppelklicken. Beim ersten Öffnen läuft die Tour — durchklicken.
+2. Neuen Job „Reel-Test" anlegen, Kanal Kurzvideo, Sprechtext eintippen, Voiceover erzeugen, Szenen ordnen.
+3. Bei „💾 MP4 erzeugen" 9:16 + 1:1 + 16:9 anhaken → Knopf drücken → nach 60–120 s erscheinen drei Download-Links.
+4. Zweiten Browser (z. B. Firefox statt Chrome) öffnen → Freigabe-Link kopieren → in Firefox öffnen → Pin setzen → im Chrome-Grafiker-Panel „Pins neu laden" → Pin taucht auf.
+5. `/uebersicht` öffnen → Monats-Budget eintragen → Performance-Check „Messen" starten.
+6. Hilfe-Popover im Editor-Header, in Artefakt, Video-Studio, Exporte, Korrekturportal jeweils antesten (Klick auf „?").
+
+**Screenshot-Pfad:** (noch keine — Andreas macht Screenshots nach der Testrunde)
+
+**Grenze:** Für den KV-Modus muss Andreas den Namespace einmalig anlegen (Ein-Zeiler in `OFFENE_PUNKTE.md` #8). Lokal läuft alles ohne Extra-Setup.
+
+---
+

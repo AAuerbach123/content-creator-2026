@@ -6,8 +6,10 @@ import { assetLaden } from '@/lib/db'
 import type { Job } from '@/lib/types'
 import type { StimmProbe, Storyboard, Szene } from '@/lib/video-types'
 import { STANDARDANNEKE_ID, STANDARDANNEKE_NAME } from '@/lib/video-types'
-import { sfxErzeugen, sprechtextPruefen, ttsAlsAsset } from '@/lib/video-client'
+import { mp4Rendern, sfxErzeugen, sprechtextPruefen, ttsAlsAsset } from '@/lib/video-client'
+import type { RenderErgebnis } from '@/lib/video-client'
 import { videoAbmessungen } from '@/remotion/VideoKomposition'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Der @remotion/player nutzt DOM-APIs beim Import — deshalb dynamic mit ssr:false.
@@ -43,6 +45,10 @@ export default function VideoStudio({
   const [voiceoverFehler, setVoiceoverFehler] = useState<string | null>(null)
   const [pruefbericht, setPruefbericht] = useState<string[]>([])
   const [assetUrls, setAssetUrls] = useState<Record<string, string>>({})
+  const [renderLaeuft, setRenderLaeuft] = useState(false)
+  const [renderErgebnisse, setRenderErgebnisse] = useState<RenderErgebnis[]>([])
+  const [renderFehler, setRenderFehler] = useState<string | null>(null)
+  const [renderAuswahl, setRenderAuswahl] = useState<Array<'9:16' | '1:1' | '16:9'>>(['9:16'])
 
   const patch = useCallback(
     (p: Partial<Storyboard>) => {
@@ -237,6 +243,32 @@ export default function VideoStudio({
     setPruefbericht(bericht)
   }
 
+  const mp4Erzeugen = async () => {
+    setRenderLaeuft(true)
+    setRenderFehler(null)
+    setRenderErgebnisse([])
+    try {
+      const antwort = await mp4Rendern({
+        storyboard,
+        seitenverhaeltnisse: renderAuswahl,
+        dateiname: (job.titel || 'reel').toLowerCase().replace(/\s+/g, '-'),
+        jobId: job.id,
+      })
+      if (!antwort.ok || !antwort.ergebnisse) {
+        setRenderFehler(typeof antwort.fehler === 'string' ? antwort.fehler : JSON.stringify(antwort.fehler))
+      } else {
+        setRenderErgebnisse(antwort.ergebnisse)
+        if (Array.isArray(antwort.fehler)) {
+          setRenderFehler(antwort.fehler.map((f) => `${f.ratio}: ${f.fehler}`).join(' · '))
+        }
+      }
+    } catch (e) {
+      setRenderFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setRenderLaeuft(false)
+    }
+  }
+
   const dims = videoAbmessungen(storyboard.seitenverhaeltnis)
   const playerBreite = 320
   const playerHoehe = Math.round((dims.hoehe / dims.breite) * playerBreite)
@@ -244,8 +276,12 @@ export default function VideoStudio({
 
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ fontSize: 15, fontWeight: 700 }}>
-        {sprache === 'de' ? '🎬 Video-Studio' : '🎬 Video studio'}
+      <div style={{ fontSize: 15, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span>{sprache === 'de' ? '🎬 Video-Studio' : '🎬 Video studio'}</span>
+        <HilfePopover
+          de={'Fünf Szenen-Templates: Logo-Einflug (2 s + Woooosch), Text-Reveal (Aufzählung fliegt synchron zur Stimme), Bild-Ken-Burns, Karussell, Logo-Outro. Stimme Anneke ist Standard; Stimmproben-Knopf liefert 3+3 Alternativen. Prüfbericht vor Export prüft Sync, Untertitel-Safe-Zone, echte Umlaute und die Regel „nicht ablesen". MP4 rendert lokal (Remotion + headless Chrome).'}
+          en={'Five templates: logo intro (2 s + whoosh), text reveal (bullets synced to voice), image Ken Burns, carousel, logo outro. Anneke is the default voice; sample button gives 3+3 options. Pre-export check verifies sync, subtitle safe-zone, real umlauts and the „do not read" rule. MP4 renders locally (Remotion + headless Chrome).'}
+        />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: `${playerBreite}px 1fr`, gap: 16, alignItems: 'start' }}>
@@ -453,23 +489,86 @@ export default function VideoStudio({
         </div>
       </details>
 
-      <details>
+      <details open>
         <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 700, opacity: 0.85 }}>
-          {sprache === 'de' ? '💾 Video rendern (lokal, mit Remotion)' : '💾 Render video (locally, Remotion)'}
+          {sprache === 'de' ? '💾 MP4 erzeugen' : '💾 Render MP4'}
         </summary>
-        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, opacity: 0.9 }}>
-          <p style={{ margin: 0 }}>
+        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 12 }}>
+          <p style={{ margin: 0, opacity: 0.75 }}>
             {sprache === 'de'
-              ? 'Der Render läuft lokal auf deinem Mac. Kopiere den Befehl und führ ihn in Terminal aus (Repo-Ordner):'
-              : 'Render runs locally on your Mac. Copy this and run in Terminal (repo folder):'}
+              ? 'Der Render läuft lokal (per Remotion + headless Chrome). Beim ersten Aufruf dauert das Bundling ca. 30–60 s, danach ist es schnell.'
+              : 'Render runs locally (Remotion + headless Chrome). First bundle takes ~30–60 s, then it is fast.'}
           </p>
-          <pre style={{ background: '#000', color: '#f5f5f7', padding: 10, borderRadius: 6, fontSize: 11, overflowX: 'auto', margin: 0 }}>
-            npx remotion render src/remotion/index.tsx Reel out/{'{job.titel}'}.mp4
-          </pre>
-          <p style={{ margin: 0, opacity: 0.65 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', fontSize: 11 }}>
+            {(['9:16', '1:1', '16:9'] as const).map((r) => (
+              <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <input
+                  type="checkbox"
+                  checked={renderAuswahl.includes(r)}
+                  onChange={(e) => {
+                    setRenderAuswahl((alt) => (e.target.checked ? Array.from(new Set([...alt, r])) : alt.filter((x) => x !== r)))
+                  }}
+                />
+                {r}
+              </label>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={mp4Erzeugen}
+            disabled={renderLaeuft || renderAuswahl.length === 0}
+            style={{ ...styleKnopfPrimaer, alignSelf: 'flex-start' }}
+          >
+            {renderLaeuft
+              ? sprache === 'de'
+                ? 'Rendere …'
+                : 'Rendering …'
+              : sprache === 'de'
+                ? 'MP4 erzeugen'
+                : 'Render MP4'}
+          </button>
+          {renderFehler && <p style={{ margin: 0, fontSize: 11, color: '#fecaca' }}>⚠ {renderFehler}</p>}
+          {renderErgebnisse.length > 0 && (
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
+              {renderErgebnisse.map((r) => (
+                <li
+                  key={r.dateiname}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: 5,
+                    padding: '6px 10px',
+                  }}
+                >
+                  <span style={{ fontSize: 11 }}>
+                    {r.ratio} · {(r.bytes / (1024 * 1024)).toFixed(2)} MB
+                  </span>
+                  <a
+                    href={r.download}
+                    download={r.dateiname}
+                    style={{
+                      background: '#f5f5f7',
+                      color: '#0b0b0f',
+                      textDecoration: 'none',
+                      padding: '3px 10px',
+                      borderRadius: 4,
+                      fontSize: 11,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {sprache === 'de' ? 'Herunterladen' : 'Download'}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p style={{ margin: 0, opacity: 0.55, fontSize: 11 }}>
             {sprache === 'de'
-              ? 'Das eingebettete Beispiel-Storyboard rendert 8 s. Für ein anderes Storyboard kopiere den JSON-Job-Export ins Remotion-Setup — siehe OFFENE_PUNKTE.md #9.'
-              : 'The embedded sample storyboard renders 8 s. For a different storyboard copy the job JSON — see OFFENE_PUNKTE.md #9.'}
+              ? 'Die MP4 liegen zusätzlich im Ordner out/. Für Cloudflare-Deploy: der Render läuft nur lokal — auf dem Worker fehlt Chromium.'
+              : 'MP4 files are also written to out/. Cloudflare deployment: render only works locally — Workers has no local Chromium.'}
           </p>
         </div>
       </details>

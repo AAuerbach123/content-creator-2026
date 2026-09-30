@@ -1,8 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { assetLaden } from '@/lib/db'
 import type { Artefakt, Ebene } from '@/lib/types'
+
+// Ermöglicht, dass Aufrufer (z. B. Review-Seite) URLs pro Asset-Hash bereitstellen,
+// ohne die IndexedDB zu bemühen. Wenn ein Override vorhanden ist, wird IDB übersprungen.
+const AssetUrlContext = createContext<Record<string, string> | undefined>(undefined)
 
 // Nur-Anzeige-Renderer für Artefakte in Phase 2. Skaliert das Artefakt in die
 // verfügbare Breite. Der interaktive Konva-Editor kommt in Phase 3.
@@ -43,9 +47,14 @@ function TextEbene({ e, scale }: { e: Ebene; scale: number }) {
 }
 
 function useAssetUrl(hash?: string): string | undefined {
+  const override = useContext(AssetUrlContext)
   const [url, setUrl] = useState<string | undefined>()
   useEffect(() => {
     if (!hash) return setUrl(undefined)
+    if (override && override[hash]) {
+      setUrl(override[hash])
+      return
+    }
     let abgebrochen = false
     let objURL: string | undefined
     assetLaden(hash)
@@ -59,7 +68,7 @@ function useAssetUrl(hash?: string): string | undefined {
       abgebrochen = true
       if (objURL) URL.revokeObjectURL(objURL)
     }
-  }, [hash])
+  }, [hash, override])
   return url
 }
 
@@ -144,10 +153,12 @@ export default function ArtefaktRenderer({
   artefakt,
   maxBreite = 640,
   hintergrund = '#f5f5f7',
+  assetUrlOverride,
 }: {
   artefakt: Artefakt
   maxBreite?: number
   hintergrund?: string
+  assetUrlOverride?: Record<string, string>
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [breite, setBreite] = useState(maxBreite)
@@ -167,36 +178,38 @@ export default function ArtefaktRenderer({
   const hoehe = artefakt.hoehe * scale
 
   return (
-    <div ref={containerRef} style={{ width: '100%' }}>
-      <div
-        style={{
-          position: 'relative',
-          width: breite,
-          height: hoehe,
-          background: hintergrund,
-          borderRadius: 8,
-          overflow: 'hidden',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
-        }}
-      >
-        {artefakt.ebenen.map((e) => {
-          if (e.typ === 'text') return <TextEbene key={e.id} e={e} scale={scale} />
-          if (e.typ === 'bild') return <BildEbene key={e.id} e={e} scale={scale} />
-          if (e.typ === 'logo') return <LogoEbene key={e.id} e={e} scale={scale} />
-          return null
-        })}
+    <AssetUrlContext.Provider value={assetUrlOverride}>
+      <div ref={containerRef} style={{ width: '100%' }}>
+        <div
+          style={{
+            position: 'relative',
+            width: breite,
+            height: hoehe,
+            background: hintergrund,
+            borderRadius: 8,
+            overflow: 'hidden',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
+          }}
+        >
+          {artefakt.ebenen.map((e) => {
+            if (e.typ === 'text') return <TextEbene key={e.id} e={e} scale={scale} />
+            if (e.typ === 'bild') return <BildEbene key={e.id} e={e} scale={scale} />
+            if (e.typ === 'logo') return <LogoEbene key={e.id} e={e} scale={scale} />
+            return null
+          })}
+        </div>
+        <div
+          style={{
+            marginTop: 6,
+            fontSize: 10,
+            opacity: 0.55,
+            textAlign: 'right',
+            fontFamily: 'ui-monospace, monospace',
+          }}
+        >
+          {artefakt.format}
+        </div>
       </div>
-      <div
-        style={{
-          marginTop: 6,
-          fontSize: 10,
-          opacity: 0.55,
-          textAlign: 'right',
-          fontFamily: 'ui-monospace, monospace',
-        }}
-      >
-        {artefakt.format}
-      </div>
-    </div>
+    </AssetUrlContext.Provider>
   )
 }

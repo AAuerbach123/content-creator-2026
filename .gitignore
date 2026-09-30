@@ -22,3 +22,10 @@ Thumbs.db
 # TypeScript
 next-env.d.ts
 *.tsbuildinfo
+
+# Lokaler Freigabe-Fallback (Korrekturportal ohne KV)
+/.freigaben/
+
+# Video-Renderer-Zwischendateien
+/public/remotion/
+/public/renders/

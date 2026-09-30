@@ -16,10 +16,13 @@ type SpracheContextWert = {
 const SpracheContext = createContext<SpracheContextWert | undefined>(undefined)
 
 function anfangsSprache(): Sprache {
+  // Phase 6: Oberfläche startet auf Deutsch. Wenn der Nutzer schon einmal auf EN
+  // gestellt hat, respektieren wir das; sonst ist DE der Standard — unabhängig von
+  // der Browser-Sprache.
   if (typeof window === 'undefined') return 'de'
   const gespeichert = window.localStorage.getItem(STORAGE_KEY) as Sprache | null
   if (gespeichert === 'de' || gespeichert === 'en') return gespeichert
-  return window.navigator.language.startsWith('en') ? 'en' : 'de'
+  return 'de'
 }
 
 export function SpracheProvider({ children }: { children: ReactNode }) {
