@@ -2,6 +2,7 @@
 
 import { KANAL_PRESETS } from '@/lib/kanaele'
 import type { Kanal } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 export default function KanalWahl({
@@ -21,8 +22,15 @@ export default function KanalWahl({
         padding: 14,
       }}
     >
-      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
-        {sprache === 'de' ? 'Kanal wählen' : 'Pick channel'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>
+          {sprache === 'de' ? 'Kanal wählen' : 'Pick channel'}
+        </div>
+        <HilfePopover
+          de={'Wählt Kanal + Format. Zeitung/Zeitschrift in mm (min. 200 dpi), Web-Banner in IAB-Standardgrößen, Social mit Safe-Zones, Kurzvideo 9:16/1:1/16:9. Ändert Format und Safe-Zones des Artefakts.'}
+          en={'Picks channel + format. Newspaper/magazine in mm (min 200 dpi), web banners in IAB sizes, social with safe zones, short video 9:16/1:1/16:9. Adjusts artifact size and safe zones.'}
+          anker="kanaele"
+        />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 6 }}>
         {KANAL_PRESETS.map((p) => {

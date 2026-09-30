@@ -299,6 +299,16 @@ export default function VideoStudio({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, opacity: 0.85 }}>
+              {sprache === 'de' ? 'Szenen-Timeline' : 'Scene timeline'}
+            </span>
+            <HilfePopover
+              de={'Jede Szene mit Typ + Dauer. ↑/↓ verschiebt, ✕ löscht, „+ text-reveal/…" fügt eine neue Szene an. Bei Text-Reveal Aufzählung eintragen — die Elemente fliegen synchron zur Stimme ein.'}
+              en={'Each scene with type + duration. ↑/↓ reorders, ✕ removes, „+ text-reveal/…" appends. For text-reveal enter the bullets — items fly in synced to the voice.'}
+              anker="szenen"
+            />
+          </div>
           <select
             value={storyboard.seitenverhaeltnis}
             onChange={(e) => patch({ seitenverhaeltnis: e.target.value as Storyboard['seitenverhaeltnis'] })}
@@ -399,6 +409,28 @@ export default function VideoStudio({
           {sprache === 'de' ? '🎙 Voiceover' : '🎙 Voiceover'}
         </summary>
         <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, opacity: 0.85 }}>
+                {sprache === 'de' ? 'Sprechtext-Assistent' : 'Voiceover script helper'}
+              </span>
+              <HilfePopover
+                de={'Regeln: max. 4 gemeinsame Wörter mit dem Folientext (nicht ablesen), jeder Satz nur einmal, Ziellänge setzen. Der Zähler schätzt ~2,5 Wörter/s. Der Prüfbericht darunter warnt bei Verstößen.'}
+                en={'Rules: at most 4 words shared with the on-screen text (do not read), each sentence only once, set a target length. Counter estimates ~2.5 words/s. Report below warns on violations.'}
+                anker="sprechtext"
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, opacity: 0.85 }}>
+                {sprache === 'de' ? 'Stimmproben' : 'Voice samples'}
+              </span>
+              <HilfePopover
+                de={'Standard ist Anneke (neutrales Hochdeutsch, kein Hall). „Stimmproben (3+3)" liefert drei Frauen- und drei Männerstimmen mit deinem echten Sprechtext — so vergleichst du direkt.'}
+                en={'Default is Anneke (neutral High German, no reverb). „Voice samples (3+3)" delivers three female and three male voices with your real script for direct comparison.'}
+                anker="stimmproben"
+              />
+            </div>
+          </div>
           <textarea
             rows={4}
             value={sprechtext}
@@ -474,6 +506,18 @@ export default function VideoStudio({
           {sprache === 'de' ? '✅ Prüfbericht' : '✅ Check report'}
         </summary>
         <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, opacity: 0.75 }}>
+              {sprache === 'de'
+                ? 'Prüft Sync ≤ 50 ms, Untertitel-Safe-Zone, echte Umlaute und Länge.'
+                : 'Checks sync ≤ 50 ms, subtitle safe-zone, real umlauts and length.'}
+            </span>
+            <HilfePopover
+              de={'Ton-/Video-Sync ≤ 50 ms, Untertitel-Safe-Zone (9:16), echte Umlaute (keine ae/oe/ue), Länge gegen Ziel, „nicht ablesen"-Regel. Grün = ok, Gelb = Info, Rot = Warnung.'}
+              en={'Audio/video sync ≤ 50 ms, subtitle safe-zone (9:16), real umlauts (no ae/oe/ue), length against target, „do not read" rule. Green = ok, yellow = info, red = warning.'}
+              anker="pruefbericht"
+            />
+          </div>
           <button type="button" onClick={pruefen} style={styleKnopf}>
             {sprache === 'de' ? 'Vor Export prüfen' : 'Run pre-export checks'}
           </button>
@@ -494,11 +538,18 @@ export default function VideoStudio({
           {sprache === 'de' ? '💾 MP4 erzeugen' : '💾 Render MP4'}
         </summary>
         <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 12 }}>
-          <p style={{ margin: 0, opacity: 0.75 }}>
-            {sprache === 'de'
-              ? 'Der Render läuft lokal (per Remotion + headless Chrome). Beim ersten Aufruf dauert das Bundling ca. 30–60 s, danach ist es schnell.'
-              : 'Render runs locally (Remotion + headless Chrome). First bundle takes ~30–60 s, then it is fast.'}
-          </p>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+            <p style={{ margin: 0, opacity: 0.75, flex: 1 }}>
+              {sprache === 'de'
+                ? 'Der Render läuft lokal (per Remotion + headless Chrome). Beim ersten Aufruf dauert das Bundling ca. 30–60 s, danach ist es schnell.'
+                : 'Render runs locally (Remotion + headless Chrome). First bundle takes ~30–60 s, then it is fast.'}
+            </p>
+            <HilfePopover
+              de={'Rendert lokal aus dem Job-Storyboard. Ratios 9:16 / 1:1 / 16:9 aus einer Composition. MP4 landet in public/renders/ und out/. Auf Cloudflare Workers nicht verfügbar (kein Chromium).'}
+              en={'Renders locally from the job storyboard. Ratios 9:16 / 1:1 / 16:9 from one composition. MP4 goes to public/renders/ and out/. Not available on Cloudflare Workers (no Chromium).'}
+              anker="mp4"
+            />
+          </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', fontSize: 11 }}>
             {(['9:16', '1:1', '16:9'] as const).map((r) => (
               <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>

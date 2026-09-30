@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { verlagePresetsLaden, verlagFarbenPalette } from '@/lib/verlage'
 import type { Artefakt, Ebene } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Rechte Seitenleiste: bearbeitbare Eigenschaften der ausgewählten Ebene.
@@ -82,8 +83,15 @@ export default function EbenenInspektor({
         gap: 10,
       }}
     >
-      <div style={{ fontSize: 13, fontWeight: 700 }}>
-        {sprache === 'de' ? 'Eigenschaften' : 'Properties'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>
+          {sprache === 'de' ? 'Eigenschaften' : 'Properties'}
+        </div>
+        <HilfePopover
+          de={'Alle Eigenschaften der ausgewählten Ebene: Position, Größe, Drehung, Text/Farbe/Schrift. CI-Farben stehen im Farbwähler zuerst (Regel „Konva-Editor: CI-Farben zuerst").'}
+          en={'All properties of the selected layer: position, size, rotation, text/colour/font. Brand colours appear first in the picker (rule „Konva editor: brand colours first").'}
+          anker="inspektor"
+        />
       </div>
 
       <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, opacity: 0.85 }}>

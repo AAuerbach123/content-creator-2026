@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { alleAktionen, alleJobsLaden } from '@/lib/db'
 import type { KIAktion } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Aggregiert die Kosten aus dem kiAktionen-Store. Zeigt Summe je Job und
@@ -81,9 +82,16 @@ export default function KostenUebersicht() {
         fontFamily: 'ui-sans-serif, system-ui, -apple-system, Roboto, sans-serif',
       }}
     >
-      <h2 style={{ margin: '0 0 10px', fontSize: 16, fontWeight: 700 }}>
-        {sprache === 'de' ? 'KI-Kosten (geschätzt)' : 'AI cost (estimated)'}
-      </h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
+          {sprache === 'de' ? 'KI-Kosten (geschätzt)' : 'AI cost (estimated)'}
+        </h2>
+        <HilfePopover
+          de={'Zählt jede KI-Aktion aus dem Store „kiAktionen". Bilder Pauschale 0,04 USD, Claude nach Token. Budget-Ampel: grün < 75 %, gelb 75–99 %, rot ≥ 100 %. Klapp „nach Route" auf für die Aufschlüsselung.'}
+          en={'Counts every AI action from the „kiAktionen" store. Images flat 0.04 USD, Claude by tokens. Budget: green < 75 %, yellow 75–99 %, red ≥ 100 %. Unfold „by route" for the breakdown.'}
+          anker="kosten"
+        />
+      </div>
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 14 }}>
         <div>
           <div style={{ fontSize: 11, opacity: 0.55, textTransform: 'uppercase', letterSpacing: '0.05em' }}>

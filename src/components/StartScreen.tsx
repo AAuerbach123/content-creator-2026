@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { useSprache } from './SpracheProvider'
+import HandbuchKnopf from './HandbuchKnopf'
+import HilfePopover from './HilfePopover'
 import SpracheUmschalter from './SpracheUmschalter'
 import KIZentrum from './KIZentrum'
 import KartenGrid from './KartenGrid'
@@ -65,20 +67,7 @@ export default function StartScreen() {
           <strong style={{ fontSize: 15, letterSpacing: '-0.01em' }}>{T('appName')}</strong>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Link
-            href="/handbuch"
-            style={{
-              color: '#f5f5f7',
-              textDecoration: 'none',
-              fontSize: 12,
-              padding: '5px 10px',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: 5,
-              opacity: 0.85,
-            }}
-          >
-            {sprache === 'de' ? 'Handbuch' : 'Manual'}
-          </Link>
+          <HandbuchKnopf anker="start" />
           <Link
             href="/uebersicht"
             style={{

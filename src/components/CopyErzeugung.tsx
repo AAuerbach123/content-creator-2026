@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { copyErzeugen, type CopyAntwort } from '@/lib/dialog-client'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 type Slot = 'headline' | 'subline' | 'cta' | 'body' | 'caption' | 'hashtags'
@@ -74,6 +75,16 @@ export default function CopyErzeugung({
         gap: 10,
       }}
     >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, opacity: 0.85 }}>
+          {sprache === 'de' ? 'Text erzeugen' : 'Generate copy'}
+        </div>
+        <HilfePopover
+          de={'Sechs Slots (Headline, Subline, CTA, Body, Caption, Hashtags) × drei Varianten × fünf Töne. „Nehmen" schreibt den Text in die passende Ebene.'}
+          en={'Six slots (headline, subline, CTA, body, caption, hashtags) × three variants × five tones. „Use" writes the text into the matching layer.'}
+          anker="copy-erzeugung"
+        />
+      </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <select
           value={slot}

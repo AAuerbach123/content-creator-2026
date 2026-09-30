@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import HandbuchKnopf from '@/components/HandbuchKnopf'
 import KostenUebersicht from '@/components/KostenUebersicht'
 import PerformanceCheck from '@/components/PerformanceCheck'
 import SpracheUmschalter from '@/components/SpracheUmschalter'
@@ -22,7 +23,10 @@ export default function UebersichtSeite() {
         <Link href="/" style={{ color: '#f5f5f7', textDecoration: 'none', fontSize: 13 }}>
           ← ContentCreator2026
         </Link>
-        <SpracheUmschalter />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <HandbuchKnopf anker="kosten" />
+          <SpracheUmschalter />
+        </div>
       </header>
       <main style={{ maxWidth: 780, margin: '0 auto', padding: '32px 24px 80px' }}>
         <h1 style={{ fontSize: 26, margin: '0 0 20px' }}>{sprache === 'de' ? 'Übersicht' : 'Overview'}</h1>

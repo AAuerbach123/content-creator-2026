@@ -193,3 +193,29 @@
 
 ---
 
+## Phase 7 — Hilfe überall + Rufnummern ✅
+
+**Was geht:**
+- **Handbuch überall anklickbar:** Kopfzeilen-Knopf „📖 Handbuch" auf jeder Ansicht (Start, JobEditor, /uebersicht, /review, /handbuch, /rufnummern). Öffnet ein Overlay mit Inhaltsverzeichnis (32 Abschnitte), Live-Suche und Sprung zum Anker — Escape/Rand-Klick schließt. Ohne den laufenden Job zu verlassen. Vollständig DE/EN, einzelne Quelle in `src/lib/handbuch-inhalt.ts` (auch für die eigene Seite `/handbuch`).
+- **(i)-Symbol an jedem Panel:** 33 Panels/Ansichten mit Kurzerklärung (2 – 4 Sätze) + Link „Mehr im Handbuch →". Das (i) rendert der bekannte `HilfePopover` (aus Phase 6), jetzt mit optionalem `anker`. Bereiche mit (i): StartScreen, KI-Zentrum, jede Startkarte einzeln, Weg-Auswahl, KI-Dialog, Richtungen, Vorlagen-Upload, MC-Fragen, Schrittplan, KI-Verlauf, JobEditor, Artefakt-Werkstatt, Editor, Ebenen-Panel, Ebenen-Inspektor, KI-Editor-Befehl, Bild-Erzeugung, Copy-Erzeugung, Kanal-Wahl, Verlag/Brand-Kit, Rufnummern-Info, Exporte, Korrekturportal, Grafiker-Pin-Ansicht, Video-Studio inkl. Szenen/Stimmproben/Sprechtext/Prüfbericht/MP4, Werkzeuge, Kosten, Performance, Sprach-Umschalter (Einstellungen), Übersicht, Kunden-Review, Handbuch-Seite, Rufnummern-Seite.
+- **Prüfskript:** `npm run check-hilfe` → `scripts/check-hilfe.mjs`. Läuft grün (33/33). Meldet fehlende (i)/Handbuch-Knöpfe und ungültige Anker.
+- **Karte „☎ Rufnummern"** auf der Startseite. Route `/rufnummern` mit Tabelle nach Verlagsgruppe (SWMH, IPPEN, FUNKE, …), Freitext-Suche (Titel/Gruppe/Nummer/Preset-ID), Hinweis-Kästen, Quellen-Link zum monday-Board. Status „zu bestätigen" ist oben deutlich sichtbar (gelbes Warnbanner).
+- **Nummern bei Verlagswahl im Job:** Wähle im Job einen Verlag → direkt unter der Wahl erscheint das Panel „☎ Rufnummern <Zeitung>" mit den passenden Wissensquiz-Nummern (1–5 + Servicehotline) und Geldregen-Nummern (MWN Print/Web). Klick auf eine Nummer setzt sie in die CTA-Ebene, „Als Notiz speichern" hängt eine Notiz mit allen Nummern an den Job. Fehlt der Eintrag, kommt eine klare rote Warnung mit Verweis auf `/rufnummern` und Yasmina Salah — **nie eine erfundene Nummer**.
+
+**Wie testen:**
+1. `ContentCreator starten.command` doppelklicken.
+2. Oben rechts auf „📖 Handbuch" klicken → Overlay öffnet sich mit Inhaltsverzeichnis. In der Suche „Woooosch" tippen → Video-Abschnitt bleibt sichtbar. Escape schließt.
+3. Auf ein beliebiges (i) klicken (z. B. bei „Neuer Job", im KI-Zentrum, im Dialog nach Job-Öffnung) → Erklärung erscheint, unten „Mehr im Handbuch →" → springt genau zum Anker.
+4. Auf die neue Karte „☎ Rufnummern" klicken → Tabelle mit 55 Zeitungen erscheint. Suche z. B. „Schwarzwälder" → drei Zeilen.
+5. Im Job Kanal „Zeitung" wählen, dann „Verlag / Brand-Kit anwenden" aufklappen und einen Verlag klicken → Farben/Font/Logo werden angewendet UND das Rufnummern-Panel erscheint. Klick auf Nummer „01378 408171" → landet in der CTA-Ebene (in der Vorschau/Editor sichtbar). „Als Notiz speichern" → im WerkzeugePanel unter „Notizen" auftauchend.
+6. `npm run check-hilfe` im Terminal → 33/33 grün.
+
+**Screenshot-Pfad:** (Andreas macht Screenshots nach Testrunde)
+
+**Grenzen:**
+- Alle Rufnummern haben Status „zu bestätigen" (alte Listen aus Ad-Creator + monday-Board 2. Projektdetails). Yasmina Salah bestätigt final.
+- Getrennte Online-Nummern für Handy / Laptop-QR liegen noch nicht vor (Feld in `rufnummern.json` ist `null`).
+- Presets ohne Rufnummer-Eintrag zeigen im Job die rote Warnung; das ist gewollt.
+
+---
+

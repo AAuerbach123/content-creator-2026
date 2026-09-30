@@ -1,5 +1,6 @@
 'use client'
 
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 import type { Richtung } from '@/lib/types'
 
@@ -19,7 +20,14 @@ export default function RichtungenPanel({
 
   return (
     <section>
-      <h2 style={{ margin: '0 0 4px', fontSize: 17, fontWeight: 700 }}>{T('richtungenTitel')}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 style={{ margin: '0 0 4px', fontSize: 17, fontWeight: 700 }}>{T('richtungenTitel')}</h2>
+        <HilfePopover
+          de={'Drei visuell klar unterschiedliche Karten (Layout, Farbwelt, Tonalität, Beispiel-Headline). Ein Klick wählt die Richtung — danach verfeinert die KI per Multiple Choice und erzeugt den Schrittplan.'}
+          en={'Three visually distinct cards (layout, palette, tone, sample headline). One click picks the direction — the AI then refines via multiple choice and generates the step plan.'}
+          anker="richtungen"
+        />
+      </div>
       <p style={{ margin: '0 0 14px', opacity: 0.65, fontSize: 13 }}>{T('richtungenHinweis')}</p>
 
       <div

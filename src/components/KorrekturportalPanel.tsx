@@ -150,6 +150,7 @@ export default function KorrekturportalPanel({ job, artefaktId }: { job: Job; ar
           <HilfePopover
             de={'Erzeugt einen Token-Link (/review/TOKEN), den du dem Verlag/Kunden schickst. Der Kunde klickt auf eine Stelle im Motiv und hinterlässt Text — du siehst die Pins hier mit Kommentar-Thread und Status. Cross-Browser dank Server-Speicher (Cloudflare KV online, Datei-Fallback lokal).'}
             en={'Creates a token link (/review/TOKEN) you share with the client. Client clicks on the artwork and leaves a note — you see the pins here with a comment thread and status. Cross-browser via server store (Cloudflare KV online, file fallback locally).'}
+            anker="korrektur"
           />
         </div>
         <button

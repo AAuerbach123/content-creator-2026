@@ -109,3 +109,16 @@ Der Knopf **„💾 MP4 erzeugen"** im Video-Studio ist da (siehe `src/component
 **Grenze:** Der Render läuft **nur lokal** (Node-Runtime + headless Chrome). Auf Cloudflare Workers gibt es kein Chromium — die Route meldet dort einen klaren Fehler. Wenn Video-Rendering auch online laufen soll, ist Remotion Lambda der Weg (siehe IDEEN_NAECHSTE_LOOPS.md #27).
 
 Erster Aufruf dauert 30–60 s (Bundling). Danach ist Rendern schnell.
+
+---
+
+## 10. Rufnummern von Yasmina Salah bestätigen (Phase 7)
+
+`public/rufnummern.json` enthält 55 Zeitungen aus den alten Listen (Ad-Creator + monday-Board *2. Projektdetails*). Status im Tool: **„zu bestätigen"**. Vor dem ersten echten Druck bitte einmal mit Yasmina abgleichen und ggf. korrigieren. Auf `/rufnummern` steht ganz oben ein gelbes Warnbanner.
+
+Fehlt eine getrennte Online-Nummer (Handy vs. Laptop/QR)? Die Felder in `rufnummern.json` sind vorbereitet (`online.handy` / `online.laptopQr`) — solange sie `null` sind, warnt das Tool, statt zu erfinden.
+
+Kein Terminal-Befehl nötig — nur JSON-Datei anpassen und committen:
+```bash
+open -e public/rufnummern.json
+```

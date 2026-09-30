@@ -42,6 +42,11 @@ export const dict = {
   cardAssetsHint: { de: 'Bilder, Videos, Audios', en: 'Images, videos, audios' },
   cardExports: { de: 'Exporte', en: 'Exports' },
   cardExportsHint: { de: 'Fertige Abgaben je Kanal', en: 'Finished deliverables per channel' },
+  cardRufnummern: { de: 'Rufnummern', en: 'Phone numbers' },
+  cardRufnummernHint: {
+    de: 'Wissensquiz + Geldregen je Zeitung',
+    en: 'Wissensquiz + Geldregen per newspaper',
+  },
   cardComingSoon: { de: 'kommt bald', en: 'coming soon' },
 
   // Debug-Sektion (bleibt bis Phase 1 die richtige „Laufende Jobs"-Ansicht liefert)

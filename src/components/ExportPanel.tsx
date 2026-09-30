@@ -133,6 +133,7 @@ export default function ExportPanel({ job, artefakt }: { job: Job; artefakt?: Ar
         <HilfePopover
           de="Raster (PNG/JPG/WebP) 1× für Web, 2× für Retina. Vektor-PDF geht in mm mit 3 mm Beschnitt + Schnittmarken — genau so wollen Verlage die Anzeige. Social-Paket bündelt alle Artefakte + Captions. Adobe-Paket enthält PDF + Anleitung. Job-Backup = alles wieder öffnen können."
           en="Raster (PNG/JPG/WebP) 1× for web, 2× for Retina. Vector PDF in mm with 3 mm bleed + crop marks — the way publishers want ads. Social bundle: all artefacts + captions. Adobe bundle: PDF + how-to. Job backup = full reopen."
+          anker="exporte"
         />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>

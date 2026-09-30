@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { assetSpeichern } from '@/lib/db'
 import { bildErzeugen, type BildAntwort } from '@/lib/dialog-client'
 import { STIL_PRESETS } from '@/lib/stil-presets'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Bild-Generator: Motiv + Stil-Preset + Orientierung → 3 Varianten (nacheinander).
@@ -75,6 +76,16 @@ export default function BildErzeugung({
         gap: 10,
       }}
     >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, opacity: 0.85 }}>
+          {sprache === 'de' ? 'Bilder erzeugen' : 'Generate images'}
+        </div>
+        <HilfePopover
+          de={'Motiv + Stil-Preset + Orientierung → 3 Varianten. Der IP-Sanitizer ersetzt Marken- oder IP-Namen im Prompt (gewollt). Übernehmen schreibt das Bild content-adressiert in den Asset-Store und in die Bild-Ebene.'}
+          en={'Subject + style preset + orientation → 3 variants. The IP sanitizer replaces brand/IP names in the prompt (intentional). „Use this" writes the image content-addressed into the asset store and the image layer.'}
+          anker="bild-erzeugung"
+        />
+      </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-start' }}>
         <input
           type="text"

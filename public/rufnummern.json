@@ -1,0 +1,1097 @@
+{
+ "_hinweis": "Rufnummern je Zeitung. Stand: alte Listen, von Yasmina Salah zu bestätigen. Keine eigene Online-Nummern (Handy/Laptop) vorhanden – folgen.",
+ "quellen": {
+  "wissensquiz": "Ad-Creator docs/hotlines-phonenumbers.json (Wissensquiz h5: 5 Nummern je Zeitung, Endziffer 1–5 = Frage/Gewinnstufe)",
+  "geldregen": "monday Board '2. Projektdetails' (Cash Call), Spalten MWN Print/MWN Web; xx = Klasse (Geldpaket) + Endziffer Antwort 1/2",
+  "url": "https://telemedia-interactive.monday.com/boards/1062567155"
+ },
+ "stand": "2026-09-30",
+ "status": "zu bestätigen",
+ "online": {
+  "handy": null,
+  "laptopQr": null,
+  "hinweis": "Separate Nummern für Handy und Laptop/QR bei Yasmina angefragt"
+ },
+ "zeitungen": [
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Schwarzwälder Bote (mit Neckarquelle, Lahrer Zeitung)",
+   "presetIds": [
+    "SWMH__Schwarzwälder Bote, Neckarquelle, Lahrer Zeitung",
+    "SWP__Schwabo"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40817x",
+    "nummern": [
+     "01378 408171",
+     "01378 408172",
+     "01378 408173",
+     "01378 408174",
+     "01378 408175"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 81 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Die Oberbadische / Markgräfler Tagblatt / Weiler Zeitung",
+   "presetIds": [
+    "SWMH__Die Oberbadische, Markgräfler Tagblatt, Weiler Zeitung"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40817x",
+    "nummern": [
+     "01378 408171",
+     "01378 408172",
+     "01378 408173",
+     "01378 408174",
+     "01378 408175"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 89 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": "Wissensquiz läuft unter Schwarzwälder Bote"
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Frankenpost",
+   "presetIds": [
+    "SWMH__Frankenpost"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40827x",
+    "nummern": [
+     "01378 408271",
+     "01378 408272",
+     "01378 408273",
+     "01378 408274",
+     "01378 408275"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 82 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Neue Presse",
+   "presetIds": [
+    "SWMH__Neue Presse"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40837x",
+    "nummern": [
+     "01378 408371",
+     "01378 408372",
+     "01378 408373",
+     "01378 408374",
+     "01378 408375"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 83 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Suhler Verlagsgesellschaft",
+   "presetIds": [
+    "SWMH__Suhler Verlagsgesellschaft"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40847x",
+    "nummern": [
+     "01378 408471",
+     "01378 408472",
+     "01378 408473",
+     "01378 408474",
+     "01378 408475"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 84 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Nordbayerischer Kurier",
+   "presetIds": [
+    "SWMH__Nordbayerischer Kurier"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40857x",
+    "nummern": [
+     "01378 408571",
+     "01378 408572",
+     "01378 408573",
+     "01378 408574",
+     "01378 408575"
+    ],
+    "serviceHotline": "0800-2224449"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 85 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Stuttgarter Zeitung / Nachrichten",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 86 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Esslinger Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 87 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWMH",
+   "zeitung": "Böblinger Kreiszeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 88 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SWP",
+   "zeitung": "Südwest Presse (SWP)",
+   "presetIds": [
+    "SWP__SWP"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80387x",
+    "nummern": [
+     "01378 803871",
+     "01378 803872",
+     "01378 803873",
+     "01378 803874",
+     "01378 803875"
+    ],
+    "serviceHotline": "0800-7779889"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 38 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SHZ",
+   "zeitung": "sh:z",
+   "presetIds": [
+    "SHZ__SHZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80278x",
+    "nummern": [
+     "01378 802781",
+     "01378 802782",
+     "01378 802783",
+     "01378 802784",
+     "01378 802785"
+    ],
+    "serviceHotline": "0800-2223365"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 27 xx",
+    "mwnWeb": "01378 80 26 xx"
+   },
+   "hinweis": "Cash Call: SHZ Nummer 1"
+  },
+  {
+   "gruppe": "SHZ",
+   "zeitung": "A. Beig",
+   "presetIds": [
+    "SHZ__Beig"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80477x",
+    "nummern": [
+     "01378 804771",
+     "01378 804772",
+     "01378 804773",
+     "01378 804774",
+     "01378 804775"
+    ],
+    "serviceHotline": "0800-2223365"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 47 xx",
+    "mwnWeb": "01378 80 46 xx"
+   },
+   "hinweis": "Cash Call: SHZ Nummer 3 (Zuordnung prüfen)"
+  },
+  {
+   "gruppe": "SHZ",
+   "zeitung": "NOZ",
+   "presetIds": [
+    "SHZ__NOZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80577x",
+    "nummern": [
+     "01378 805771",
+     "01378 805772",
+     "01378 805773",
+     "01378 805774",
+     "01378 805775"
+    ],
+    "serviceHotline": "0800-2223365"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 57 xx",
+    "mwnWeb": "01378 80 56 xx"
+   },
+   "hinweis": "Cash Call: SHZ Nummer 4 (Zuordnung prüfen)"
+  },
+  {
+   "gruppe": "SHZ",
+   "zeitung": "SHZ Nummer 2",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 80 37 xx",
+    "mwnWeb": "01378 80 36 xx"
+   },
+   "hinweis": "Cash Call: welcher Titel?"
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "C. Beckers Buchdruckerei (Allgemeine Zeitung der Lüneburger Heide, AltmarkZeitung, Isenhagener Kreisblatt)",
+   "presetIds": [
+    "Ippen__Allgemeine Zeitung der Lüneburger Heide",
+    "Ippen__AltmarkZeitung",
+    "Ippen__Isenhagener Kreisblatt"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40378x",
+    "nummern": [
+     "01378 403781",
+     "01378 403782",
+     "01378 403783",
+     "01378 403784",
+     "01378 403785"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 37 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "tz",
+   "presetIds": [
+    "Ippen__TZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40388x",
+    "nummern": [
+     "01378 403881",
+     "01378 403882",
+     "01378 403883",
+     "01378 403884",
+     "01378 403885"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 38 xx",
+    "mwnWeb": null
+   },
+   "hinweis": "Cash Call: gleiche Nummer wie Münchner Merkur"
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Münchner Merkur",
+   "presetIds": [
+    "Ippen__Muenchner-Merkur"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40398x",
+    "nummern": [
+     "01378 403981",
+     "01378 403982",
+     "01378 403983",
+     "01378 403984",
+     "01378 403985"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 38 xx",
+    "mwnWeb": null
+   },
+   "hinweis": "Cash Call: gleiche Nummer wie tz"
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Pressehaus Bintz (Offenbach-Post)",
+   "presetIds": [
+    "Ippen__Offenbach-Post"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40428x",
+    "nummern": [
+     "01378 404281",
+     "01378 404282",
+     "01378 404283",
+     "01378 404284",
+     "01378 404285"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 42 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Hanauer Anzeiger",
+   "presetIds": [
+    "Ippen__Hanauer-Anzeiger"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40438x",
+    "nummern": [
+     "01378 404381",
+     "01378 404382",
+     "01378 404383",
+     "01378 404384",
+     "01378 404385"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 43 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Kreiszeitung",
+   "presetIds": [
+    "Ippen__Kreiszeitung-Verlag"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40379x",
+    "nummern": [
+     "01378 403791",
+     "01378 403792",
+     "01378 403793",
+     "01378 403794",
+     "01378 403795"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 48 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Karl Sasse (Rotenburg)",
+   "presetIds": [
+    "Ippen__Karl-Sasse-Verlage"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40389x",
+    "nummern": [
+     "01378 403891",
+     "01378 403892",
+     "01378 403893",
+     "01378 403894",
+     "01378 403895"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 49 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Wildeshauser Zeitung",
+   "presetIds": [
+    "Ippen__Wildeshauser-Zeitung"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40518x",
+    "nummern": [
+     "01378 405181",
+     "01378 405182",
+     "01378 405183",
+     "01378 405184",
+     "01378 405185"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 51 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Frankfurter Neue Presse",
+   "presetIds": [
+    "Ippen__Frankfurter-Neue-Presse"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40528x",
+    "nummern": [
+     "01378 405281",
+     "01378 405282",
+     "01378 405283",
+     "01378 405284",
+     "01378 405285"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 52 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Rüsselsheimer Echo",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 53 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Frankfurter Rundschau",
+   "presetIds": [
+    "Ippen__Frankfurter-Rundschau"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40568x",
+    "nummern": [
+     "01378 405681",
+     "01378 405682",
+     "01378 405683",
+     "01378 405684",
+     "01378 405685"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 56 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Mittelhessisches Druck- und Verlagshaus (Gießener-Alsfelder, Oberhessische, Usinger, Wetterauer)",
+   "presetIds": [
+    "Ippen__Giessener-Alsfelder",
+    "Ippen__Oberhessische-Lauterbacher",
+    "Ippen__Usinger-Kreis",
+    "Ippen__Wetterauer-Butzbacher"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40578x",
+    "nummern": [
+     "01378 405781",
+     "01378 405782",
+     "01378 405783",
+     "01378 405784",
+     "01378 405785"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 57 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Gießener Anzeiger",
+   "presetIds": [
+    "Ippen__Giessener-Anzeiger"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40728x",
+    "nummern": [
+     "01378 407281",
+     "01378 407282",
+     "01378 407283",
+     "01378 407284",
+     "01378 407285"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 XX XX xx",
+    "mwnWeb": null
+   },
+   "hinweis": "Cash Call: nur Platzhalter"
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Verlag Dierichs (HNA)",
+   "presetIds": [
+    "Ippen__HNA"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40588x",
+    "nummern": [
+     "01378 405881",
+     "01378 405882",
+     "01378 405883",
+     "01378 405884",
+     "01378 405885"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 58 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Waldeckische Landeszeitung",
+   "presetIds": [
+    "Ippen__Waldeckische-Landeszeitung"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40598x",
+    "nummern": [
+     "01378 405981",
+     "01378 405982",
+     "01378 405983",
+     "01378 405984",
+     "01378 405985"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 59 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Werra-Rundschau",
+   "presetIds": [
+    "Ippen__Werra-Rundschau"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40618x",
+    "nummern": [
+     "01378 406181",
+     "01378 406182",
+     "01378 406183",
+     "01378 406184",
+     "01378 406185"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 61 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Hersfelder Zeitung",
+   "presetIds": [
+    "Ippen__Hersfelder-Zeitung"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40628x",
+    "nummern": [
+     "01378 406281",
+     "01378 406282",
+     "01378 406283",
+     "01378 406284",
+     "01378 406285"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 62 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Leine-Deister-Zeitung",
+   "presetIds": [
+    "Ippen__Leine-Deister-Zeitung"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40638x",
+    "nummern": [
+     "01378 406381",
+     "01378 406382",
+     "01378 406383",
+     "01378 406384",
+     "01378 406385"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 63 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Westfälischer Anzeiger",
+   "presetIds": [
+    "Ippen__Westfaelischer-Anz"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40658x",
+    "nummern": [
+     "01378 406581",
+     "01378 406582",
+     "01378 406583",
+     "01378 406584",
+     "01378 406585"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 65 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Soester Anzeiger",
+   "presetIds": [
+    "Ippen__Soester-Anzeiger"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40678x",
+    "nummern": [
+     "01378 406781",
+     "01378 406782",
+     "01378 406783",
+     "01378 406784",
+     "01378 406785"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 67 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Märkische Zeitung",
+   "presetIds": [
+    "Ippen__Maerkische-Z"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-40688x",
+    "nummern": [
+     "01378 406881",
+     "01378 406882",
+     "01378 406883",
+     "01378 406884",
+     "01378 406885"
+    ],
+    "serviceHotline": "0800-2223384"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 40 68 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Oberbayerisches Volksblatt",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 71 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "IPPEN",
+   "zeitung": "Burg-Verlag",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 40 36 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SAAR",
+   "zeitung": "Saarbrücker Zeitung",
+   "presetIds": [
+    "SAAR__SZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80617x",
+    "nummern": [
+     "01378 806171",
+     "01378 806172",
+     "01378 806173",
+     "01378 806174",
+     "01378 806175"
+    ],
+    "serviceHotline": "0800-2223385"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 61 xx",
+    "mwnWeb": "01378 80 71 xx"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SAAR",
+   "zeitung": "Trierischer Volksfreund",
+   "presetIds": [
+    "SAAR__TV"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80627x",
+    "nummern": [
+     "01378 806271",
+     "01378 806272",
+     "01378 806273",
+     "01378 806274",
+     "01378 806275"
+    ],
+    "serviceHotline": "0800-2223385"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 62 xx",
+    "mwnWeb": "01378 80 72 xx"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "SAAR",
+   "zeitung": "Pfälzischer Merkur",
+   "presetIds": [
+    "SAAR__PM"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-80637x",
+    "nummern": [
+     "01378 806371",
+     "01378 806372",
+     "01378 806373",
+     "01378 806374",
+     "01378 806375"
+    ],
+    "serviceHotline": "0800-2223385"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 80 63 xx",
+    "mwnWeb": "01378 80 73 xx"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "NUERNBERG",
+   "zeitung": "Nürnberger Nachrichten",
+   "presetIds": [
+    "Nürnberg__Nürnberg"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-22027x",
+    "nummern": [
+     "01378 220271",
+     "01378 220272",
+     "01378 220273",
+     "01378 220274",
+     "01378 220275"
+    ],
+    "serviceHotline": "0800-1011326"
+   },
+   "geldregen": {
+    "mwnPrint": "01378 22 02 xx",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "FUNKE",
+   "zeitung": "Thüringische Landeszeitung (TLZ)",
+   "presetIds": [
+    "Funke__TLZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01379-44127x",
+    "nummern": [
+     "01379 441271",
+     "01379 441272",
+     "01379 441273",
+     "01379 441274",
+     "01379 441275"
+    ],
+    "serviceHotline": "0800-7779872"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "FUNKE",
+   "zeitung": "Thüringer Allgemeine (TA)",
+   "presetIds": [
+    "Funke__TA"
+   ],
+   "wissensquiz": {
+    "stamm": "01379-44128x",
+    "nummern": [
+     "01379 441281",
+     "01379 441282",
+     "01379 441283",
+     "01379 441284",
+     "01379 441285"
+    ],
+    "serviceHotline": "0800-7779872"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "FUNKE",
+   "zeitung": "Ostthüringer Zeitung (OTZ)",
+   "presetIds": [
+    "Funke__OTZ"
+   ],
+   "wissensquiz": {
+    "stamm": "01379-44129x",
+    "nummern": [
+     "01379 441291",
+     "01379 441292",
+     "01379 441293",
+     "01379 441294",
+     "01379 441295"
+    ],
+    "serviceHotline": "0800-7779872"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "AUGSBURGER",
+   "zeitung": "Augsburger Allgemeine",
+   "presetIds": [
+    "Augsburger Allgemeinen__n/a"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-00556x",
+    "nummern": [
+     "01378 005561",
+     "01378 005562",
+     "01378 005563",
+     "01378 005564",
+     "01378 005565"
+    ],
+    "serviceHotline": "0800-2001199"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "Neue-Westfaeische",
+   "zeitung": "Neue Westfälische",
+   "presetIds": [
+    "Neue-Westfaeische__n/a"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-60827x",
+    "nummern": [
+     "01378 608271",
+     "01378 608272",
+     "01378 608273",
+     "01378 608274",
+     "01378 608275"
+    ],
+    "serviceHotline": "0800-7779878"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "Neue-Westfaeische",
+   "zeitung": "Haller Kreisblatt",
+   "presetIds": [
+    "Neue-Westfaeische__Haller Kreisblatt"
+   ],
+   "wissensquiz": {
+    "stamm": "01378-60837x",
+    "nummern": [
+     "01378 608371",
+     "01378 608372",
+     "01378 608373",
+     "01378 608374",
+     "01378 608375"
+    ],
+    "serviceHotline": "0800-7779878"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "RHEIN-Z",
+   "zeitung": "Mittelrhein (Rhein-Zeitung)",
+   "presetIds": [],
+   "wissensquiz": {
+    "stamm": "01378-80379x",
+    "nummern": [
+     "01378 803791",
+     "01378 803792",
+     "01378 803793",
+     "01378 803794",
+     "01378 803795"
+    ],
+    "serviceHotline": "0800-1088100"
+   },
+   "geldregen": null,
+   "hinweis": null
+  },
+  {
+   "gruppe": "SAECHSISCHE",
+   "zeitung": "Sächsische Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 4010 xx",
+    "mwnWeb": "01378 4011 xx"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "ALLGAEUER",
+   "zeitung": "Allgäuer Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 4095 xx",
+    "mwnWeb": "01378 4096 xx"
+   },
+   "hinweis": "In monday doppelt geführt (auch „NEU“, 2024)"
+  },
+  {
+   "gruppe": "SCHWAEBISCHE",
+   "zeitung": "Schwäbische Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 6090 xx",
+    "mwnWeb": "kein Online"
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "NWZ",
+   "zeitung": "Nordwest-Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 22 12 1x",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "NWZ",
+   "zeitung": "Emder Zeitung",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 22 13 1x",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "NWZ",
+   "zeitung": "Harlingerland",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 22 14 1x",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  },
+  {
+   "gruppe": "NWZ",
+   "zeitung": "Jeversches / Wilhelmshavener",
+   "presetIds": [],
+   "wissensquiz": null,
+   "geldregen": {
+    "mwnPrint": "01378 22 15 1x",
+    "mwnWeb": null
+   },
+   "hinweis": null
+  }
+ ]
+}

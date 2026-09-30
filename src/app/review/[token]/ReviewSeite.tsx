@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ArtefaktRenderer from '@/components/ArtefaktRenderer'
+import HandbuchKnopf from '@/components/HandbuchKnopf'
+import HilfePopover from '@/components/HilfePopover'
 import KorrekturPinLayer from '@/components/KorrekturPinLayer'
 import type { Artefakt, Korrekturpin } from '@/lib/types'
 
@@ -90,7 +92,17 @@ export default function ReviewSeite({ token }: { token: string }) {
       }}
     >
       <header style={{ maxWidth: 720, margin: '0 auto 20px' }}>
-        <div style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.5 }}>Freigabe</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+          <div style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.5 }}>Freigabe</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <HilfePopover
+              de={'Klicken Sie auf eine beliebige Stelle im Motiv, um einen Änderungswunsch zu setzen. Ein Popup fragt nach Text (optional Name). Bereits gesetzte Pins können Sie anklicken. Kein Konto nötig.'}
+              en={'Click anywhere on the artwork to leave a change request. A popup asks for text (name optional). Click existing pins to open them. No account required.'}
+              anker="review"
+            />
+            <HandbuchKnopf anker="review" />
+          </div>
+        </div>
         <h1 style={{ margin: '4px 0', fontSize: 18, fontWeight: 700 }}>{freigabe.jobTitel || 'Motiv'}</h1>
         <p style={{ margin: 0, opacity: 0.7, fontSize: 13, lineHeight: 1.5 }}>
           Klicken Sie auf eine Stelle im Motiv, um einen Änderungswunsch zu hinterlassen. Bereits

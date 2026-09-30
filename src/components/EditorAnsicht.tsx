@@ -6,6 +6,7 @@ import type { Artefakt } from '@/lib/types'
 import { LEERER_STAPEL, stapelSchreiben, stapelVor, stapelZurueck, type UndoStapel } from '@/lib/undo'
 import EbenenInspektor from './EbenenInspektor'
 import EbenenPanel from './EbenenPanel'
+import HilfePopover from './HilfePopover'
 import KIEditorBefehl from './KIEditorBefehl'
 import { useSprache } from './SpracheProvider'
 
@@ -97,7 +98,7 @@ export default function EditorAnsicht({
       }}
     >
       <div ref={containerRef} style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <button
             type="button"
             onClick={undo}
@@ -114,6 +115,13 @@ export default function EditorAnsicht({
           >
             ⟳ {sprache === 'de' ? 'Vor' : 'Redo'}
           </button>
+          <div style={{ marginLeft: 'auto' }}>
+            <HilfePopover
+              de={'Konva-Editor. Verschieben/Skalieren/Drehen per Transformer, Doppelklick auf Text für Inline-Bearbeitung. Cmd/Ctrl+Z zurück, Cmd+Shift+Z vor, Delete löscht die ausgewählte Ebene.'}
+              en={'Konva editor. Move/scale/rotate via transformer, double-click text for inline edit. Cmd/Ctrl+Z undo, Cmd+Shift+Z redo, Delete removes the selected layer.'}
+              anker="editor"
+            />
+          </div>
         </div>
         <KonvaEditor
           artefakt={artefakt}

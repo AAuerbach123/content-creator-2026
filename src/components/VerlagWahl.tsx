@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { verlageGruppieren, verlagePresetsLaden, type VerlagsPreset } from '@/lib/verlage'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Verlags-Auswahl (Brand-Kit). Zeigt die 46 Presets aus dem Ad-Creator gruppiert
@@ -44,9 +45,16 @@ export default function VerlagWahl({ onWahl }: { onWahl: (v: VerlagsPreset) => v
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>
-          {sprache === 'de' ? `Verlage (${liste.length})` : `Publishers (${liste.length})`}
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>
+            {sprache === 'de' ? `Verlage (${liste.length})` : `Publishers (${liste.length})`}
+          </h3>
+          <HilfePopover
+            de={'46 Verlags-Presets aus dem Ad-Creator (Titel, Verlag, Schrift, Hausfarben, Format, Logo, Hotlines). Klick übernimmt Farben, Font und Logo in die aktuellen Ebenen.'}
+            en={'46 publisher presets from the Ad-Creator (title, publisher, font, house colours, format, logo, hotlines). Click applies colours, font and logo to the current layers.'}
+            anker="artefakt"
+          />
+        </div>
         <input
           type="text"
           value={suche}

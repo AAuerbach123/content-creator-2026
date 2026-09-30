@@ -1,6 +1,7 @@
 'use client'
 
 import type { Artefakt, Ebene } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Ebenen-Panel für den Konva-Editor: Auflistung, Auswahl, Sichtbarkeit,
@@ -56,8 +57,15 @@ export default function EbenenPanel({
         padding: 12,
       }}
     >
-      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
-        {sprache === 'de' ? 'Ebenen' : 'Layers'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>
+          {sprache === 'de' ? 'Ebenen' : 'Layers'}
+        </div>
+        <HilfePopover
+          de={'Alle Ebenen des aktuellen Artefakts. ● / ◌ = Sichtbarkeit, ↑ / ↓ = Reihenfolge (Z-Achse), ✕ = löschen. Buchstabe zeigt den Typ (T Text, ▤ Bild, ★ Logo, ◐ Form, ▶ Video-Platz).'}
+          en={'All layers of the current artifact. ● / ◌ = visibility, ↑ / ↓ = order (z-axis), ✕ = delete. Letter shows the type (T text, ▤ image, ★ logo, ◐ shape, ▶ video slot).'}
+          anker="ebenen"
+        />
       </div>
       <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
         {artefakt.ebenen.map((e) => {

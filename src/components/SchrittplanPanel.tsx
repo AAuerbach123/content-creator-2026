@@ -1,5 +1,6 @@
 'use client'
 
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 import type { Schritt, SchrittStatus } from '@/lib/types'
 
@@ -43,7 +44,14 @@ export default function SchrittplanPanel({
 
   return (
     <section>
-      <h2 style={{ margin: '0 0 12px', fontSize: 15, fontWeight: 700 }}>{T('schrittplanTitel')}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{T('schrittplanTitel')}</h2>
+        <HilfePopover
+          de={'Checkliste der KI zum Ziel. Je Schritt: Annehmen / Ändern / Selbst machen. Farbe am linken Rand zeigt den Status (offen, KI-Vorschlag, angenommen, manuell).'}
+          en={'AI checklist toward your goal. Per step: Accept / Change / DIY. Colour on the left indicates status (open, AI proposal, accepted, manual).'}
+          anker="schrittplan"
+        />
+      </div>
 
       {schritte.length === 0 ? (
         <p style={{ opacity: 0.6, fontSize: 13, margin: 0 }}>{T('schrittplanLeer')}</p>

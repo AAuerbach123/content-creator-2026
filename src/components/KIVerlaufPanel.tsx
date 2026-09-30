@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { aktionenFuerJob } from '@/lib/db'
 import type { KIAktion } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Verlaufs-Panel (Regel 8): jede KI-Aktion sichtbar. Nachladen per nonce.
@@ -45,7 +46,14 @@ export default function KIVerlaufPanel({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-        <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>{T('verlaufTitel')}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>{T('verlaufTitel')}</h2>
+          <HilfePopover
+            de={'Jede KI-Aktion mit Route, Prompt-Auszug, Tokens und geschätzten Kosten. Rote Zeilen = Fehler. Die Zahlen kommen aus dem Store „kiAktionen".'}
+            en={'Every AI action with route, prompt excerpt, tokens and estimated cost. Red rows = errors. Numbers come from the „kiAktionen" store.'}
+            anker="verlauf"
+          />
+        </div>
         <span style={{ fontSize: 11, opacity: 0.65 }}>
           {T('verlaufKosten')}: {formatKosten(gesamtKosten)}
         </span>

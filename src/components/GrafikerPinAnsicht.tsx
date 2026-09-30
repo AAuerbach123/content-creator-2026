@@ -5,6 +5,7 @@ import ArtefaktRenderer from './ArtefaktRenderer'
 import KorrekturPinLayer from './KorrekturPinLayer'
 import { freigabeSpeichern, freigabenFuerJob } from '@/lib/db'
 import type { Artefakt, Freigabe, Pinstatus } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Grafiker-Sicht auf die Korrektur-Pins: alle Freigaben zu diesem Artefakt
@@ -81,30 +82,38 @@ export default function GrafikerPinAnsicht({
         gap: 10,
       }}
     >
-      <button
-        type="button"
-        onClick={() => setOffen((v) => !v)}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: '#f5f5f7',
-          padding: 0,
-          textAlign: 'left',
-          fontSize: 13,
-          fontWeight: 700,
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <span>
-          {sprache === 'de' ? 'Kundenkorrekturen' : 'Customer feedback'} · {allePins.length}
-        </span>
-        <span style={{ fontSize: 11, color: offenePins > 0 ? '#fbbf24' : '#34d399' }}>
-          {offenePins} {sprache === 'de' ? 'offen' : 'open'} {offen ? '▲' : '▼'}
-        </span>
-      </button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <button
+          type="button"
+          onClick={() => setOffen((v) => !v)}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#f5f5f7',
+            padding: 0,
+            textAlign: 'left',
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flex: 1,
+          }}
+        >
+          <span>
+            {sprache === 'de' ? 'Kundenkorrekturen' : 'Customer feedback'} · {allePins.length}
+          </span>
+          <span style={{ fontSize: 11, color: offenePins > 0 ? '#fbbf24' : '#34d399' }}>
+            {offenePins} {sprache === 'de' ? 'offen' : 'open'} {offen ? '▲' : '▼'}
+          </span>
+        </button>
+        <HilfePopover
+          de={'Pins mit Kommentar-Thread und Status pro Freigabe. Antworten wird lokal gespeichert; für den Kunden brauchst du das Korrekturportal weiter oben (Server-Snapshot).'}
+          en={'Pins with comment thread and status per share. Replies stored locally; to reach the client use the correction portal above (server snapshot).'}
+          anker="korrektur"
+        />
+      </div>
 
       {offen && (
         <div style={{ position: 'relative' }}>

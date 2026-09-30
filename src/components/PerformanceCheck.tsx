@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { alleJobsLaden, jobLaden, jobLoeschen, jobSpeichern } from '@/lib/db'
 import type { Job } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Kleiner Performance-Check aus Phase 6.
@@ -100,9 +101,16 @@ export default function PerformanceCheck() {
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
-          {sprache === 'de' ? 'Performance-Check' : 'Performance check'}
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
+            {sprache === 'de' ? 'Performance-Check' : 'Performance check'}
+          </h2>
+          <HilfePopover
+            de={'Misst Start (alle Jobs laden < 200 ms), Job-Wechsel (jobLaden < 150 ms), Save (jobSpeichern + Snapshot < 100 ms). Setzt kurz einen Test-Job an und löscht ihn wieder.'}
+            en={'Measures start (load all jobs < 200 ms), job switch (jobLaden < 150 ms), save (jobSpeichern + snapshot < 100 ms). Briefly adds a test job and cleans it up.'}
+            anker="performance"
+          />
+        </div>
         <button
           type="button"
           onClick={messen}

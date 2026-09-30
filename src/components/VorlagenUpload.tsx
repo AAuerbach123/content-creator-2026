@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { assetSpeichern } from '@/lib/db'
 import { vorlageAnalysieren } from '@/lib/dialog-client'
 import type { VorlagenAnalyse } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Datei-Drop + Analyse via /api/analyze-template. Ruft onFertig mit
@@ -75,7 +76,14 @@ export default function VorlagenUpload({
         if (datei) verarbeiten(datei)
       }}
     >
-      <h3 style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 700 }}>{T('vorlageUploadTitel')}</h3>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <h3 style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 700 }}>{T('vorlageUploadTitel')}</h3>
+        <HilfePopover
+          de={'PNG oder JPG per Drop oder Klick. Claude Vision analysiert Farben, Schrift-Kandidaten und Text-Gefäße. Danach beantwortest du Multiple-Choice-Fragen, was übernommen wird.'}
+          en={'PNG or JPG via drop or click. Claude Vision detects colours, font candidates and text slots. You then answer multiple-choice questions about what to keep.'}
+          anker="vorlage"
+        />
+      </div>
       <p style={{ margin: '0 0 12px', fontSize: 12, opacity: 0.65 }}>{T('vorlageUploadHinweis')}</p>
 
       <label

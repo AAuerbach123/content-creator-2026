@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { dialogAufrufen, type EditorBefehlAntwort } from '@/lib/dialog-client'
 import type { Artefakt, Ebene } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import MikrofonKnopf from './MikrofonKnopf'
 import { useSprache } from './SpracheProvider'
 
@@ -157,8 +158,15 @@ export default function KIEditorBefehl({
         gap: 8,
       }}
     >
-      <div style={{ fontSize: 12, fontWeight: 700, color: '#93c5fd' }}>
-        {sprache === 'de' ? '💬 Freier Befehl an die KI (Editor)' : '💬 Freeform AI editor command'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#93c5fd' }}>
+          {sprache === 'de' ? '💬 Freier Befehl an die KI (Editor)' : '💬 Freeform AI editor command'}
+        </div>
+        <HilfePopover
+          de={'Sprich oder tippe deinen Wunsch — z. B. „mach die Headline größer und rück das Logo nach rechts". Die KI übersetzt das in konkrete Operationen (skaliere, verschiebe, setzeText, setzeFarbe, aendereReihenfolge, entferne).'}
+          en={'Speak or type your wish — e.g. „make the headline bigger and push the logo right". The AI turns it into concrete ops (scale, move, setText, setColor, reorder, remove).'}
+          anker="ki-editor-befehl"
+        />
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
         <input

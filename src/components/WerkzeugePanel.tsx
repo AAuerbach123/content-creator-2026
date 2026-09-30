@@ -8,6 +8,7 @@ import { assetRefSicherstellen, ebeneAktualisieren } from '@/lib/artefakt'
 import { farbschemaAusBlob } from '@/lib/farbschema'
 import { pruefePrint, type PruefHinweis } from '@/lib/pruefungen'
 import type { Artefakt, EigeneVorlage, Job } from '@/lib/types'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Sammelpanel für die kleinen Grafiker-Werkzeuge: QR-Code, UTM-Link,
@@ -223,7 +224,14 @@ export default function WerkzeugePanel({
         gap: 10,
       }}
     >
-      <div style={{ fontSize: 13, fontWeight: 700 }}>{sprache === 'de' ? '🛠 Werkzeuge' : '🛠 Tools'}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>{sprache === 'de' ? '🛠 Werkzeuge' : '🛠 Tools'}</div>
+        <HilfePopover
+          de={'Kleine Helfer: Notizen (nur du), QR-Code aufs Artefakt legen, UTM-Link-Builder, Farbschema aus Vorlage extrahieren, Print-Prüfung, Alt-Text von der KI, Hashtag-Vorschläge, Übersetzung, Vorlagen-Bibliothek.'}
+          en={'Little helpers: notes (yourself), place QR on artifact, UTM link builder, colour scheme from reference, print check, AI alt text, hashtag suggestions, translation, template library.'}
+          anker="einstellungen"
+        />
+      </div>
 
       <details>
         <summary style={{ cursor: 'pointer', fontSize: 12 }}>{sprache === 'de' ? 'Notizen' : 'Notes'} ({job.notizen?.length || 0})</summary>

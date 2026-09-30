@@ -1,5 +1,6 @@
 'use client'
 
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 import type { Einstiegsweg } from '@/lib/types'
 
@@ -61,7 +62,14 @@ export default function WegAuswahl({
 
   return (
     <section>
-      <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{T('wegAuswahlTitel')}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{T('wegAuswahlTitel')}</h2>
+        <HilfePopover
+          de={'Drei gleichberechtigte Einstiege: A · Nur ein Ziel (KI schlägt drei Richtungen vor), B · Vorstellung im Kopf (KI stellt max. 5 offene Fragen), C · Vorlage hochladen (KI analysiert und fragt per Multiple Choice).'}
+          en={'Three equal entries: A · Only a goal (AI proposes three directions), B · Idea in mind (AI asks up to 5 open questions), C · Upload reference (AI analyses and asks via multiple choice).'}
+          anker="drei-einstiege"
+        />
+      </div>
       <p style={{ margin: '4px 0 18px', opacity: 0.65, fontSize: 13 }}>
         {T('wegAuswahlHinweis')}
       </p>

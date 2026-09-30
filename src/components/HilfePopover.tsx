@@ -1,21 +1,26 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useHandbuch } from './HandbuchProvider'
 import { useSprache } from './SpracheProvider'
 
 // Kleiner „?"-Knopf mit Popover. DE/EN je Bereich, Text kommt via Props.
-// Klick auf den Knopf toggelt das Popover, Klick außerhalb schließt es.
+// Phase 7: optionaler `anker` — dann steht am Ende ein Link „Mehr im Handbuch",
+// der das Handbuch-Overlay am passenden Abschnitt öffnet.
 
 export default function HilfePopover({
   de,
   en,
   ausrichtung = 'rechts',
+  anker,
 }: {
   de: string
   en: string
   ausrichtung?: 'links' | 'rechts'
+  anker?: string
 }) {
   const { sprache } = useSprache()
+  const { oeffnen } = useHandbuch()
   const [offen, setOffen] = useState(false)
   const rootRef = useRef<HTMLSpanElement>(null)
 
@@ -30,9 +35,14 @@ export default function HilfePopover({
   }, [offen])
 
   const text = sprache === 'de' ? de : en
+  const mehr = sprache === 'de' ? 'Mehr im Handbuch →' : 'More in the manual →'
 
   return (
-    <span ref={rootRef} style={{ position: 'relative', display: 'inline-block' }}>
+    <span
+      ref={rootRef}
+      data-hilfe-anker={anker || ''}
+      style={{ position: 'relative', display: 'inline-block' }}
+    >
       <button
         type="button"
         onClick={() => setOffen((o) => !o)}
@@ -52,7 +62,7 @@ export default function HilfePopover({
           verticalAlign: 'middle',
         }}
       >
-        ?
+        i
       </button>
       {offen && (
         <div
@@ -62,7 +72,7 @@ export default function HilfePopover({
             top: 26,
             [ausrichtung === 'rechts' ? 'right' : 'left']: 0,
             zIndex: 40,
-            width: 280,
+            width: 300,
             background: '#0b0b0f',
             color: '#f5f5f7',
             border: '1px solid rgba(255,255,255,0.15)',
@@ -73,7 +83,29 @@ export default function HilfePopover({
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
           }}
         >
-          {text}
+          <div>{text}</div>
+          {anker && (
+            <button
+              type="button"
+              onClick={() => {
+                setOffen(false)
+                oeffnen(anker)
+              }}
+              style={{
+                marginTop: 8,
+                background: 'transparent',
+                color: '#93c5fd',
+                border: 'none',
+                padding: 0,
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              {mehr}
+            </button>
+          )}
         </div>
       )}
     </span>

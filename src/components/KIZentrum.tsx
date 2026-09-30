@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react'
 import { jobErstellen } from '@/lib/db'
 import { dialogAufrufen, type EinstiegAntwort } from '@/lib/dialog-client'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 import MikrofonKnopf from './MikrofonKnopf'
 
@@ -105,9 +106,24 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
         boxShadow: '0 10px 40px rgba(0,0,0,0.4)',
       }}
     >
-      <label htmlFor="ki-input" style={{ display: 'block', fontSize: 20, fontWeight: 600, marginBottom: 14 }}>
-        {T('kiPrompt')}
-      </label>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 14,
+          gap: 8,
+        }}
+      >
+        <label htmlFor="ki-input" style={{ fontSize: 20, fontWeight: 600 }}>
+          {T('kiPrompt')}
+        </label>
+        <HilfePopover
+          de={'Das KI-Zentrum ist der Einstieg. Beschreib dein Ziel — die KI erkennt selbst, welcher der drei Wege passt (nur Ziel / Vorstellung im Kopf / Vorlage). „Los" legt einen Job an und öffnet den JobEditor.'}
+          en={'The AI centre is the entry point. Describe your goal — the AI decides which of the three paths fits (goal only / idea in mind / reference). „Go" creates a job and opens the JobEditor.'}
+          anker="ki-zentrum"
+        />
+      </div>
 
       <textarea
         id="ki-input"

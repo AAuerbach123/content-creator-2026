@@ -14,6 +14,7 @@ import ExportPanel from './ExportPanel'
 import GrafikerPinAnsicht from './GrafikerPinAnsicht'
 import KanalWahl from './KanalWahl'
 import KorrekturportalPanel from './KorrekturportalPanel'
+import RufnummernInfo from './RufnummernInfo'
 import VerlagWahl from './VerlagWahl'
 import VideoStudio from './VideoStudio'
 import WerkzeugePanel from './WerkzeugePanel'
@@ -45,6 +46,7 @@ export default function ArtefaktWerkstatt({
   const [rundumLaedt, setRundumLaedt] = useState(false)
   const [rundumFehler, setRundumFehler] = useState<string | null>(null)
   const [modus, setModus] = useState<'vorschau' | 'editor'>('vorschau')
+  const [letzterVerlagId, setLetzterVerlagId] = useState<string | null>(null)
 
   const aktuellesArtefakt = useMemo(
     () => job.artefakte.find((a) => a.id === aktuelleId) || job.artefakte[0],
@@ -186,8 +188,31 @@ export default function ArtefaktWerkstatt({
     [artefaktSetzen],
   )
 
+  // Wird nach „In CTA einsetzen" im RufnummernInfo aufgerufen
+  const nummerInCta = useCallback(
+    (nummer: string) => {
+      artefaktSetzen((a) => ebenenEigenschaftSetzen(a, 'cta', 'text', nummer))
+    },
+    [artefaktSetzen],
+  )
+
+  // Wird nach „Als Notiz speichern" aufgerufen
+  const nummerAlsNotiz = useCallback(
+    (text: string) => {
+      onJobPatch((alt) => ({
+        ...alt,
+        notizen: [
+          ...(alt.notizen || []),
+          { id: crypto.randomUUID(), text, erstelltAm: Date.now() },
+        ],
+      }))
+    },
+    [onJobPatch],
+  )
+
   const verlagAnwenden = useCallback(
     async (v: import('@/lib/verlage').VerlagsPreset) => {
+      setLetzterVerlagId(v.id)
       // Logo in den Asset-Store laden (falls URL), Farben auf die Ebenen anwenden
       let logoHash: string | undefined
       if (v.logoUrl) {
@@ -241,6 +266,7 @@ export default function ArtefaktWerkstatt({
             de={'Ein Artefakt ist EIN Motiv (Anzeige, Post, Kachel, Video-Rahmen). Ein Job kann mehrere Artefakte enthalten (z. B. IG-Post + Zeitungsanzeige). Umschalter oben rechts: Vorschau ↔ Editor. Der Knopf „KI-Design" füllt Bild + Text in einem Rutsch. Kanal wechseln passt Maße und Safe-Zones an.'}
             en={'An artifact is ONE piece of artwork (ad, post, tile, video frame). A job can hold several artifacts (e.g. IG post + newspaper ad). Toggle at top right: preview ↔ editor. The „AI design" button fills image + text in one go. Changing channel adjusts size and safe zones.'}
             ausrichtung="links"
+            anker="artefakt"
           />
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
@@ -409,6 +435,13 @@ export default function ArtefaktWerkstatt({
         </summary>
         <div style={{ marginTop: 8 }}>
           <VerlagWahl onWahl={verlagAnwenden} />
+          {letzterVerlagId && (
+            <RufnummernInfo
+              presetId={letzterVerlagId}
+              onInCta={nummerInCta}
+              onAlsNotiz={nummerAlsNotiz}
+            />
+          )}
         </div>
       </details>
 

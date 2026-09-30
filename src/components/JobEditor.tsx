@@ -21,6 +21,7 @@ import type {
   VorlagenAnalyse,
 } from '@/lib/types'
 import ArtefaktWerkstatt from './ArtefaktWerkstatt'
+import HandbuchKnopf from './HandbuchKnopf'
 import HilfePopover from './HilfePopover'
 import KIDialog from './KIDialog'
 import KIVerlaufPanel from './KIVerlaufPanel'
@@ -470,9 +471,11 @@ export default function JobEditor({
           )}
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <HandbuchKnopf anker="artefakt" />
           <HilfePopover
             de="Links: KI-Dialog + Editor. Rechts: Schrittplan + KI-Verlauf. Der Titel oben ist editierbar. Titelklick ✎ = umbenennen. Zurück zur Übersicht mit dem Zurück-Knopf."
             en="Left: AI dialog + editor. Right: step plan + AI log. Title editable at top. Back to overview with the back button."
+            anker="artefakt"
           />
           <button
             type="button"

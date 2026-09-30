@@ -1,5 +1,6 @@
 'use client'
 
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 
 // Multiple-Choice-Fragen zur Vorlage. Wählt der Nutzer eine Option, geht das
@@ -23,7 +24,14 @@ export default function MCFragenPanel({
 
   return (
     <section>
-      <h2 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 700 }}>{T('mcTitel')}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h2 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 700 }}>{T('mcTitel')}</h2>
+        <HilfePopover
+          de={'Aus der Vorlage abgeleitete Fragen (Farben, Schrift, Layout, Bildstil). Je Merkmal: aus Vorlage übernehmen / aus Brand-Kit / neu wählen. Deine Antworten landen im Briefing des Jobs.'}
+          en={'Questions derived from the reference (colours, font, layout, imagery). Per attribute: take from reference / from brand kit / pick fresh. Your answers land in the job briefing.'}
+          anker="vorlage"
+        />
+      </div>
       <p style={{ margin: '0 0 14px', opacity: 0.65, fontSize: 13 }}>{T('mcHinweis')}</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

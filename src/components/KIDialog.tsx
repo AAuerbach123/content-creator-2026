@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import HilfePopover from './HilfePopover'
 import { useSprache } from './SpracheProvider'
 import MikrofonKnopf from './MikrofonKnopf'
 import type { Nachricht } from '@/lib/types'
@@ -57,11 +58,20 @@ export default function KIDialog({
           borderBottom: '1px solid rgba(255,255,255,0.08)',
           fontSize: 13,
           fontWeight: 600,
-          opacity: 0.75,
+          opacity: 0.85,
           letterSpacing: '0.03em',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 8,
         }}
       >
-        {T('dialogUeberschrift')}
+        <span>{T('dialogUeberschrift')}</span>
+        <HilfePopover
+          de={'Chat mit der KI. Enter sendet, Shift+Enter neue Zeile. Mikro-Knopf tippt dein Wort per Web-Speech ins Feld. Der Verlauf bleibt beim Job — auch nach Reload.'}
+          en={'Chat with the AI. Enter sends, Shift+Enter new line. Mic button dictates via Web Speech into the field. History stays with the job — even after reload.'}
+          anker="dialog"
+        />
       </header>
 
       <div
