@@ -10,6 +10,7 @@ import {
   jsonAusText,
   type ClaudeNachricht,
 } from '@/lib/anthropic'
+import { ERLAUBTE_BILD_MIMES, LIMITS, begrenzeBase64 } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -47,6 +48,14 @@ export async function POST(request: Request) {
       { status: 400 },
     )
   }
+  if (!ERLAUBTE_BILD_MIMES.has(body.mediaType)) {
+    return NextResponse.json(
+      { fehler: `Nicht unterstützter Typ „${body.mediaType}". Erlaubt: PNG, JPG, WEBP, PDF.` },
+      { status: 400 },
+    )
+  }
+  const groesse = begrenzeBase64('base64', body.base64, LIMITS.base64Bild)
+  if (!groesse.ok) return NextResponse.json({ fehler: groesse.nachricht }, { status: groesse.status })
 
   const spracheHinweis = `Antwort-Sprache für Freitext-Felder: ${
     body.sprache === 'en' ? 'englisch' : 'deutsch'

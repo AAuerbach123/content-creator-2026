@@ -3,6 +3,7 @@
 // dann einen mitgelieferten Fallback-Sound verwenden.
 
 import { NextResponse } from 'next/server'
+import { LIMITS, begrenzeText } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -21,6 +22,12 @@ export async function POST(request: Request) {
   }
   if (!body.prompt || !body.prompt.trim()) {
     return NextResponse.json({ fehler: 'Feld „prompt" fehlt.' }, { status: 400 })
+  }
+  const laenge = begrenzeText('prompt', body.prompt, LIMITS.textKurz)
+  if (!laenge.ok) return NextResponse.json({ fehler: laenge.nachricht }, { status: laenge.status })
+  const dauer = body.dauerSekunden ?? 2.0
+  if (typeof dauer !== 'number' || dauer <= 0 || dauer > 22) {
+    return NextResponse.json({ fehler: 'dauerSekunden muss zwischen 0 und 22 liegen.' }, { status: 400 })
   }
   const key = process.env.ELEVENLABS_API_KEY
   if (!key) {

@@ -17,6 +17,7 @@ import {
   SYSTEM_ROUTER,
   SYSTEM_SCHRITTPLAN,
 } from '@/lib/dialog-prompts'
+import { LIMITS } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -63,6 +64,18 @@ export async function POST(request: Request) {
 
   if (!body.aktion) {
     return NextResponse.json({ fehler: 'Feld „aktion" fehlt.' }, { status: 400 })
+  }
+  if (body.nutzerText && body.nutzerText.length > LIMITS.textMittel) {
+    return NextResponse.json(
+      { fehler: `Feld „nutzerText" ist zu lang (${body.nutzerText.length}, max ${LIMITS.textMittel}).` },
+      { status: 413 },
+    )
+  }
+  if (body.historie) {
+    const gesamt = body.historie.reduce((s, n) => s + (n.text?.length || 0), 0)
+    if (gesamt > LIMITS.textLang) {
+      return NextResponse.json({ fehler: `Dialog-Verlauf zu lang (${gesamt}, max ${LIMITS.textLang}).` }, { status: 413 })
+    }
   }
 
   const system = systemFuer(body.aktion)

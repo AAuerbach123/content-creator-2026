@@ -4,6 +4,7 @@
 
 import { NextResponse } from 'next/server'
 import { stilById, stilPromptBauen } from '@/lib/stil-presets'
+import { LIMITS } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -137,6 +138,13 @@ export async function POST(request: Request) {
     body = await request.json()
   } catch {
     return NextResponse.json({ fehler: 'Body ist kein gültiges JSON.' }, { status: 400 })
+  }
+
+  if (body.prompt && body.prompt.length > LIMITS.textMittel) {
+    return NextResponse.json({ fehler: `Feld „prompt" ist zu lang (max ${LIMITS.textMittel}).` }, { status: 413 })
+  }
+  if (body.motiv && body.motiv.length > LIMITS.textKurz) {
+    return NextResponse.json({ fehler: `Feld „motiv" ist zu lang (max ${LIMITS.textKurz}).` }, { status: 413 })
   }
 
   // Prompt bauen: entweder vorgegeben, oder aus Motiv + Stil-Preset.

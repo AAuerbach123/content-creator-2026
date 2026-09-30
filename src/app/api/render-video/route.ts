@@ -18,9 +18,21 @@ import { NextResponse } from 'next/server'
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import type { Storyboard } from '@/lib/video-types'
+import { LIMITS } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 600 // bis 10 min, falls Bundling + drei Renderings länger dauern
+
+// Läuft nur lokal (Node-Runtime auf dem Mac). In Cloudflare Workers gibt es
+// keine Chromium/Bundler-Umgebung — wir erkennen das an fehlendem `process.cwd`
+// bzw. fehlender Node-Umgebung und schalten die Route online sauber ab.
+function istLokaleNodeUmgebung(): boolean {
+  try {
+    return typeof process !== 'undefined' && typeof process.cwd === 'function' && !process.env.CF_PAGES && !process.env.CLOUDFLARE_WORKERS
+  } catch {
+    return false
+  }
+}
 
 type Anfrage = {
   storyboard: Storyboard
@@ -88,6 +100,12 @@ function storyboardMitUrls(sb: Storyboard, mapping: Record<string, string>): Sto
 }
 
 export async function POST(request: Request) {
+  if (!istLokaleNodeUmgebung()) {
+    return NextResponse.json(
+      { fehler: 'Video-Rendern läuft nur lokal (npm run dev auf dem Mac), nicht auf Cloudflare Workers.' },
+      { status: 501 },
+    )
+  }
   let body: Anfrage
   try {
     body = (await request.json()) as Anfrage
@@ -96,6 +114,20 @@ export async function POST(request: Request) {
   }
   if (!body.storyboard || !Array.isArray(body.storyboard.szenen)) {
     return NextResponse.json({ fehler: 'Feld „storyboard" fehlt oder ist ungültig.' }, { status: 400 })
+  }
+  // Grösse der Base64-Assets prüfen (Regel: Uploadgrenzen).
+  const gesamtBase64 = (body.assets || []).reduce((s, a) => s + (a.base64?.length || 0), 0)
+  const gesamtBytes = Math.ceil(gesamtBase64 * 3 / 4)
+  if (gesamtBytes > LIMITS.base64Gesamt) {
+    return NextResponse.json(
+      { fehler: `Assets zu gross (${Math.round(gesamtBytes / 1024 / 1024)} MB, max ${Math.round(LIMITS.base64Gesamt / 1024 / 1024)} MB).` },
+      { status: 413 },
+    )
+  }
+  for (const a of body.assets || []) {
+    if (!a?.hash || typeof a.hash !== 'string' || !/^[a-f0-9]{16,}$/i.test(a.hash)) {
+      return NextResponse.json({ fehler: `Asset-Hash ungültig: ${a?.hash}` }, { status: 400 })
+    }
   }
   const ratios = body.seitenverhaeltnisse?.length ? body.seitenverhaeltnisse : ['9:16']
 

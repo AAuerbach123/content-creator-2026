@@ -7,6 +7,7 @@
 // heuristisch aus Whitespace).
 
 import { NextResponse } from 'next/server'
+import { LIMITS, begrenzeText } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -67,6 +68,8 @@ export async function POST(request: Request) {
   if (!body.text || !body.text.trim()) {
     return NextResponse.json({ fehler: 'Feld „text" fehlt.' }, { status: 400 })
   }
+  const laenge = begrenzeText('text', body.text, LIMITS.textMittel)
+  if (!laenge.ok) return NextResponse.json({ fehler: laenge.nachricht }, { status: laenge.status })
   const key = process.env.ELEVENLABS_API_KEY
   if (!key) {
     return NextResponse.json(

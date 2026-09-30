@@ -4,6 +4,7 @@
 
 import { NextResponse } from 'next/server'
 import { ClaudeFehler, claudeAnfragen, jsonAusText } from '@/lib/anthropic'
+import { LIMITS } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
 
@@ -52,6 +53,15 @@ export async function POST(request: Request) {
       { fehler: `Feld „slot" fehlt oder ist ungültig. Erlaubt: ${Object.keys(SLOT_ANWEISUNG).join(', ')}` },
       { status: 400 },
     )
+  }
+  if (body.briefing && body.briefing.length > LIMITS.textMittel) {
+    return NextResponse.json(
+      { fehler: `Feld „briefing" ist zu lang (${body.briefing.length}, max ${LIMITS.textMittel}).` },
+      { status: 413 },
+    )
+  }
+  if (body.ziel && body.ziel.length > LIMITS.textKurz) {
+    return NextResponse.json({ fehler: `Feld „ziel" ist zu lang (max ${LIMITS.textKurz}).` }, { status: 413 })
   }
   const anzahl = body.anzahl && body.anzahl > 0 && body.anzahl <= 6 ? body.anzahl : 3
 
