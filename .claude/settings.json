@@ -37,19 +37,20 @@
    "Bash(git diff:*)",
    "Bash(git push:*)",
    "Bash(npx playwright:*)",
-   "Bash(pgrep:*)"
+   "Bash(pgrep:*)",
+   "Bash(npx wrangler deploy:*)",
+   "Bash(wrangler deploy:*)",
+   "Bash(npm run deploy:*)",
+   "Bash(npm run deploy:vinext:*)",
+   "Bash(npx opennextjs-cloudflare deploy:*)",
+   "Bash(npm run build:vinext:*)"
   ],
   "deny": [
    "Bash(rm -rf:*)",
    "Bash(sudo:*)",
-   "Bash(npx wrangler deploy:*)",
-   "Bash(wrangler deploy:*)",
-   "Bash(npm run deploy:*)",
    "Bash(npx --yes wrangler@3 deploy:*)",
-   "Bash(npm run deploy:vinext:*)",
    "Bash(npx wrangler secret:*)",
-   "Bash(wrangler secret:*)",
-   "Bash(npx opennextjs-cloudflare deploy:*)"
+   "Bash(wrangler secret:*)"
   ]
  }
 }
