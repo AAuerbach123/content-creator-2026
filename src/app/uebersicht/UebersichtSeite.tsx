@@ -4,6 +4,7 @@ import Link from 'next/link'
 import HandbuchKnopf from '@/components/HandbuchKnopf'
 import KostenUebersicht from '@/components/KostenUebersicht'
 import PerformanceCheck from '@/components/PerformanceCheck'
+import SpeicherPanel from '@/components/SpeicherPanel'
 import SpracheUmschalter from '@/components/SpracheUmschalter'
 import { useSprache } from '@/components/SpracheProvider'
 
@@ -32,6 +33,7 @@ export default function UebersichtSeite() {
         <h1 style={{ fontSize: 26, margin: '0 0 20px' }}>{sprache === 'de' ? 'Übersicht' : 'Overview'}</h1>
         <KostenUebersicht />
         <PerformanceCheck />
+        <SpeicherPanel />
       </main>
     </div>
   )
