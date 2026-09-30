@@ -132,15 +132,21 @@ export async function POST(request: Request) {
   const ratios = body.seitenverhaeltnisse?.length ? body.seitenverhaeltnisse : ['9:16']
 
   // Remotion nur lazy laden — im Cloudflare-Worker-Bundle ist es nicht verfügbar.
+  // Wichtig: den Modulnamen als String zusammensetzen, damit esbuild
+  // (Next.js UND @opennextjs/cloudflare) das Modul NICHT statisch analysiert
+  // und mit-bündelt. `@remotion/bundler` zieht `@rspack/binding` mit einer
+  // nativen `.node`-Datei mit; das kann esbuild nicht laden.
+  const remotionBundlerName = ['@remotion', 'bundler'].join('/')
+  const remotionRendererName = ['@remotion', 'renderer'].join('/')
   let bundle:
     | ((opts: { entryPoint: string; publicDir?: string }) => Promise<string>)
     | undefined
   let selectComposition: unknown, renderMedia: unknown
   try {
-    ;({ bundle } = (await import('@remotion/bundler')) as {
+    ;({ bundle } = (await import(remotionBundlerName)) as {
       bundle: (opts: { entryPoint: string; publicDir?: string }) => Promise<string>
     })
-    ;({ selectComposition, renderMedia } = await import('@remotion/renderer'))
+    ;({ selectComposition, renderMedia } = await import(remotionRendererName))
   } catch (e) {
     return NextResponse.json(
       {
