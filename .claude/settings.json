@@ -34,7 +34,9 @@
    "Bash(git commit:*)",
    "Bash(git status:*)",
    "Bash(git log:*)",
-   "Bash(git diff:*)"
+   "Bash(git diff:*)",
+   "Bash(npx playwright:*)",
+   "Bash(pgrep:*)"
   ],
   "deny": [
    "Bash(rm -rf:*)",
