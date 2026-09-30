@@ -98,12 +98,12 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
       style={{
         width: '100%',
         maxWidth: 760,
-        background:
-          'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: 'rgba(255,255,255,0.92)',
+        border: '1px solid rgba(0,0,0,0.08)',
         borderRadius: 20,
         padding: '28px 28px 20px',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.4)',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
+        color: '#0b0b0f',
       }}
     >
       <div
@@ -142,9 +142,9 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
           width: '100%',
           resize: 'vertical',
           minHeight: 80,
-          background: 'rgba(0,0,0,0.35)',
-          color: '#f5f5f7',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: '#faf9f6',
+          color: '#0b0b0f',
+          border: '1px solid rgba(0,0,0,0.12)',
           borderRadius: 10,
           padding: '12px 14px',
           fontSize: 15,
@@ -170,8 +170,8 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
           type="button"
           onClick={starten}
           style={{
-            background: '#f5f5f7',
-            color: '#0b0b0f',
+            background: '#0b0b0f',
+            color: '#ffffff',
             border: 'none',
             padding: '10px 22px',
             borderRadius: 10,
@@ -188,7 +188,7 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
       </div>
 
       {fehler && (
-        <p style={{ marginTop: 12, fontSize: 12, color: '#fecaca' }}>
+        <p style={{ marginTop: 12, fontSize: 12, color: '#b91c1c' }}>
           ⚠ {fehler}
         </p>
       )}

@@ -38,44 +38,54 @@ export default function StartScreen() {
         minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
-        background: '#0b0b0f',
-        color: '#f5f5f7',
+        background: '#f6f5f2',
+        color: '#0b0b0f',
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* Abgeschwächtes Telemedia-Logo als Hintergrund. Bewusst dezent
+          (opacity ~0.07), damit die Schrift auf hellem Papier lesbar bleibt.
+          `pointer-events:none` → kein Klick-Fänger. */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/telemedia-logo.png)',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'min(88vw, 1100px)',
+          opacity: 0.08,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
       <header
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '18px 24px',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid rgba(0,0,0,0.06)',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <span
-            style={{
-              fontSize: 10,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              opacity: 0.5,
-            }}
-          >
-            {T('phaseLabel')}
-          </span>
-          <strong style={{ fontSize: 15, letterSpacing: '-0.01em' }}>{T('appName')}</strong>
-        </div>
+        <strong style={{ fontSize: 15, letterSpacing: '-0.01em' }}>{T('appName')}</strong>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <HandbuchKnopf anker="start" />
           <Link
             href="/uebersicht"
             style={{
-              color: '#f5f5f7',
+              color: '#0b0b0f',
               textDecoration: 'none',
               fontSize: 12,
               padding: '5px 10px',
-              border: '1px solid rgba(255,255,255,0.12)',
+              border: '1px solid rgba(0,0,0,0.15)',
               borderRadius: 5,
               opacity: 0.85,
             }}
@@ -92,8 +102,8 @@ export default function StartScreen() {
               padding: 0,
               borderRadius: '50%',
               background: 'transparent',
-              color: '#f5f5f7',
-              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#0b0b0f',
+              border: '1px solid rgba(0,0,0,0.2)',
               fontSize: 12,
               fontWeight: 700,
               cursor: 'pointer',
@@ -112,6 +122,8 @@ export default function StartScreen() {
           flexDirection: 'column',
           alignItems: 'center',
           padding: '48px 24px 64px',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         <KIZentrum onJobStart={jobOeffnen} />

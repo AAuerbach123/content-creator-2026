@@ -14,9 +14,9 @@ export default function SpracheUmschalter() {
         onClick={() => setSprache(wert)}
         aria-pressed={aktiv}
         style={{
-          background: aktiv ? '#f5f5f7' : 'transparent',
-          color: aktiv ? '#0b0b0f' : '#f5f5f7',
-          border: '1px solid rgba(255,255,255,0.15)',
+          background: aktiv ? '#b91c1c' : 'transparent',
+          color: aktiv ? '#ffffff' : 'currentColor',
+          border: '1px solid currentColor',
           padding: '6px 12px',
           borderRadius: 6,
           fontSize: 12,

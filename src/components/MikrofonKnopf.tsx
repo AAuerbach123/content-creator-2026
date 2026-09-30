@@ -107,8 +107,9 @@ export default function MikrofonKnopf({
         title={aktiv ? T('kiMikroAus') : T('kiMikro')}
         style={{
           background: aktiv ? '#b91c1c' : 'transparent',
-          color: aktiv ? '#fee2e2' : '#f5f5f7',
-          border: `1px solid ${aktiv ? '#7f1d1d' : 'rgba(255,255,255,0.15)'}`,
+          color: aktiv ? '#fee2e2' : 'currentColor',
+          border: `1px solid ${aktiv ? '#7f1d1d' : 'currentColor'}`,
+          opacity: aktiv ? 1 : 0.85,
           padding: klein ? '4px 10px' : '8px 12px',
           borderRadius: 8,
           fontSize: klein ? 12 : 13,

@@ -46,10 +46,11 @@ export default function JobDemo({
         marginTop: 28,
         width: '100%',
         maxWidth: 960,
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(255,255,255,0.75)',
+        border: '1px solid rgba(0,0,0,0.08)',
         borderRadius: 12,
         padding: 18,
+        color: '#0b0b0f',
       }}
     >
       <h2 style={{ margin: 0, fontSize: 13, fontWeight: 600, opacity: 0.7, letterSpacing: '0.05em' }}>
@@ -57,7 +58,7 @@ export default function JobDemo({
       </h2>
 
       {fehler && (
-        <p style={{ color: '#fca5a5', marginTop: 10, fontSize: 13 }}>
+        <p style={{ color: '#b91c1c', marginTop: 10, fontSize: 13 }}>
           {T('debugError')}: {fehler}
         </p>
       )}
@@ -75,7 +76,7 @@ export default function JobDemo({
                 justifyContent: 'space-between',
                 padding: '8px 12px',
                 borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)',
+                background: 'rgba(0,0,0,0.03)',
                 marginBottom: 5,
                 fontSize: 13,
                 gap: 12,
@@ -88,7 +89,7 @@ export default function JobDemo({
                   flex: 1,
                   background: 'transparent',
                   border: 'none',
-                  color: '#f5f5f7',
+                  color: '#0b0b0f',
                   textAlign: 'left',
                   padding: 0,
                   cursor: 'pointer',
@@ -121,8 +122,8 @@ export default function JobDemo({
                 onClick={() => loeschen(job.id)}
                 style={{
                   background: 'transparent',
-                  color: '#fca5a5',
-                  border: '1px solid rgba(252,165,165,0.35)',
+                  color: '#b91c1c',
+                  border: '1px solid rgba(185,28,28,0.35)',
                   padding: '3px 10px',
                   borderRadius: 6,
                   fontSize: 12,

@@ -148,14 +148,14 @@ export default function KartenGrid({
               width: '100%',
               textAlign: 'left',
               background: karte.aktiv
-                ? 'rgba(255,255,255,0.06)'
-                : 'rgba(255,255,255,0.025)',
+                ? 'rgba(255,255,255,0.85)'
+                : 'rgba(255,255,255,0.55)',
               border: `1px solid ${
-                karte.aktiv ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)'
+                karte.aktiv ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.06)'
               }`,
               borderRadius: 14,
               padding: '18px 16px',
-              color: '#f5f5f7',
+              color: '#0b0b0f',
               cursor: karte.aktiv ? 'pointer' : 'not-allowed',
               transition: 'background 120ms ease, border-color 120ms ease',
               opacity: karte.aktiv ? 1 : 0.55,
@@ -168,14 +168,14 @@ export default function KartenGrid({
             }}
             onMouseEnter={(e) => {
               if (karte.aktiv) {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.24)'
+                e.currentTarget.style.background = 'rgba(255,255,255,0.98)'
+                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.22)'
               }
             }}
             onMouseLeave={(e) => {
               if (karte.aktiv) {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'
+                e.currentTarget.style.background = 'rgba(255,255,255,0.85)'
+                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'
               }
             }}
           >
@@ -191,8 +191,8 @@ export default function KartenGrid({
                   position: 'absolute',
                   bottom: 12,
                   right: 12,
-                  background: '#f5f5f7',
-                  color: '#0b0b0f',
+                  background: '#0b0b0f',
+                  color: '#ffffff',
                   fontSize: 11,
                   fontWeight: 700,
                   padding: '2px 7px',

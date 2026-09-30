@@ -16,8 +16,8 @@ export default function HandbuchKnopf({ anker }: { anker?: string }) {
       title={sprache === 'de' ? 'Handbuch öffnen' : 'Open manual'}
       style={{
         background: 'transparent',
-        color: '#f5f5f7',
-        border: '1px solid rgba(255,255,255,0.15)',
+        color: 'currentColor',
+        border: '1px solid currentColor',
         borderRadius: 5,
         padding: '5px 10px',
         fontSize: 12,
