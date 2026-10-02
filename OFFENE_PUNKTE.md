@@ -68,7 +68,12 @@ rm -rf node_modules package-lock.json && npm install
 
 ---
 
-## 7. OpenAI-Guthaben aufladen (blockiert Bildgenerierung)
+## 7. ✅ ERLEDIGT (02.10.2026) – OpenAI-Guthaben aufgeladen
+
+Test mit `OpenAI testen.command` erfolgreich (gpt-image-1 liefert Bilder). Bei künftigen Problemen denselben Test erneut starten.
+
+<details><summary>Alter Text</summary>
+
 
 Bei der Live-Prüfung meldet die OpenAI-API `insufficient_quota` / `credit_balance_exhausted` — Bildgenerierung geht deshalb noch nicht:
 - Aufladen unter https://platform.openai.com/settings/organization/billing/
@@ -76,9 +81,16 @@ Bei der Live-Prüfung meldet die OpenAI-API `insufficient_quota` / `credit_balan
 
 Der Code fällt sonst sauber zurück auf `gpt-image-1.5` → `gpt-image-1` und meldet den Fehler an die Oberfläche.
 
+</details>
+
 ---
 
-## 8. Korrekturportal cross-browser — Cloudflare KV anlegen (Phase 6, lokal fertig)
+## 8. Korrekturportal cross-browser — KV ✅ angelegt (02.10.2026), nur noch online stellen
+
+KV-Namespace `content-creator-2026-FREIGABEN` (id `9557d28444cb4d09a2084b5f550da63a`) ist angelegt und in `wrangler.jsonc` als Binding `FREIGABEN` eingetragen. **Offen:** Doppelklick auf `ContentCreator online stellen.command` (baut, deployt, committet, pusht).
+
+<details><summary>Alter Text</summary>
+
 
 Der Server-Store liegt fertig im Code (`src/lib/freigabe-store.ts` + `/api/freigabe`). **Lokal (`npm run dev`) funktioniert alles ohne weiteres Setup** — Freigaben landen in `.freigaben/<token>.json`. Für das Cloudflare-Deployment fehlt der KV-Namespace:
 
@@ -95,6 +107,8 @@ Wrangler gibt eine `id` aus. Diese in `wrangler.jsonc` als Binding eintragen:
 ```
 
 Danach `npm run build:vinext && npm run deploy:vinext`. Der Code erkennt das Binding automatisch (`getCloudflareContext().env.FREIGABEN`) und nutzt es statt der Datei.
+
+</details>
 
 ---
 

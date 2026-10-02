@@ -13,7 +13,11 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  // Korrekturportal: Freigaben + Kunden-Pins (cross-browser). Angelegt am 02.10.2026.
+  "kv_namespaces": [
+    { "binding": "FREIGABEN", "id": "9557d28444cb4d09a2084b5f550da63a" }
+  ]
   // Secrets (APP_PASSWORD, OPENAI_API_KEY, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY)
   // werden ausschliesslich per `wrangler secret put …` gesetzt – nie ins Repo.
 }
