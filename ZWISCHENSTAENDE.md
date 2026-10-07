@@ -219,3 +219,27 @@
 
 ---
 
+
+## Phase 8 — Korrekturen Oktober 2026 ✅ (laufend)
+
+### Phase 1 — Juli-Spiele: Teilnahmebedingungen ohne Vorzählfaktor ✅
+
+**Was geht:**
+- `src/lib/serie/spiele/tnb.ts`, Zweig `'jackpot'`: nutzt den Geldregen-Wortlaut (je Verlag — SWMH-Standard, NUE-Variante, NOZ/NPG ohne Social Media), Spielname wird ersetzt und als Aktionszeitraum erscheint die jeweilige Spielwoche. Die Jackpot-Fussnote „* Für jeden Tag …“ wird wörtlich wie in `_quellen_loop_2026-10/tnb/jul_postkarte.html` am Ende angehängt. **Kein Vorzählfaktor** im Juli.
+- Juli-Spielwochen übernommen: 01.–11., 12.–18., 19.–25., 26.–31.07.2027 (Jenny/Yasmina 07.10.2026, auch Folie 15 der Präsentation). `scripts/_test_juli.mjs → ERWARTET` nutzt jetzt diese Wochen.
+- Neue Prüfung in `src/lib/serie/pruefen.ts`: `pruefeKeinVorzaehlfaktor(mechanikArt, html)` — bei `geldpakete` und `jackpot` löst ein „Vorzählfaktor“ im Text einen Fehler aus. Automatisch aufgerufen in `_test_juli.mjs` und `_test_kreuzquer.mjs`.
+
+**Wie testen:**
+1. `node scripts/_test_juli.mjs` → `OK – alle Datenprüfungen bestanden.`
+2. `node scripts/_test_kreuzquer.mjs` → `ALLES OK` (inkl. Zeitfenster-Satz + kein Vorzählfaktor bei geldpakete).
+3. `node scripts/check-serie.mjs 2027-11 ~/Downloads/01_Projekte/Telemedia/Spiele_2027/Geldregen_2027/_html` → 3213 identisch, 0 abweichend.
+4. `node scripts/check-serie.mjs 2027-12 …/_html` → 3402 identisch, 0 abweichend.
+
+### Phase 2 — Kreuz & Quer April: Zeitfenster-Satz in Teilnahmebedingungen ✅
+
+**Was geht:**
+- `tnb.ts`, Zweig `'geldpakete'`: Unmittelbar nach „Wochenende: Samstag 00:00 Uhr bis Sonntag 23:59 Uhr.“ wird wörtlich eingefügt: „Vor Spielbeginn wurden für alle Gewinne Zeitfenster unterschiedlicher Länge festgelegt, die per Zufallsgenerator über den Spieltag verteilt werden.“ (Quelle `_quellen_loop_2026-10/tnb/kq_b4.html`).
+- Automatischer Check im `_test_kreuzquer.mjs`.
+
+**Wie testen:**
+- `node scripts/_test_kreuzquer.mjs` → Zeile „kreuzquer-april: Zeitfenster-Satz in Teilnahmebedingungen (06.10.2026)“ ist OK; die Prüfseite `_pruef/kreuzquer-april.html` zeigt den Satz vor dem Veranstalter.
