@@ -87,6 +87,8 @@ for (const spiel of SPIELE) {
   const liste = []
   for (const v of vArg.split(',')) for (const z of zeit) for (const inhalt of inhalte) for (const g of gArg.split(',').map(Number))
     liste.push({ spiel, daten, z, inhalt, vorschlag: v, gewinner: g, monat, pfad })
+  // Keine Schatten/Filter in der einzelnen Anzeige (Regel 06.10.2026)
+  if (liste.length) for (const err of P.pruefeKeineSchatten(R.spielSeite(liste[0]))) melde(false, spiel.id + ': ' + err)
   const ziel = path.join(wurzel, '_pruef', `${spiel.id}.html`)
   fs.mkdirSync(path.dirname(ziel), { recursive: true })
   fs.writeFileSync(ziel, R.spielPruefseite(liste, pfad))

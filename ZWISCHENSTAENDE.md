@@ -243,3 +243,37 @@
 
 **Wie testen:**
 - `node scripts/_test_kreuzquer.mjs` → Zeile „kreuzquer-april: Zeitfenster-Satz in Teilnahmebedingungen (06.10.2026)“ ist OK; die Prüfseite `_pruef/kreuzquer-april.html` zeigt den Satz vor dem Veranstalter.
+
+### Phase 3 — Die anderen 11 Spiele sichtprüfen ✅ (ohne PDF)
+
+**Was geht:**
+- Schatten/Filter restlos entfernt aus `src/lib/serie/spiele/rahmen.ts` (6 Stellen in den Familien A/B/C, inkl. `.ant`, `.lw`, `.tile.tp`, `.hot`, `.rt`, `.hl text-shadow`) und `src/lib/serie/spiele/juli.ts` (Postkarte `.pk` + `.pk-sonne`). Erlaubt bleibt nur `box-shadow` am Prüfseiten-Rahmen `.zelle .ad` (ist nicht in den Anzeigen selbst).
+- Neuer Check `pruefeKeineSchatten(html)` in `src/lib/serie/pruefen.ts`: lehnt `box-shadow`, `text-shadow` und `filter:` (ausser `backdrop-filter`) ab. Automatisch aufgerufen in `_test_juli.mjs`, `_test_kreuzquer.mjs`, `_test_bilderraetsel.mjs`, `_test_fehlerjagd.mjs` auf dem Ergebnis von `spielSeite(…)` (einzelne Anzeige, ohne Prüfseiten-Rahmen).
+- Neues Skript `scripts/_test_fehlerjagd.mjs` – damit sind alle 11 Spiele automatisch abgedeckt (sommer-postkarte, wahr-oder-erfunden, sprichwort-raetsel, schattenraetsel, kreuzquer-april, kreuzquer-oktober, gitterraetsel, aus2mach1, kombinieren, brueckenraetsel, fehlerjagd).
+- Prüfseiten `_pruef/<spiel>.html` neu geschrieben (Zeitungen ta/sz/shz, 2 Spieltage, A/B/C, 1 und 4 Gewinner; für Fehlerjagd zusätzlich schwabo+swp).
+
+**Ergebnistabelle (Code-Prüfung, HTML):**
+
+| Spiel | Schatten gefunden | Status |
+|---|---|---|
+| Fehlerjagd | nur Rahmen-Schatten geerbt | ✅ (behoben in rahmen.ts) |
+| Kreuz & Quer April | wie oben | ✅ |
+| Brückenrätsel | wie oben | ✅ |
+| Kombinieren & Kassieren | wie oben | ✅ |
+| Sommer-Postkarte | `.pk` + `.pk-sonne` (juli.ts) | ✅ (durch 1-px-Rand ersetzt) |
+| Wahr oder erfunden? | wie oben | ✅ |
+| Sprichwort-Rätsel | wie oben | ✅ |
+| Schattenrätsel | wie oben | ✅ |
+| Gitterrätsel | wie oben | ✅ |
+| Kreuz & Quer Oktober | wie oben | ✅ |
+| aus 2 mach 1 | wie oben | ✅ |
+
+**Wie testen:**
+1. `node scripts/_test_juli.mjs` → `OK – alle Datenprüfungen bestanden.`
+2. `node scripts/_test_kreuzquer.mjs` → `ALLES OK`.
+3. `node scripts/_test_bilderraetsel.mjs` → `ALLE PRÜFUNGEN OK`.
+4. `node scripts/_test_fehlerjagd.mjs` → `ALLE PRÜFUNGEN OK`.
+5. `node scripts/check-serie.mjs 2027-11 …/_html` und `… 2027-12 …/_html` → weiterhin 3213 bzw. 3402 identisch, 0 abweichend.
+
+**Grenze:**
+- PDFs mit `scripts/serie-export.mjs` + `pdftoppm -r 110` muss Andreas am Mac erzeugen (headless-chrome im Worker-Build; Puppeteer-Pfad in `.command`-Skripten) — Punkt in `OFFENE_PUNKTE.md`.

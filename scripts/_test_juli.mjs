@@ -75,6 +75,9 @@ for (const spiel of SPIELE) {
   fs.mkdirSync(path.dirname(ziel), { recursive: true })
   fs.writeFileSync(ziel, html)
   console.log(`  ${liste.length} Anzeigen → ${path.relative(wurzel, ziel)} (${Math.round(html.length / 1024)} KB)`)
+  // Keine Schatten/Filter in der einzelnen Anzeige (Regel 06.10.2026)
+  const einzel = R.spielSeite(liste[0])
+  for (const err of P.pruefeKeineSchatten(einzel)) pruefe(false, spiel.id + ': ' + err)
 }
 const fehlend = [...cache.keys()].filter((k) => cache.get(k).startsWith('FEHLT:'))
 if (fehlend.length) fehler.push('FEHLENDE BILDER: ' + fehlend.join(', '))

@@ -19,6 +19,17 @@ export function pruefeKeinVorzaehlfaktor(mechanikArt: 'geldpakete' | 'jackpot' |
     : []
 }
 
+/** Anzeigen dürfen keine Schatten/Filter enthalten. Chrome legt box-shadow als Rasterbild ins PDF,
+ *  das in der Mac-Vorschau als graue Kästen erscheint (Regel 06.10.2026). Prüfung gegen `spielSeite()`-HTML
+ *  einer einzelnen Anzeige (nicht gegen die Prüfseite — dort gibt es den erlaubten .zelle-Rahmen). */
+export function pruefeKeineSchatten(html: string): string[] {
+  const fehler: string[] = []
+  if (/\bbox-shadow\s*:/.test(html)) fehler.push('box-shadow im HTML (nicht erlaubt)')
+  if (/\btext-shadow\s*:/.test(html)) fehler.push('text-shadow im HTML (nicht erlaubt)')
+  if (/(?<!backdrop-)filter\s*:/.test(html)) fehler.push('filter: im HTML (nicht erlaubt)')
+  return fehler
+}
+
 function entitaeten(s: string): string {
   return s
     .replace(/&nbsp;/g, ' ')

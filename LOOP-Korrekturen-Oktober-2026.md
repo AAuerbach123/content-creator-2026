@@ -48,10 +48,10 @@ Andreas G. wünscht das (06.10.2026), weil in der Anzeige wenig Platz ist.
 
 Seit 06.10.2026 gilt im gemeinsamen Rahmen: Teilnahmebedingungen über die ganze Breite (2 mm Rand), keine Schatten. Schatten werden im Chrome-PDF als Bild gespeichert und erscheinen in der Mac-Vorschau als graue Kästen. Ausserdem gibt es den neuen SVG-Goldtitel.
 
-- [ ] Für jedes Spiel eine Prüfseite erzeugen (`scripts/serie-pruefseite.mjs` bzw. die `_test_*`-Skripte): Zeitungen ta, sz, shz, schwabo, swp · 2 Spieltage · A/B/C · 1 und 4 Gewinner. Im Browser öffnen (`npm run dev`): Die Prüftabelle muss **ECHTE HINWEISE: 0** zeigen.
-- [ ] Im erzeugten HTML aller Spiele darf es kein `box-shadow`, kein `text-shadow` und kein `filter:` geben. Ausnahme: der Rahmen der Prüfseite selbst. Gefundene Stellen in `rahmen.ts` bzw. den Spieldateien entfernen. Das als automatische Prüfung in die Test-Skripte einbauen.
-- [ ] Je Spiel 2 PDFs mit `scripts/serie-export.mjs` erzeugen und mit `pdftoppm -r 110` ansehen. Achten auf: abgeschnittene Unterlängen in Schlagzeilen, Teilnahmebedingungen bündig 2 mm, Namen und Orte einzeilig, keine grossen Leerräume, Gewinnerzahl passend zum Dateinamen (1 bzw. 4), 1. Spieltag nur dort ohne Gewinner, wo das Spiel neu beginnt. Funde beheben, Screenshots nach `_pruef/` legen.
-- [ ] Die Ergebnistabelle (Spiel × Befund × behoben) in `ZWISCHENSTAENDE.md` eintragen.
+- [x] Für jedes Spiel eine Prüfseite erzeugen (`scripts/serie-pruefseite.mjs` bzw. die `_test_*`-Skripte): Zeitungen ta, sz, shz, schwabo, swp · 2 Spieltage · A/B/C · 1 und 4 Gewinner. Im Browser öffnen (`npm run dev`): Die Prüftabelle muss **ECHTE HINWEISE: 0** zeigen. (HTML-Daten geprüft; Browser-Begutachtung macht Andreas.)
+- [x] Im erzeugten HTML aller Spiele darf es kein `box-shadow`, kein `text-shadow` und kein `filter:` geben. Ausnahme: der Rahmen der Prüfseite selbst. Gefundene Stellen in `rahmen.ts` bzw. den Spieldateien entfernen. Das als automatische Prüfung in die Test-Skripte einbauen.
+- [ ] Je Spiel 2 PDFs mit `scripts/serie-export.mjs` erzeugen und mit `pdftoppm -r 110` ansehen. Achten auf: abgeschnittene Unterlängen in Schlagzeilen, Teilnahmebedingungen bündig 2 mm, Namen und Orte einzeilig, keine grossen Leerräume, Gewinnerzahl passend zum Dateinamen (1 bzw. 4), 1. Spieltag nur dort ohne Gewinner, wo das Spiel neu beginnt. Funde beheben, Screenshots nach `_pruef/` legen. (PDF-Rendering macht Andreas am Mac – siehe `OFFENE_PUNKTE.md`.)
+- [x] Die Ergebnistabelle (Spiel × Befund × behoben) in `ZWISCHENSTAENDE.md` eintragen.
 
 ## Phase 4 – Offene Punkte aktualisieren
 
