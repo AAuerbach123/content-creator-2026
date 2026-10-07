@@ -148,3 +148,45 @@ Kein Terminal-Befehl nötig — nur JSON-Datei anpassen und committen:
 ```bash
 open -e public/rufnummern.json
 ```
+
+---
+
+## 12. Serien-Anzeigen: PDF-Rendering der 11 Spiele (Phase 3 Oktober-Loop)
+
+Die PDF-Begutachtung je Spiel macht Andreas am Mac (headless Chrome braucht lokalen Puppeteer-Pfad):
+
+```bash
+node scripts/serie-export.mjs 2027-02 fehlerjagd ta 1,2 && pdftoppm -r 110 _export/*.pdf _export/preview && open _export/
+```
+
+Für die zehn weiteren Spiele den `<id>` tauschen: `aus2mach1`, `kreuzquer-april`, `brueckenraetsel`, `kombinieren`, `sommer-postkarte`, `wahr-oder-erfunden`, `sprichwort-raetsel`, `schattenraetsel`, `gitterraetsel`, `kreuzquer-oktober`.
+
+---
+
+## 13. Präsentationen per Knopfdruck – `pptxgenjs` (Phase 5 Oktober-Loop)
+
+Vor dem ersten Export „Gewinnspielplan 2027“ als PPTX muss die Bibliothek `pptxgenjs` auf dem Mac installiert werden:
+
+```bash
+npm i pptxgenjs@4.0.1 && cp -R _quellen_loop_2026-10/praesentation/gsp_bilder public/praesentation/
+```
+
+Für den PDF-Export aus dem Tool wird LibreOffice im Standardpfad erwartet. Falls nicht vorhanden:
+
+```bash
+brew install --cask libreoffice
+```
+
+---
+
+## 14. Serien-Anzeigen: monday.com-Schlüssel (für „Spieltage nach monday übertragen“)
+
+Persönlichen API-Token in monday holen (Profilbild → Developers → My access tokens), dann lokal in `.env.local` eintragen (Vorlage: `.env.local.example`) und den Server neu starten:
+```bash
+open -e .env.local
+```
+Online (Cloudflare) einmalig:
+```bash
+npx wrangler secret put MONDAY_API_TOKEN
+```
+Zum Testen ein **privates** Board mit den Spalten „Datum“ (Datum), „Frage“, „Antwort 1“, „Antwort 2“, „Richtige Antwort“, „Dateiname“ (Text) anlegen; Board-ID steht in der URL nach `/boards/`. Testmodus bleibt an.

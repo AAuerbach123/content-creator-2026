@@ -57,13 +57,13 @@ Seit 06.10.2026 gilt im gemeinsamen Rahmen: Teilnahmebedingungen über die ganze
 
 `public/serie/OFFENE_PUNKTE.md` und `OFFENE_PUNKTE.md` auf den Stand vom 07.10.2026 bringen:
 
-- [ ] Nr. 8: Die Liste der teilnehmenden Verlage ist **bestätigt** (Vorlage Yasmina, Geldregen März/April 2026). Für 2027 kommt FUNKE Medien Thüringen dazu.
-- [ ] Nr. 9: **Erledigt.** Nov und Dez sind ein durchgehender Geldregen. Aktionszeitraum 01.11.–31.12.2027 (`zeitungen.json → aktionszeitraum`). Die Dezember-Spieltage zählen weiter (27–53).
-- [ ] Nr. 13 und 14: aktualisieren. „Heute startet der Geldregen!“ steht nur am 1. Spieltag einer Aktion. Die Datei heisst dann „ohne-Gewinner“, in monday liegt sie in beiden Spalten.
-- [ ] Neu: die Vorzählfaktor-Regel aus Phase 1.
-- [ ] Neu, offene Frage an Telemedia: Gilt die Anmeldefrist von 8 Wochen (Folie 6) auch für die Juli-Spiele?
-- [ ] Neu, Kleinigkeit: Im SWP-Hotline-Satz steht „·“ zwischen Nummer und „Keine Gewinnspielteilnahme“. Yasminas Vorlage hat dort einen Zeilenumbruch. Erst ändern, wenn Telemedia das bestätigt. Danach müssten die SWP-Anzeigen neu erstellt werden.
-- [ ] Veraltetes nach unten unter „Erledigt“ verschieben, nicht löschen.
+- [x] Nr. 8: Die Liste der teilnehmenden Verlage ist **bestätigt** (Vorlage Yasmina, Geldregen März/April 2026). Für 2027 kommt FUNKE Medien Thüringen dazu.
+- [x] Nr. 9: **Erledigt.** Nov und Dez sind ein durchgehender Geldregen. Aktionszeitraum 01.11.–31.12.2027 (`zeitungen.json → aktionszeitraum`). Die Dezember-Spieltage zählen weiter (27–53).
+- [x] Nr. 13 und 14: aktualisieren. „Heute startet der Geldregen!“ steht nur am 1. Spieltag einer Aktion. Die Datei heisst dann „ohne-Gewinner“, in monday liegt sie in beiden Spalten.
+- [x] Neu: die Vorzählfaktor-Regel aus Phase 1.
+- [x] Neu, offene Frage an Telemedia: Gilt die Anmeldefrist von 8 Wochen (Folie 6) auch für die Juli-Spiele?
+- [x] Neu, Kleinigkeit: Im SWP-Hotline-Satz steht „·“ zwischen Nummer und „Keine Gewinnspielteilnahme“. Yasminas Vorlage hat dort einen Zeilenumbruch. Erst ändern, wenn Telemedia das bestätigt. Danach müssten die SWP-Anzeigen neu erstellt werden.
+- [x] Veraltetes nach unten unter „Erledigt“ verschieben, nicht löschen.
 
 ## Phase 5 – Präsentationen per Knopfdruck
 
