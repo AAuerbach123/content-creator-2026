@@ -319,3 +319,20 @@
 
 **Bewusst offen (Entscheidungs-Log):**
 - **Keine automatische Übernahme in Seriendaten + kein monday-Upload im selben Loop.** Grund: Das Portal liefert nur Freitext ohne strukturierten Bezug zu konkreten Spieldaten (Zeitung + Monat + Spieltag + Feld). Der Datenpfad „Seriendaten ändern + neu rendern + hochladen“ wäre ein eigenständiger Loop. Status-Verfolgung reicht erstmal, um die Verlags-Rückmeldungen abzuarbeiten; die eigentliche Änderung macht Andreas weiterhin per Hand im Serien-Modus. Vermerkt in `IDEEN_NAECHSTE_LOOPS.md`.
+
+### Phase 7 — Spiele direkt wählen (Teil 1) ✅
+
+**Was geht:**
+- Neue Startkarte **„Spiele 2027“** (Kreis-Position 7, dunkelrot, DE/EN) → `/spiele`.
+- Seite `src/app/spiele/SpieleUebersicht.tsx` zeigt alle 12 Spiele als Kacheln (Monat, Spielname, Modell, Beschreibung, Musterbild aus `public/praesentation/`). Jede Kachel verlinkt auf `/serie?spiel=<id>`.
+- `SerieSeite.tsx` wertet den Query-Parameter `?spiel=<id>` aus und setzt beim Öffnen das vorausgewählte Spiel plus den passenden Startmonat.
+- Hilfe-Anker `spiele2027`, DE/EN-i18n (`spiele2027Titel`, `cardSpiele2027*`).
+- Prüfskript `scripts/check-spielauswahl.mjs` – stellt sicher, dass alle Katalog-Spiele die Pflichtfelder haben, `musterInhalte(spiel.monate[0])` Einträge liefert, die Übersicht korrekt verlinkt und `SerieSeite.tsx` den Query-Parameter liest.
+
+**Wie testen:**
+1. `npm run dev` → Karte „Spiele 2027“ auf der Startseite → Übersicht öffnet sich.
+2. Klick auf ein Kachel-Spiel → `/serie?spiel=<id>` lädt den Serien-Modus mit dem Spiel vorausgewählt.
+3. `node scripts/check-spielauswahl.mjs` → `ALLES OK`.
+
+**Bewusst verschoben (Entscheidungs-Log):**
+- **Modell-Umschalter AZS/RSP, Preis-Editor pro Spiel/Monat, Jackpot-Schalter, Dateinamen mit Modell, Merken der letzten Kombination.** Diese Teile greifen tief in `rahmen.ts` + `generator.ts` ein, und Geldregen 2027-11/-12 muss weiter 100 % bytegleich bleiben (`check-serie`). Darum als eigener, zusammenhängender Loop vermerkt: `IDEEN_NAECHSTE_LOOPS.md` #32 (Umschalter+Preise+Jackpot), #33 (Merken). Offene fachliche Rückfragen stehen in `public/serie/OFFENE_PUNKTE.md` #19 (RSP bei Rätselspielen) und #20 (Jackpot bei Rätselspielen).

@@ -337,6 +337,15 @@ export const HANDBUCH_ABSCHNITTE: HandbuchAbschnitt[] = [
       'In “Winners” you add photo, name, town, prize and a short text (max. 110 characters) per game day. The entries replace the sample portraits in the ad: “1 winner” shows the first entry, “4 winners” up to four. “Only in this newspaper” limits the entry to the newspaper currently shown. Photos are stored in the browser (assets store) and cropped so the head stays visible.',
   },
   {
+    anker: 'spiele2027',
+    titelDe: 'Spiele 2027 – Übersicht',
+    titelEn: 'Games 2027 – overview',
+    koerperDe:
+      'Über die Startkarte „Spiele 2027“ oder direkt /spiele. Zeigt alle 12 Spiele des Gewinnspielplans (Geldregen + 11 Rätselspiele) als Kacheln: Monat, Spielname, Modell (AZS/RSP), Musterbild. Ein Klick auf eine Kachel öffnet den Serien-Modus unter /serie?spiel=<id> mit vorausgewähltem Spiel. Modell-Umschalter (AZS/RSP), Preis-Editor und Jackpot-Schalter sind geplant – siehe IDEEN_NAECHSTE_LOOPS.md.',
+    koerperEn:
+      'Via the start card “Games 2027” or /spiele directly. Shows all 12 games of the prize game plan (Geldregen + 11 puzzle games) as tiles: month, game name, model (AZS/RSP), sample image. A click opens Series mode at /serie?spiel=<id> with the game preselected. Model switch (AZS/RSP), price editor and Jackpot toggle are planned – see IDEEN_NAECHSTE_LOOPS.md.',
+  },
+  {
     anker: 'korrekturen',
     titelDe: 'Korrekturen aus dem Wissensquiz-Portal',
     titelEn: 'Corrections from the Wissensquiz portal',

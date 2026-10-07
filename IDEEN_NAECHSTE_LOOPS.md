@@ -50,3 +50,6 @@
 ## Aus Loop 2026-10 übrig
 
 31. **Korrekturportal → Seriendaten (Phase 6, zweiter Teil):** Automatische Umsetzung der KI-eingeordneten Korrekturen in die Spieldaten, dann Rückrender via `scripts/serie-export.mjs` und Upload nach monday (`/api/monday-dateien` mit `ersetzen: true`). Setzt voraus, dass die Portal-Rückmeldungen zuverlässig genug zu konkreten Spieldaten zugeordnet werden können (heute Freitext). *(1 Tag)*
+
+32. **Spiele 2027: Modell-Umschalter (AZS/RSP), Preis-Editor, Jackpot-Schalter (Phase 7, Rest):** Nachdem die Startkarte „Spiele 2027" und `/serie?spiel=<id>` existieren, sind drei Erweiterungen offen – (a) AZS/RSP-Umschalter mit gelbem „RSP-Fassung bei Rätselspielen = Annahme, noch nicht bestätigt“, (b) Preis-Editor (6 Geldpakete bzw. Tagespreis/Supermittwoch/Jackpot) pro Spiel+Monat in IndexedDB mit „auf Standard zurücksetzen“, (c) „Jackpot aktiv“-Schalter für alle Spiele. Bedingung: Geldregen 2027-11/-12 bleibt bytegleich (`check-serie`). Neue Prüfung `scripts/check-preise.mjs`. *(2–3 Tage)*
+33. **Last-used-Kombination pro Spiel merken (Phase 7):** Spiel/Modell/Vorschlag/Gewinner in Dexie-Settings; beim Öffnen wiederherstellen. *(halbtag)*

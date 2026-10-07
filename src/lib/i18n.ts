@@ -115,6 +115,18 @@ export const dict = {
     de: 'Rückmeldungen aus dem Korrekturportal',
     en: 'Feedback from the review portal',
   },
+  cardSpiele2027: { de: 'Spiele 2027', en: 'Games 2027' },
+  cardSpiele2027Hint: {
+    de: 'Alle 12 Spiele als Kacheln',
+    en: 'All 12 games as tiles',
+  },
+
+  // Seite /spiele
+  spiele2027Titel: { de: 'Spiele 2027', en: 'Games 2027' },
+  spiele2027Untertitel: {
+    de: 'Alle 12 Spiele des Gewinnspielplans auf einen Blick – Monat, Modell, Musterbild. Ein Klick öffnet den Serien-Modus mit dem Spiel vorausgewählt.',
+    en: 'All 12 games of the 2027 plan at a glance – month, model, sample image. A click opens the Series mode with the game preselected.',
+  },
 
   // Startseite (Kopf + Funktionskreis)
   startLogoAlt: { de: 'Telemedia-Logo', en: 'Telemedia logo' },

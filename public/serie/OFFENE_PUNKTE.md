@@ -19,6 +19,8 @@ Diese Punkte sind in den Anzeigen **gelb markiert** oder als Annahme umgesetzt. 
 | 13 | alle | Gewinner-Zeile „GEWINNER VOM {n−1}. SPIELTAG“ – „Heute startet der Geldregen!“ steht **nur am 1. Spieltag einer Aktion**. Die Anzeige heisst dann „ohne-Gewinner“ und liegt in monday in beiden Spalten (1 und 4 Gewinner). Status 07.10.2026: Umsetzung korrekt, aber bitte final mit Telemedia abgleichen (soll n−1 bleiben oder n−2?). | n−1 (Dummy); 1. Spieltag ohne Gewinner |
 | 15 | SWP | SWP-Hotline-Satz: Yasminas Vorlage setzt zwischen Rufnummer und „Keine Gewinnspielteilnahme“ einen **Zeilenumbruch**, aktueller Datenstand nutzt dort „ · “. **Erst nach Telemedia-Freigabe ändern** – danach müssen die SWP-Anzeigen neu erstellt werden. | aktuell „ · “ |
 | 16 | Juli-Spiele | Anmeldefrist von **8 Wochen** vor Aktionsstart (Folie 6 der Präsentation) – gilt sie auch für die Juli-Zeitschienen-Spiele? Telemedia fragen. | offen |
+| 19 | Rätselspiele (RSP) | Soll die **RSP-Fassung** eines Rätselspiels (AZS oder RSP) im Preisbereich wie die Kreuz & Quer April-Fassung aussehen (6 Geldpakete + Hotlines mit Endziffer + Geldregen-TNB ohne Vorzählfaktor + Zeitfenster-Satz)? Oder bleibt es beim Tagespreis-Modell wie AZS? Telemedia bestätigen lassen; aktuell nicht umgesetzt (Phase 7-Teil wartet). | Umschalter nicht aktiv |
+| 20 | Rätselspiele (Jackpot) | Soll ein **Jackpot** auch bei den Rätselspielen (ausserhalb Juli) rechtlich und kaufmännisch möglich sein (Stop-Loss/Versicherung)? Telemedia prüfen. Aktuell nicht umgesetzt (Phase 7-Teil wartet). | Schalter nicht aktiv |
 
 ## Erledigt
 
