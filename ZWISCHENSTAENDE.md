@@ -277,3 +277,26 @@
 
 **Grenze:**
 - PDFs mit `scripts/serie-export.mjs` + `pdftoppm -r 110` muss Andreas am Mac erzeugen (headless-chrome im Worker-Build; Puppeteer-Pfad in `.command`-Skripten) — Punkt in `OFFENE_PUNKTE.md`.
+
+### Phase 5 — Präsentationen per Knopfdruck ✅
+
+**Was geht:**
+- Neue Startkarte **„Präsentationen“** (Kreis-Position 5, DE/EN, blasses Thema) führt zu `/praesentationen`.
+- `src/app/praesentationen/PraesentationenSeite.tsx` mit drei Modi: **Einzel** (Formular Verlag/AZS-Cent/RSP-%), **Verlagsliste (CSV)** (Name;AZS;RSP je Zeile), **Varianten (CSV)** (AZS;RSP je Zeile). Optionen „ohne Sprechernotizen“ und „zusätzlich als PDF (benötigt LibreOffice)“.
+- API-Route `POST /api/praesentation` (`src/app/api/praesentation/route.ts`, Node-Runtime) erzeugt je Variante eine PPTX und liefert bei >1 Variante ein ZIP mit `Uebersicht_Verlage_Konditionen.csv`. Mit `pdf: true` konvertiert LibreOffice headless jede PPTX zu PDF; fehlt der Pfad `/Applications/LibreOffice.app/Contents/MacOS/soffice`, kommt eine 503 mit Hinweis.
+- `src/lib/praesentation/gsp2027.ts` ist der 1:1-Port von `_quellen_loop_2026-10/praesentation/gsp2027_verlag.js` (pptxgenjs 4.0.1); drei Umgebungsvariablen sind jetzt Funktionsargumente, Bilder werden als `data:`-URLs eingereicht. Rechenlogik komplett unverändert.
+- `src/lib/praesentation/nachbearbeiten.ts` setzt die OHNE_ANIM-Semantik aus `gsp2027_anim.py` um: eindeutige `<p:cNvPr id>`-Durchnummerierung je Folie und `<p:fade>`-Übergang; **kein `<p:timing>`**.
+- Bilder liegen nun unter `public/praesentation/` (einmaliger Copy-Schritt im Loop).
+- Hilfe-Anker `praesentationen` im Handbuch, Kopfzeilen-Hilfeknopf auf der Seite.
+- Prüfskript `scripts/check-praesentation.mjs`: offline prüft die Rechenformel (33 ct / 70 % → 39.600 / 36.800 / 50.680 €); online (bei laufendem Dev-Server) zusätzlich die PPTX-XMLs auf fehlendes `<p:timing>`, Verlagsname bzw. kein „Für …“-Feld und eindeutige IDs je Folie.
+
+**Wie testen:**
+1. Einmalig auf Andreas' Mac installieren (`OFFENE_PUNKTE.md` #13): `npm i pptxgenjs@4.0.1`.
+2. `npm run dev`, Startseite → Karte „Präsentationen“, Modus „Einzel“, Verlag „SWMH“, AZS 33, RSP 70, „Präsentation erzeugen“ → Datei `Gewinnspielplan_2027_SWMH.pptx` lädt sich herunter.
+3. Modus „Varianten“ mit Inhalt `26;60\n32;50\n33;70` → ZIP mit drei PPTX + CSV-Übersicht.
+4. `node scripts/check-praesentation.mjs offline` → alle Rechenpunkte grün. Mit laufendem Dev-Server zusätzlich `node scripts/check-praesentation.mjs`.
+
+**Grenzen:**
+- **pptxgenjs ist nicht committet** (Rule 2: npm nur auf Andreas' Mac). Vor dem ersten Aufruf einmalig installieren.
+- LibreOffice ist optional; ohne klare Fehlermeldung.
+- XLSX-Übersicht wurde durch CSV ersetzt (kein zusätzliches Dependency).

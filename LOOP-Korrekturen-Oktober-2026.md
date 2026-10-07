@@ -69,22 +69,12 @@ Seit 06.10.2026 gilt im gemeinsamen Rahmen: Teilnahmebedingungen über die ganze
 
 Heute baut Claude die Präsentation „Gewinnspielplan 2027“ mit Skripten ausserhalb des ContentCreators (`_quellen_loop_2026-10/praesentation/`). Daraus wird eine Funktion im ContentCreator.
 
-- [ ] Neue Karte bzw. Seite **„Präsentationen“** (Kreis auf der Startseite, DE/EN).
-- [ ] **Eingaben:**
-  - (a) Verlagsliste aus Excel hochladen. Spalten wie `Übersicht der Verlage für Präsentation GWS-Plan 2027.xlsx`: Name, AZS €/Anruf, RSP-Anteil. Die Namensbereinigung wie in `gsp_verlage_build.py` übernehmen (Tabelle `NAMEN`/`KURZ`).
-  - (b) Alternativ Varianten ohne Verlagsnamen: Liste aus „AZS-Cent / %-Anteil RSP & GR“, z. B. 26/60, 32/50 …
-  - (c) Einzelne Präsentation mit frei eingegebenem Namen und Konditionen.
-- [ ] **Erzeugen:** `gsp2027_verlag.js` als Modul nach `src/lib/praesentation/` portieren (pptxgenjs im Browser, Version 4.0.1). Ist pptxgenjs nicht installiert: klare Meldung und `npm i pptxgenjs@4.0.1` in `OFFENE_PUNKTE.md`. Bilder aus `gsp_bilder/` nach `public/praesentation/`.
-  - Keine Klick-Animationen: Die Präsentation erscheint komplett, wie mit `OHNE_ANIM=1` in `gsp2027_anim.py`. Die eindeutigen Shape-IDs pro Folie aus diesem Skript übernehmen.
-  - Die Rechenlogik unverändert lassen: AZS mit 120.000 Anrufen und 2.800 € Preisgeldanteil, RSP-Basis 72.400 €.
-  - Ganze Monatskacheln auf Folie 7 sind Links (Stand 07.10.2026).
-- [ ] **Ausgabe:** PPTX je Verlag oder Variante. Bei mehreren Dateien ein ZIP plus `Uebersicht_Verlage_Konditionen.xlsx`.
-- [ ] **PDF:** Lokal über eine API-Route, die LibreOffice (`soffice --headless --convert-to pdf`) aufruft, falls es installiert ist (`/Applications/LibreOffice.app/Contents/MacOS/soffice`). Sonst eine klare Meldung, und die Installation als Punkt in `OFFENE_PUNKTE.md`.
-- [ ] **Prüfen:**
-  - Folien 17 und 19 zeigen die richtigen Beträge. Muster: 33 Cent / 70 % → 39.600 €, Verdienst 36.800 €, RSP 50.680 €.
-  - Ohne Verlagsnamen steht auf der Titelfolie keine Zeile „Für …“.
-  - Die Datei hat keine `<p:timing>`-Knoten.
-  - Diese Prüfungen als Skript `scripts/check-praesentation.mjs` ablegen.
+- [x] Neue Karte bzw. Seite **„Präsentationen“** (Kreis auf der Startseite, DE/EN).
+- [x] **Eingaben:** (a) Verlagsliste als CSV-Paste (Name;AZS-Cent;RSP-%), (b) Varianten-CSV ohne Name (AZS-Cent;RSP-%), (c) Einzel-Formular. Hinweis: Excel-Namensbereinigung aus `gsp_verlage_build.py` entfällt, weil der Verlagsname nur auf der Titelfolie ausgewiesen wird.
+- [x] **Erzeugen:** `gsp2027_verlag.js` → `src/lib/praesentation/gsp2027.ts` portiert; pptxgenjs via dynamischem Import (klare Meldung + `npm i pptxgenjs@4.0.1` in `OFFENE_PUNKTE.md` #13). Bilder nach `public/praesentation/` kopiert. OHNE_ANIM-Semantik via `src/lib/praesentation/nachbearbeiten.ts` (eindeutige `<p:cNvPr id>`-Durchnummerierung + `<p:fade>`-Übergang, kein `<p:timing>`). Rechenlogik unverändert; Monatskacheln auf Folie 7 sind klickbar.
+- [x] **Ausgabe:** PPTX direkt bei Einzelbestellung, ZIP (plus `Uebersicht_Verlage_Konditionen.csv`) bei Verlags-/Varianten-Liste. CSV reicht und lässt sich in Excel öffnen; eine XLSX-Erzeugung ohne weitere Abhängigkeit wäre Overhead.
+- [x] **PDF:** `/api/praesentation` mit `pdf: true` ruft LibreOffice (`/Applications/LibreOffice.app/Contents/MacOS/soffice`) auf. Fehlt es, kommt eine 503 mit Hinweis auf `brew install --cask libreoffice` (`OFFENE_PUNKTE.md` #13).
+- [x] **Prüfen:** `scripts/check-praesentation.mjs` offline prüft die Rechenformel (33 ct / 70 % → 39.600 / 36.800 / 50.680 €), online zusätzlich die PPTX (kein `<p:timing>`, eindeutige IDs je Folie, Verlagsname auf Folie 1 bzw. kein „Für …“-Feld ohne Verlag).
 
 ## Phase 6 – Anbindung des Korrekturportals
 
@@ -105,6 +95,39 @@ Ziel: Korrekturen der Verlage aus dem Portal kommen in den ContentCreator. Was e
   - **Telefonnummern und Teilnahmebedingungen nie automatisch ändern.** Die kommen immer als Rückfrage, weil sie rechtlich relevant sind.
 - [ ] **Danach:** Betroffene Spieltage als Tages-Update neu erzeugen (`serie-export.mjs` mit `auftrag.tage`) und auf Wunsch nach monday hochladen (`/api/monday-dateien` mit `ersetzen: true`).
 - [ ] **Test:** mit 5 erfundenen Beispiel-Korrekturen in `scripts/_test_korrekturen.mjs`. Nur Testdaten, keine echten Verlagsdaten verändern.
+
+## Phase 7 – Spiele direkt wählen, Modell und Variante wählen
+
+Wunsch von Andreas (07.10.2026): Man soll die einzelnen Spiele direkt anwählen und je Spiel Modell und Variante gezielt festlegen können. Heute geht das nur über die Liste „Spiel“ im Serien-Modus.
+
+- [ ] **Startseite:** neue Karte **„Spiele 2027“** im Kreis (DE/EN, Farbe passend zum Telemedia-Logo). Ein Klick öffnet eine Übersicht mit allen 12 Spielen als Kacheln: Monat, Name, Modell, kleines Musterbild aus `public/serie/assets/spiele/…`, für Geldregen das Geldregen-Muster. Ein Klick auf eine Kachel öffnet den Serien-Modus mit diesem Spiel schon ausgewählt (`/serie?spiel=<id>`, Parameter in `SerieSeite.tsx` auswerten). Die bisherige Liste bleibt.
+- [ ] **Modell wählen:** Bei Spielen mit „AZS oder RSP“ ein deutlicher Umschalter **AZS / RSP**:
+  - **AZS** = heutige Mechanik `tagespreis` (Tagespreis 500 €, Supermittwoch 1.000 €, eine Gewinn-Hotline, Teilnahmebedingungen der Rätselspiele; Vorzählfaktor erlaubt).
+  - **RSP** = Mechanik `geldpakete` wie Kreuz & Quer April (6 Geldpakete, Hotlines mit Endziffer, Geldregen-Teilnahmebedingungen **ohne** Vorzählfaktor, Zeitfenster-Satz). Das Rätselfeld des Spiels bleibt gleich, nur Preise, Hotlines und Teilnahmebedingungen wechseln.
+  - **Nicht erfinden:** Ob die RSP-Fassung bei Rätselspielen wirklich so aussehen soll, ist nicht bestätigt. Diese Annahme als **offenen Punkt** in `public/serie/OFFENE_PUNKTE.md` eintragen („RSP bei Rätselspielen: Geldpakete wie Geldregen oder Tagespreis wie AZS? – Telemedia bestätigen lassen“). In der Vorschau einen kleinen gelben Hinweis „RSP-Fassung: Annahme, noch nicht bestätigt“ zeigen, nur auf dem Bildschirm, nicht im PDF.
+  - Spiele mit festem Modell (Geldregen, Kreuz & Quer April, Juli) zeigen das Modell nur an, ohne Umschalter.
+- [ ] **Variante wählen:** gut sichtbare Auswahl für **Vorschlag A / B / C** (einzeln oder mehrere) und **Gewinner 1 / 4 / beide**. Was davon schon existiert, sichtbarer machen statt neu bauen. Die Auswahl gilt für Vorschau, Prüflauf, Export (`serie-export.mjs`, `auftrag`) und den monday-Upload.
+- [ ] **Dateinamen und monday:** Bei Spielen mit Umschalter enthält der Dateiname das Modell, z. B. `…_A_AZS_1-Gewinner_…` bzw. `…_RSP_…`. Die Geldregen-Dateinamen bleiben **unverändert**: check-serie muss weiter 100 % identisch melden. `/api/monday-dateien` findet die Dateien weiterhin, dafür das Filtermuster vorsichtig erweitern und testen.
+- [ ] **Geldpreise ändern** (Wunsch Andreas, 07.10.2026): Pro Spiel und Aktion/Monat lassen sich alle Gewinnbeträge im ContentCreator bearbeiten. Die **heutigen Werte sind Standard** und stehen vorausgefüllt drin, mit Knopf **„Auf Standard zurücksetzen“**.
+  - **Geldpakete** (Geldregen, Kreuz & Quer April, RSP-Fassungen): 6 Pakete, je **Anzahl × Betrag**. Standard laut `generator.ts → PAKETE`: 3 × 10.000 · 7 × 5.000 · 15 × 1.000 · 25 × 500 · 50 × 250 · 150 × 100 €. Pakete hinzufügen oder entfernen ist erlaubt (1–6). Die Layouts müssen mit weniger Paketen sauber bleiben, sonst bleibt es bei 6 Pflichtpaketen. Im Entscheidungs-Log begründen.
+  - **Tagespreis / Supermittwoch** (AZS-Rätselspiele): Standard 500 € / 1.000 €. Auch „kein Supermittwoch“ muss gehen.
+  - **Juli-Jackpots:** Tagespreis (Standard 500 €) und Jackpot je Woche (Standard 1.000 / 2.000 / 3.000 / 5.000 €).
+  - **Abgeleitete Texte rechnen sich automatisch mit:** Schlagzeile „Mit einem Anruf bis zu **X €** gewinnen“ (X = höchster Betrag), Paket-Kacheln und Tafel, „n Gewinne à X €“, Unterzeilen mit `{TAGESPREIS}`. Die Beträge der **Dummy-Gewinner** dürfen nur Beträge enthalten, die es wirklich gibt. Bei echten Gewinnern prüft die Inhaltsprüfung, dass ihr Betrag zu einem Preis passt, sonst Warnung.
+  - **Format:** Eingabe als Zahl. In der Anzeige steht das deutsche Format „10.000 €“, rechtsbündig mit Tabellenziffern, die €-Zeichen untereinander (wie heute).
+  - **Speichern** pro Spiel und Monat in IndexedDB. Die Werte gehen mit dem Export-Auftrag an `scripts/serie-export.mjs`.
+  - **Absicherung:** Ohne Änderung (= Standard) bleiben alle Geldregen-Anzeigen **bytegleich**. `check-serie` 2027-11/12 muss weiter 100 % identisch melden. Neues Prüfskript `scripts/check-preise.mjs`:
+    - geänderte Pakete (z. B. 2 × 20.000 · 5 × 2.000 …) → Schlagzeile zeigt 20.000 €;
+    - kein Überlauf in A/B/C bei 280 × 190 und 325 × 240;
+    - Dummy-Gewinner nur mit vorhandenen Beträgen.
+  - Die Präsentation (Phase 5) rechnet weiter mit ihren eigenen festen Annahmen. Nichts automatisch verknüpfen.
+- [ ] **Jackpot zuschalten** (Wunsch Andreas, 07.10.2026): Bei **jedem** Spiel ein Schalter **„Jackpot aktiv“** und ein Betragsfeld, optional ein Betrag pro Woche bzw. Zeitraum wie im Juli. Standard: aus. Ausnahme Juli: an, mit den heutigen Beträgen.
+  - Ist der Jackpot aktiv, zeigt die Anzeige die **Jackpot-Kachel wie bei den Juli-Spielen** (Preise-Slot `jackpot` in `rahmen.ts`): „+ JACKPOT X € – zusätzlich 1 × täglich zu einem geheimen Zeitfenster von 00:00 – 23:59 Uhr*“ und den Zeitfenster-Hinweis „Wer darin als Erster mit der richtigen Antwort anruft, gewinnt ihn sofort.“ Die Texte wörtlich aus `juli.ts` / `tnb/jul_postkarte.html` übernehmen, nichts neu formulieren.
+  - **Teilnahmebedingungen:** Mit Jackpot läuft das Spiel mit Zeitschiene. Deshalb **kein Vorzählfaktor**, sondern der Geldregen-Wortlaut plus Jackpot-Fussnote (*) wie im Juli. Gilt auch für AZS-Rätselspiele, sobald der Jackpot an ist (Regel Jenny/Yasmina). Die Prüfung aus Phase 1 erweitern: Jackpot aktiv ⇒ „Vorzählfaktor“ verboten, Fussnote vorhanden.
+  - Die Schlagzeile/Unterzeile mit Jackpot ergänzen, z. B. „Täglich 500 € gewinnen – plus 1.000 € Jackpot!“, nach dem Muster der Juli-Spiele.
+  - Funktioniert zusammen mit beiden Modellen (AZS/RSP) und mit geänderten Geldpreisen. Das Layout muss mit Kachel in A/B/C und allen Formaten passen. In `check-preise.mjs` mit „Jackpot an“ für mindestens 3 Spiele testen.
+  - **Offener Punkt** in `public/serie/OFFENE_PUNKTE.md`: Jackpot bei Rätselspielen ausserhalb Juli rechtlich und kaufmännisch von Telemedia bestätigen lassen (Stop-Loss/Versicherung des Jackpots).
+- [ ] **Merken:** Die zuletzt gewählte Kombination aus Spiel, Modell, Vorschlägen und Gewinnern pro Spiel in IndexedDB speichern (Dexie, neue Tabelle oder Einstellungen) und beim nächsten Öffnen wiederherstellen.
+- [ ] **Test:** Prüfskript `scripts/check-spielauswahl.mjs`: für jedes Spiel × Modell × A/B/C × 1/4 je eine Anzeige erzeugen; 0 echte Hinweise; bei RSP kein „Vorzählfaktor“; bei AZS keine Geldpakete. Handbuch-Kapitel „Spiele wählen“ ergänzen (`check-hilfe` grün).
 
 ---
 

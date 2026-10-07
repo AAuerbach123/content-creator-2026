@@ -292,6 +292,60 @@ export const HANDBUCH_ABSCHNITTE: HandbuchAbschnitt[] = [
       'Via the start card „Phone numbers" (☎) or /rufnummern directly. 55 newspapers with Wissensquiz numbers (last digits 1–5 = question/prize), service hotlines and Geldregen numbers (MWN Print/Web, xx = class + last digit answer 1/2). When you pick a publisher inside a job, the „☎ Phone numbers" panel appears right under the choice — click a number to put it into the CTA layer, „Save as note" attaches a note with all numbers to the job. Every number is „to be confirmed" (Yasmina Salah); if a number is missing, the tool warns clearly and invents nothing.',
   },
   {
+    anker: 'serie',
+    titelDe: 'Serien-Anzeigen',
+    titelEn: 'Series ads',
+    koerperDe:
+      'Über die Startkarte „Serien-Anzeigen“ oder direkt /serie. Links wählst du Spiel (Gewinnspielplan 2027 mit Monat und Modell), Monat, Spieltag, Gestaltungsvorschlag A/B/C, 1 oder 4 Gewinner und die Zeitungen (Mehrfachauswahl, „alle“). Rechts erscheint die echte Anzeige als Live-Vorschau, verkleinert auf die Fensterbreite. Die Ampel zeigt das Ergebnis der eingebauten Prüfung: grün = alles passt, gelb = nur Platzhalter oder Muster-Inhalte (z. B. fehlende Rufnummer), rot = echte Probleme (Überlappung, Text passt nicht, Inhaltsfehler) mit Liste. „3 Gestaltungsvorschläge vergleichen“ zeigt A, B, C nebeneinander. „Prüflauf starten“ prüft die aktuelle Einstellung für alle angehakten Zeitungen. „Offene Punkte“ listet, was beim Spiel noch zu klären ist. Geldregen läuft über den freigegebenen Generator; alle anderen Spiele über die Rahmen-Engine.',
+    koerperEn:
+      'Via the start card “Series ads” or /serie directly. On the left you pick the game (2027 plan with month and model), month, game day, design proposal A/B/C, 1 or 4 winners and the newspapers (multi-select, “all”). On the right the real ad appears as a live preview, scaled to the window width. The traffic light shows the built-in check: green = all fine, yellow = placeholders or sample content only (e.g. missing phone number), red = real problems (overlap, text does not fit, content errors) with a list. “Compare 3 design proposals” shows A, B, C side by side. “Start check run” tests the current setting for every ticked newspaper. “Open points” lists what is still to be clarified for the game. Geldregen uses the approved generator; all other games use the frame engine.',
+  },
+  {
+    anker: 'serie-ki',
+    titelDe: 'Serien-Anzeigen: KI-Funktionen',
+    titelEn: 'Series ads: AI functions',
+    koerperDe:
+      '„Neues Spiel aufsetzen (KI)“: Zusatzvorgaben tippen oder sprechen (z. B. „jünger, mehr Rot, Titel kürzer“) und „3 Umsetzungsvarianten vorschlagen“ klicken. Die KI liefert je eine Variante für die Gestaltungsfamilien A, B, C (Titel, Unterzeile, Schritte, Hinweis-Kasten) – jede als Live-Vorschau mit Ampel. „Übernehmen“ setzt sie in die Hauptvorschau und speichert sie im Browser (gespeicherte Varianten lassen sich später wieder anwenden oder löschen). Unter „Texte selbst bearbeiten“ kannst du jedes Feld ändern und mit „Text verbessern (KI)“ drei Formulierungen holen. „Tagesfragen vorschlagen (KI)“ erzeugt für Spiele mit zwei Antworten je Spieltag eine Frage – immer als KI-Vorschlag markiert, Fakten bitte selbst prüfen. Das Tool lehnt KI-Texte mit erfundenen Beträgen, Telefonnummern, Rechts- oder Kostenaussagen oder Ersatzschreibungen statt Umlauten ab. Jede KI-Aktion steht im KI-Verlauf. Ohne ANTHROPIC_API_KEY erscheint eine klare Meldung; der Rest der Seite funktioniert.',
+    koerperEn:
+      '“Set up a new game (AI)”: type or speak extra instructions (e.g. “younger, more red, shorter title”) and click “Suggest 3 implementation variants”. The AI returns one variant per design family A, B, C (title, subline, steps, info box) – each as a live preview with traffic light. “Apply” puts it into the main preview and saves it in the browser (saved variants can be re-applied or deleted later). Under “Edit texts yourself” you can change every field and get three wordings via “Improve text (AI)”. “Suggest daily questions (AI)” creates one question per game day for games with two answers – always marked as an AI proposal, please check facts yourself. The tool rejects AI texts with invented amounts, phone numbers, legal or cost claims, or umlaut substitutes. Every AI action appears in the AI history. Without ANTHROPIC_API_KEY you get a clear message; the rest of the page keeps working.',
+  },
+  {
+    anker: 'serie-mail',
+    titelDe: 'Serien-Anzeigen: Gestaltungsvorschlag per E-Mail',
+    titelEn: 'Series ads: design proposal by e-mail',
+    koerperDe:
+      '„Gestaltungsvorschlag per E-Mail senden“ erzeugt aus der aktuellen Vorschau die Anhänge: PDF und PNG (Ansicht zur Abstimmung, keine Druckvorlage) und die Anzeige als HTML-Datei mit eingebetteten Bildern. Danach „Mail-Programm öffnen (Teilen)“ – auf dem Mac öffnet sich Mail mit den Anhängen. Kann der Browser keine Dateien teilen, lädt „Dateien herunterladen + E-Mail-Entwurf“ die Dateien herunter und öffnet einen Entwurf mit Betreff und Text – die Dateien dann selbst anhängen. Kann der Browser kein Bild erzeugen, wird nur die HTML-Datei angehängt. Das Tool verschickt nie selbst eine E-Mail.',
+    koerperEn:
+      '“Send design proposal by e-mail” creates the attachments from the current preview: PDF and PNG (a view for approval, not print-ready) and the ad as an HTML file with embedded images. Then “Open mail app (Share)” – on the Mac, Mail opens with the attachments. If the browser cannot share files, “Download files + e-mail draft” downloads them and opens a draft with subject and text – attach the files yourself. If the browser cannot render an image, only the HTML file is attached. The tool never sends an e-mail itself.',
+  },
+  {
+    anker: 'serie-monday',
+    titelDe: 'Serien-Anzeigen: monday.com',
+    titelEn: 'Series ads: monday.com',
+    koerperDe:
+      '„Spieltage nach monday übertragen“ legt im angegebenen Board je Spieltag ein Item an: Name „Spieltag NN“ plus Datum, Frage, Antwort 1, Antwort 2, richtige Antwort und Dateiname. Die Spalten findet das Tool über ihre Titel – lege im Board Spalten mit genau diesen Namen an (Datum als Datums-Spalte, die anderen als Text). „Spalten prüfen“ zeigt die Zuordnung, ohne etwas zu schreiben. Der Testmodus ist standardmäßig an: nur private Boards, nur Text/Datum/Zahl, keine Personen, keine Updates, keine Benachrichtigungen. Erneutes Übertragen legt doppelte Items an. Der Schlüssel MONDAY_API_TOKEN liegt nur auf dem Server (.env.local bzw. Cloudflare-Secret).',
+    koerperEn:
+      '“Transfer game days to monday” creates one item per game day in the given board: name “Spieltag NN” plus date, question, answer 1, answer 2, correct answer and file name. Columns are matched by their titles – create columns with exactly these German names in the board (Datum as a date column, the others as text). “Check columns” shows the mapping without writing anything. Test mode is on by default: private boards only, only text/date/number, no people, no updates, no notifications. Transferring again creates duplicate items. The MONDAY_API_TOKEN key lives on the server only (.env.local or Cloudflare secret).',
+  },
+  {
+    anker: 'serie-gewinner',
+    titelDe: 'Serien-Anzeigen: Gewinnerinnen und Gewinner',
+    titelEn: 'Series ads: winners',
+    koerperDe:
+      'Im Bereich „Gewinnerinnen und Gewinner“ erfasst du je Spieltag Foto, Name, Ort, Gewinn und einen kurzen Text (max. 110 Zeichen). Die Einträge ersetzen in der Anzeige die Muster-Porträts: bei „1 Gewinner“ der erste Eintrag, bei „4 Gewinner“ bis zu vier. „Nur in dieser Zeitung“ beschränkt den Eintrag auf die gerade gezeigte Zeitung. Fotos werden im Browser gespeichert (Assets-Store) und so beschnitten, dass der Kopf sichtbar bleibt.',
+    koerperEn:
+      'In “Winners” you add photo, name, town, prize and a short text (max. 110 characters) per game day. The entries replace the sample portraits in the ad: “1 winner” shows the first entry, “4 winners” up to four. “Only in this newspaper” limits the entry to the newspaper currently shown. Photos are stored in the browser (assets store) and cropped so the head stays visible.',
+  },
+  {
+    anker: 'praesentationen',
+    titelDe: 'Präsentationen (Gewinnspielplan 2027)',
+    titelEn: 'Presentations (2027 prize game plan)',
+    koerperDe:
+      'Über die Startkarte „Präsentationen“ oder direkt /praesentationen. Drei Modi: (1) „Einzel“ – ein Verlagsname (optional) + Konditionen (AZS in Cent, RSP-Anteil in %) → eine PPTX. (2) „Verlagsliste (CSV)“ – pro Zeile Name;AZS-Cent;RSP-Prozent → ZIP mit allen Präsentationen plus einer CSV-Übersicht. (3) „Varianten (CSV)“ – pro Zeile AZS-Cent;RSP-Prozent (ohne Verlagsname) → ZIP mit Varianten-PPTX. Optional ohne Sprechernotizen (für PDF-Druck sinnvoll) und optional zusätzlich als PDF (benötigt LibreOffice unter /Applications/LibreOffice.app). Rechenlogik unverändert zum Original: 24 Spieltage + 4 Supertage = 14.000 € Preisgelder, 120.000 Anrufe/Monat, 20 % Anteil für AZS; RSP: 20 % von 1.200.000 × 0,36 € − 20 % × 70.000 €. pptxgenjs@4.0.1 muss einmalig installiert sein (siehe OFFENE_PUNKTE.md #13).',
+    koerperEn:
+      'Via the start card “Presentations” or /praesentationen. Three modes: (1) “Single” – one publisher name (optional) + terms (AZS in cents, RSP share in %) → one PPTX. (2) “Publisher list (CSV)” – one line per publisher Name;AZS-cents;RSP-percent → ZIP with all PPTX plus a CSV overview. (3) “Variants (CSV)” – one line per combination AZS-cents;RSP-percent (no publisher name) → ZIP of variant PPTX. Optional without speaker notes (good for PDF printing) and optional PDF (needs LibreOffice at /Applications/LibreOffice.app). Calculation stays identical to the original: 24 game days + 4 super days = 14,000 € prize money, 120,000 calls/month, 20 % share for AZS; RSP: 20 % of 1,200,000 × 0.36 € − 20 % × 70,000 €. pptxgenjs@4.0.1 must be installed once (see OFFENE_PUNKTE.md #13).',
+  },
+  {
     anker: 'grenzen',
     titelDe: 'Grenzen der KI',
     titelEn: 'AI limits',
