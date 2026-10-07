@@ -89,6 +89,33 @@ export const dict = {
   praesLade: { de: 'erzeuge…', en: 'generating…' },
   praesFehler: { de: 'Fehler', en: 'Error' },
 
+  // Seite /korrekturen
+  korrTitel: { de: 'Korrekturen aus dem Portal', en: 'Portal corrections' },
+  korrUntertitel: {
+    de: 'Rückmeldungen der Verlage aus dem Wissensquiz-Korrekturportal – KI ordnet jede Rückmeldung einem Feld zu; Telefonnummern und Teilnahmebedingungen bleiben manuell.',
+    en: 'Publisher feedback from the Wissensquiz review portal – the AI maps each item to a field; phone numbers and terms remain manual.',
+  },
+  korrNeuLaden: { de: 'Neu laden', en: 'Reload' },
+  korrEinordnen: { de: 'KI einordnen lassen', en: 'Classify with AI' },
+  korrFilterOffen: { de: 'offen', en: 'open' },
+  korrFilterRueckfrage: { de: 'Rückfrage', en: 'ask back' },
+  korrFilterErledigt: { de: 'erledigt', en: 'done' },
+  korrFilterAlle: { de: 'alle', en: 'all' },
+  korrFehler: { de: 'Fehler', en: 'Error' },
+  korrKeine: {
+    de: 'Keine Korrekturen – stelle KORREKTURPORTAL_URL und KORREKTURPORTAL_SLUG in .env.local ein, dann „Neu laden“.',
+    en: 'No corrections – set KORREKTURPORTAL_URL and KORREKTURPORTAL_SLUG in .env.local, then “Reload”.',
+  },
+  korrErledigt: { de: 'erledigt', en: 'done' },
+  korrRueckfrage: { de: 'als Rückfrage markieren', en: 'mark as ask-back' },
+  korrIgnorieren: { de: 'ignorieren', en: 'ignore' },
+  korrZurueck: { de: 'wieder offen', en: 'reopen' },
+  cardKorrekturen: { de: 'Korrekturen', en: 'Corrections' },
+  cardKorrekturenHint: {
+    de: 'Rückmeldungen aus dem Korrekturportal',
+    en: 'Feedback from the review portal',
+  },
+
   // Startseite (Kopf + Funktionskreis)
   startLogoAlt: { de: 'Telemedia-Logo', en: 'Telemedia logo' },
   startUebersicht: { de: 'Übersicht', en: 'Overview' },

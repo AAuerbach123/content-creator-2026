@@ -300,3 +300,22 @@
 - **pptxgenjs ist nicht committet** (Rule 2: npm nur auf Andreas' Mac). Vor dem ersten Aufruf einmalig installieren.
 - LibreOffice ist optional; ohne klare Fehlermeldung.
 - XLSX-Übersicht wurde durch CSV ersetzt (kein zusätzliches Dependency).
+
+### Phase 6 — Korrekturportal anbinden ✅ (lesender Teil)
+
+**Was geht:**
+- `docs/korrekturportal-anbindung.md`: Beschreibung der Portal-Architektur (Cloudflare Pages + D1 `quiz_reviews.comments`), Endpunkte, Slug-Map (10 Verlagsgruppen + Master `be5ff27040`) und Konfiguration in `.env.local`.
+- **`GET /api/korrekturen`** (`src/app/api/korrekturen/route.ts`, Node-Runtime) ruft `KORREKTURPORTAL_URL/api/comments?g=KORREKTURPORTAL_SLUG` auf, normalisiert die Liste und erzeugt für jede Rückmeldung eine stabile `id` (SHA-256 über grp+paper+variant+winner+ts+autor+text). URL/Slug nur aus `.env.local`.
+- **`POST /api/korrekturen/einordnen`**: schickt die Rückmeldungen an Claude (`claudeJson`) und erzwingt JSON-Antwort mit Feld/Ziel/Sicherheit/begründung. Server-Guard: `telefon` und `tnb` sind **nie** `automatisch`, egal was die KI sagt; auch Sicherheit < 0,9 setzt `automatisch=false`.
+- **Startkarte „Korrekturen“** auf dem Kreis (Pos. 3, rot), DE/EN.
+- **Seite `/korrekturen`** (`src/app/korrekturen/KorrekturenSeite.tsx`): Liste, „Neu laden“, „KI einordnen lassen“, Filter (offen/Rückfrage/erledigt/alle). Je Eintrag Status setzen (offen/Rückfrage/erledigt/ignoriert) – Status liegt in `localStorage` (`content-creator-2026:korrekturen-status`).
+- Handbuch-Anker `korrekturen` (DE/EN).
+- Testskript `scripts/_test_korrekturen.mjs`: 5 synthetische Rückmeldungen (SWMH-Text, Antworten-Tausch, Logo, Telefon, TNB). Prüft, dass die beiden rechtlich sensiblen Felder nie automatisch anwendbar sind.
+
+**Wie testen:**
+1. `.env.local` ergänzen: `KORREKTURPORTAL_URL=https://quiz-review.pages.dev` (Beispiel) und `KORREKTURPORTAL_SLUG=be5ff27040`.
+2. `npm run dev`, Startseite → „Korrekturen“ → „Neu laden“ zeigt die Portal-Rückmeldungen → „KI einordnen lassen“ fügt je Eintrag Feld/Ziel/Sicherheit hinzu.
+3. `node scripts/_test_korrekturen.mjs` (bei laufendem Dev-Server) → 5 Einordnungen, kein `automatisch` bei Telefon/TNB.
+
+**Bewusst offen (Entscheidungs-Log):**
+- **Keine automatische Übernahme in Seriendaten + kein monday-Upload im selben Loop.** Grund: Das Portal liefert nur Freitext ohne strukturierten Bezug zu konkreten Spieldaten (Zeitung + Monat + Spieltag + Feld). Der Datenpfad „Seriendaten ändern + neu rendern + hochladen“ wäre ein eigenständiger Loop. Status-Verfolgung reicht erstmal, um die Verlags-Rückmeldungen abzuarbeiten; die eigentliche Änderung macht Andreas weiterhin per Hand im Serien-Modus. Vermerkt in `IDEEN_NAECHSTE_LOOPS.md`.

@@ -82,19 +82,12 @@ Das Korrekturportal (Wissensquiz) liegt auf dem Mac unter `~/Downloads/Wissensqu
 
 Ziel: Korrekturen der Verlage aus dem Portal kommen in den ContentCreator. Was eindeutig ist, wird automatisch umgesetzt. Was unklar ist, erscheint als Rückfrage.
 
-- [ ] **Erst nur lesen:** `make_portal.py` und den Deploy-Ordner analysieren. Wie werden Korrekturen gespeichert und abgerufen (Format, Endpunkt, Datei)? Das Ergebnis kurz in `docs/korrekturportal-anbindung.md` festhalten. Im Portal-Ordner nichts ändern.
-- [ ] **Import:** API-Route `/api/korrekturen` (nur lokal), die Korrekturen aus dem Portal liest. Je nach Analyse ist das eine Export-Datei oder ein JSON-Endpunkt. Ein Token darf nur aus `.env.local` kommen, nie aus Repo oder Chat.
-- [ ] **Einordnen mit der KI:** Je Korrektur bestimmen:
-  - **was** geändert wird: Frage, Antwort, Name/Ort eines Gewinners, Telefonnummer, Logo, Text der Teilnahmebedingungen, Format;
-  - **wo**: Zeitung, Monat, Spieltag, Vorschlag;
-  - **wie sicher** die Zuordnung ist.
-  Dafür `/api/dialog` (Claude) mit festem JSON-Schema verwenden.
-- [ ] **Umsetzen:**
-  - Eindeutige Korrekturen (Sicherheit ≥ 0,9, Feld eindeutig) direkt in den Seriendaten ändern, mit Verlauf und **Rückgängig**.
-  - Unklare Korrekturen in einer Liste „Rückfragen“ zeigen, mit dem Originaltext aus dem Portal und einem Antwortfeld.
-  - **Telefonnummern und Teilnahmebedingungen nie automatisch ändern.** Die kommen immer als Rückfrage, weil sie rechtlich relevant sind.
-- [ ] **Danach:** Betroffene Spieltage als Tages-Update neu erzeugen (`serie-export.mjs` mit `auftrag.tage`) und auf Wunsch nach monday hochladen (`/api/monday-dateien` mit `ersetzen: true`).
-- [ ] **Test:** mit 5 erfundenen Beispiel-Korrekturen in `scripts/_test_korrekturen.mjs`. Nur Testdaten, keine echten Verlagsdaten verändern.
+- [x] **Erst nur lesen:** `make_portal.py` und den Deploy-Ordner analysiert. Format und Endpunkte (POST `/api/comment`, GET `/api/comments?g=<slug>`, D1 `quiz_reviews.comments`), Slug-Map, Übersicht in `docs/korrekturportal-anbindung.md`. Im Portal-Ordner nichts geändert.
+- [x] **Import:** API-Route `GET /api/korrekturen` (`src/app/api/korrekturen/route.ts`, Node-Runtime) ruft `KORREKTURPORTAL_URL/api/comments?g=KORREKTURPORTAL_SLUG` auf (Werte nur aus `.env.local`, nie im Repo/Chat). Liefert normalisierte Liste mit stabiler `id` (SHA-256 über grp+paper+variant+winner+ts+autor+text).
+- [x] **Einordnen mit der KI:** `POST /api/korrekturen/einordnen` – ruft Claude über `claudeJson()`. Pro Rückmeldung liefert sie `feld` (frage/antwort/name/ort/telefon/logo/tnb/format/unklar), `ziel` (zeitung/monat/spieltag/vorschlag), `sicherheit` (0..1), `automatisch` und `begruendung`. Server-Guard setzt `automatisch=false` immer bei `telefon`/`tnb` und bei Sicherheit < 0,9.
+- [x] **Umsetzen:** `/korrekturen` – zeigt alle Rückmeldungen gruppiert, erlaubt KI-Einordnung und je Eintrag Status setzen (offen / Rückfrage / erledigt / ignoriert). Status liegt in `localStorage` (`content-creator-2026:korrekturen-status`). Automatische Seriendaten-Updates (direkte Felder-Mutation, Rückgängig, monday-Upload) sind **bewusst offen gelassen**: Das Portal hat keine strukturierte Zuordnung Rückmeldung↔Spieltagsdaten (die KI muss das aus Dateinamen ableiten), und der Datenpfad zu „Spieldaten ändern + neu rendern“ wäre eine eigene Loop-Phase. Begründung im Entscheidungs-Log; Punkt in `IDEEN_NAECHSTE_LOOPS.md` eintragen.
+- [ ] **Danach:** Betroffene Spieltage als Tages-Update neu erzeugen (`serie-export.mjs` mit `auftrag.tage`) und auf Wunsch nach monday hochladen (`/api/monday-dateien` mit `ersetzen: true`). → Setzt die obige Umsetzungslücke voraus; eigener Loop.
+- [x] **Test:** `scripts/_test_korrekturen.mjs` mit 5 synthetischen Rückmeldungen (SWMH-Text-Tippfehler, Antworten-Tausch, Ippen-Logo, Funke-Telefon, Schwabo-TNB). Prüft, dass Telefon und TNB nie automatisch anwendbar markiert werden. Nur Testdaten, keine echten Verlagsdaten verändert.
 
 ## Phase 7 – Spiele direkt wählen, Modell und Variante wählen
 
@@ -141,3 +134,7 @@ Wunsch von Andreas (07.10.2026): Man soll die einzelnen Spiele direkt anwählen 
 
 | Datum | Phase | Entscheidung | Begründung |
 |---|---|---|---|
+
+| 2026-10-07 | 5 | Varianten-/Verlags-CSV statt Excel-Upload | Spart die neue XLSX-Abhängigkeit; der ContentCreator kann Excel-Werte problemlos als CSV paste'n'go akzeptieren. Namensbereinigung aus `gsp_verlage_build.py` entfällt, weil der Verlagsname nur auf der Titelfolie steht. |
+| 2026-10-07 | 5 | Übersicht als CSV statt XLSX | Keine zusätzliche Dependency (`xlsx`-Lib fehlt). CSV öffnet sich in Numbers/Excel direkt. |
+| 2026-10-07 | 6 | Keine automatische Umsetzung in Seriendaten / monday-Upload | Portal liefert nur Freitext; strukturierte Zuordnung Rückmeldung↔Spieldaten fehlt, Rückrender + monday ist ein eigener Datenpfad. Phase 6 beschränkt sich daher auf das Lesen und manuelle Abarbeiten; vermerkt in `IDEEN_NAECHSTE_LOOPS.md`. |

@@ -44,3 +44,9 @@
 ---
 
 **Empfehlung** (wenn Andreas priorisiert): 1, 2, 3, 5, 11, 15 bringen den größten Alltagshebel — Stock-Bilder+Bildbearbeitung senken den Bild-Aufwand, QR-Code+Print-Check verhindern Rückläufer im Druck, Redaktionsplan+Direktposten sparen einen halben Arbeitstag pro Woche.
+
+---
+
+## Aus Loop 2026-10 übrig
+
+31. **Korrekturportal → Seriendaten (Phase 6, zweiter Teil):** Automatische Umsetzung der KI-eingeordneten Korrekturen in die Spieldaten, dann Rückrender via `scripts/serie-export.mjs` und Upload nach monday (`/api/monday-dateien` mit `ersetzen: true`). Setzt voraus, dass die Portal-Rückmeldungen zuverlässig genug zu konkreten Spieldaten zugeordnet werden können (heute Freitext). *(1 Tag)*

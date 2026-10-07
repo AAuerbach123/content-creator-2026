@@ -337,6 +337,15 @@ export const HANDBUCH_ABSCHNITTE: HandbuchAbschnitt[] = [
       'In “Winners” you add photo, name, town, prize and a short text (max. 110 characters) per game day. The entries replace the sample portraits in the ad: “1 winner” shows the first entry, “4 winners” up to four. “Only in this newspaper” limits the entry to the newspaper currently shown. Photos are stored in the browser (assets store) and cropped so the head stays visible.',
   },
   {
+    anker: 'korrekturen',
+    titelDe: 'Korrekturen aus dem Wissensquiz-Portal',
+    titelEn: 'Corrections from the Wissensquiz portal',
+    koerperDe:
+      'Über die Startkarte „Korrekturen“ oder /korrekturen. Lädt die Verlags-Rückmeldungen aus dem Cloudflare-Pages-Portal (KORREKTURPORTAL_URL + Master-Slug KORREKTURPORTAL_SLUG in .env.local, siehe docs/korrekturportal-anbindung.md). „KI einordnen lassen“ ruft Claude über /api/korrekturen/einordnen auf; für jede Rückmeldung bestimmt die KI Feld (frage/antwort/name/ort/telefon/logo/tnb/format/unklar), Ziel (Zeitung/Monat/Spieltag/Vorschlag), Sicherheit und ob die Übernahme automatisch möglich ist. **Telefonnummern und Teilnahmebedingungen werden nie automatisch angewendet** — rechtlich relevant. Je Rückmeldung lässt sich der Status „offen / Rückfrage / erledigt / ignoriert“ setzen (lokal in localStorage). Das Portal selbst wird nur gelesen; eine Antwort zurück ins Portal geht erst nach Freigabe von Telemedia.',
+    koerperEn:
+      'Via the start card “Corrections” or /korrekturen. Fetches publisher feedback from the Cloudflare Pages portal (KORREKTURPORTAL_URL + master slug KORREKTURPORTAL_SLUG in .env.local, see docs/korrekturportal-anbindung.md). “Classify with AI” calls Claude via /api/korrekturen/einordnen; for each item the AI picks the field (question/answer/name/town/phone/logo/tnb/format/unknown), target (newspaper/month/day/proposal), confidence and whether an auto-apply is possible. **Phone numbers and terms are never auto-applied** — legally relevant. Per item you can set the status “open / ask back / done / ignored” (stored locally). The portal is read-only here; writing a reply back to the portal only after Telemedia’s approval.',
+  },
+  {
     anker: 'praesentationen',
     titelDe: 'Präsentationen (Gewinnspielplan 2027)',
     titelEn: 'Presentations (2027 prize game plan)',
