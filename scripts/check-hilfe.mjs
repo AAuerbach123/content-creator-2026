@@ -51,6 +51,12 @@ const PFLICHT = [
   { datei: 'src/app/handbuch/HandbuchSeite.tsx', name: 'Handbuch-Seite (Header)' },
   { datei: 'src/app/rufnummern/RufnummernSeite.tsx', name: 'Rufnummern-Seite' },
   { datei: 'src/components/RufnummernInfo.tsx', name: 'Rufnummern-Info (nach Verlagswahl)' },
+  { datei: 'src/app/serie/SerieSeite.tsx', name: 'Serien-Anzeigen (Auswahl, Vorschau, A/B/C, Prüflauf, offene Punkte)' },
+  { datei: 'src/app/serie/NeuesSpielPanel.tsx', name: 'Serien: Neues Spiel aufsetzen (KI-Varianten, Text verbessern)' },
+  { datei: 'src/app/serie/FragenPanel.tsx', name: 'Serien: Tagesfragen (KI)' },
+  { datei: 'src/app/serie/MailPanel.tsx', name: 'Serien: Gestaltungsvorschlag per E-Mail' },
+  { datei: 'src/app/serie/MondayPanel.tsx', name: 'Serien: monday.com-Übertragung' },
+  { datei: 'src/app/serie/GewinnerPanel.tsx', name: 'Serien: Gewinnerinnen und Gewinner' },
 ]
 
 // Bekannte Anker aus dem Handbuch — als Fallback grep-basiert lesen, damit das

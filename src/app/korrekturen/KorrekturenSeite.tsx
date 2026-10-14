@@ -97,7 +97,7 @@ export default function KorrekturenSeite() {
   return (
     <div style={{ minHeight: '100dvh', background: '#ffffff', color: '#1d1d1f', fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
       <header style={{ padding: '12px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #ECEEF2' }}>
-        <Link href="/" style={{ ...kopfKnopf }}>← {T('startUebersicht')}</Link>
+        <Link href="/erweitert" style={{ ...kopfKnopf }}>← {T('startUebersicht')}</Link>
         <div style={{ display: 'flex', gap: 8 }}><HandbuchKnopf anker="korrekturen" /><SpracheUmschalter /></div>
       </header>
       <main style={{ maxWidth: 1100, margin: '24px auto', padding: '0 24px' }}>

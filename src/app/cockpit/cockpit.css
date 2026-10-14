@@ -1,0 +1,349 @@
+/* Cockpit 2027 · Marke Telemedia (Farbtokens aus LOOP-Cockpit-2027.md).
+   Alle Werte als CSS-Variablen, damit das Prüfskript check-kontrast.mjs
+   die WCAG-Kontraste gegenprüfen kann. */
+
+:root {
+  --tm-rot: #9B1438;
+  --tm-dunkelrot: #7A0F2C;
+  --tm-gold: #E8B64A;
+  --tm-hell: #F6F4F1;
+  --tm-rose: #F6E6EB;
+  --tm-dunkel: #1C1B22;
+  --tm-grau: #5E616B;
+  --tm-linie: #E4E1DC;
+  --tm-weiss: #FFFFFF;
+
+  --cockpit-schatten-weich: 0 1px 2px rgba(28, 27, 34, 0.04), 0 2px 8px rgba(28, 27, 34, 0.03);
+  --cockpit-fokus: 0 0 0 3px rgba(155, 20, 56, 0.35);
+
+  --cockpit-radius-s: 6px;
+  --cockpit-radius-m: 10px;
+  --cockpit-radius-l: 14px;
+}
+
+.cockpit-root {
+  min-height: 100dvh;
+  background: var(--tm-hell);
+  color: var(--tm-dunkel);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Weiche, unscharfe Hintergrundflächen (4-8% Deckkraft, fest) */
+.cockpit-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 50% at 15% 10%, rgba(155, 20, 56, 0.06), transparent 70%),
+    radial-gradient(50% 40% at 85% 25%, rgba(232, 182, 74, 0.07), transparent 70%),
+    radial-gradient(50% 50% at 50% 90%, rgba(246, 230, 235, 0.6), transparent 70%);
+  pointer-events: none;
+}
+
+.cockpit-kopf {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: var(--tm-weiss);
+  border-bottom: 1px solid var(--tm-linie);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cockpit-kopf img {
+  height: 32px;
+  width: auto;
+}
+
+.cockpit-kopf h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--tm-dunkel);
+}
+
+.cockpit-kopf-aktionen {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cockpit-inhalt {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.cockpit-aktionsleiste {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--tm-weiss);
+  border-top: 1px solid var(--tm-linie);
+  z-index: 5;
+}
+
+/* Karten */
+.cockpit-karte {
+  background: var(--tm-weiss);
+  border: 1px solid var(--tm-linie);
+  border-radius: var(--cockpit-radius-l);
+  padding: 20px;
+  box-shadow: var(--cockpit-schatten-weich);
+}
+
+.cockpit-karte h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cockpit-karte p {
+  margin: 0 0 12px;
+  color: var(--tm-grau);
+  font-size: 14px;
+}
+
+/* Knöpfe */
+.cockpit-knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--cockpit-radius-m);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 120ms, transform 80ms;
+  text-decoration: none;
+}
+.cockpit-knopf:focus-visible {
+  outline: none;
+  box-shadow: var(--cockpit-fokus);
+}
+.cockpit-knopf.primaer {
+  background: var(--tm-rot);
+  color: var(--tm-weiss);
+}
+.cockpit-knopf.primaer:hover { background: var(--tm-dunkelrot); }
+.cockpit-knopf.sekundaer {
+  background: var(--tm-weiss);
+  color: var(--tm-dunkel);
+  border-color: var(--tm-linie);
+}
+.cockpit-knopf.sekundaer:hover { background: var(--tm-hell); }
+.cockpit-knopf.text {
+  background: transparent;
+  color: var(--tm-rot);
+  padding: 10px 8px;
+  min-height: 36px;
+}
+
+/* Schrittleiste */
+.cockpit-stepper {
+  display: flex;
+  gap: 4px;
+  padding: 0;
+  margin: 0 0 24px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+.cockpit-stepper li {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+.cockpit-stepper button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--tm-weiss);
+  border: 1px solid var(--tm-linie);
+  border-radius: var(--cockpit-radius-m);
+  cursor: pointer;
+  font: inherit;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cockpit-stepper button:focus-visible { outline: none; box-shadow: var(--cockpit-fokus); }
+.cockpit-stepper button.aktiv {
+  background: var(--tm-rose);
+  border-color: var(--tm-rot);
+  color: var(--tm-dunkel);
+}
+.cockpit-stepper .nr {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tm-grau);
+}
+.cockpit-stepper .name { font-weight: 600; }
+
+/* Statuschip */
+.cockpit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.cockpit-chip.grau   { background: #F0EFEC; color: #3A3B40; border-color: #D7D5D1; }
+.cockpit-chip.gelb   { background: #FFF3C9; color: #6B4A00; border-color: #E8B64A; }
+.cockpit-chip.rot    { background: #FBE1E7; color: #6B0820; border-color: #9B1438; }
+.cockpit-chip.gruen  { background: #D7EDDD; color: #1B4E2B; border-color: #2E8B57; }
+
+/* Formular-Feld */
+.cockpit-feld { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+.cockpit-feld label { font-size: 13px; font-weight: 600; color: var(--tm-dunkel); }
+.cockpit-feld .hinweis { font-size: 12px; color: var(--tm-grau); }
+.cockpit-feld input,
+.cockpit-feld textarea,
+.cockpit-feld select {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--tm-linie);
+  border-radius: var(--cockpit-radius-m);
+  font: inherit;
+  background: var(--tm-weiss);
+  color: var(--tm-dunkel);
+}
+.cockpit-feld input:focus,
+.cockpit-feld textarea:focus,
+.cockpit-feld select:focus { outline: none; border-color: var(--tm-rot); box-shadow: var(--cockpit-fokus); }
+.cockpit-feld textarea { min-height: 80px; resize: vertical; }
+.cockpit-feld.fehler input,
+.cockpit-feld.fehler textarea,
+.cockpit-feld.fehler select { border-color: var(--tm-rot); background: #FFF7F9; }
+.cockpit-feld .fehlertext { font-size: 12px; color: #6B0820; font-weight: 600; }
+.cockpit-feld .zaehler { font-size: 11px; color: var(--tm-grau); align-self: flex-end; }
+
+/* Leerer Zustand */
+.cockpit-leer {
+  padding: 32px;
+  text-align: center;
+  background: var(--tm-weiss);
+  border: 1px dashed var(--tm-linie);
+  border-radius: var(--cockpit-radius-l);
+  color: var(--tm-grau);
+}
+.cockpit-leer h3 { margin: 0 0 6px; color: var(--tm-dunkel); }
+
+/* Hinweis (aria-live) */
+.cockpit-hinweis {
+  padding: 10px 14px;
+  background: var(--tm-rose);
+  border-left: 4px solid var(--tm-rot);
+  border-radius: var(--cockpit-radius-m);
+  color: var(--tm-dunkel);
+  font-size: 14px;
+}
+.cockpit-hinweis.gold { background: #FFF4D6; border-left-color: var(--tm-gold); }
+
+/* Startseite: Kachelraster */
+.cockpit-kacheln {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.cockpit-kachel {
+  background: var(--tm-weiss);
+  border: 1px solid var(--tm-linie);
+  border-radius: var(--cockpit-radius-l);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  min-height: 160px;
+  transition: border-color 120ms, transform 80ms;
+}
+.cockpit-kachel:hover { border-color: var(--tm-rot); transform: translateY(-1px); }
+.cockpit-kachel:focus-visible { outline: none; box-shadow: var(--cockpit-fokus); }
+.cockpit-kachel .monat {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tm-grau);
+}
+.cockpit-kachel .name { font-size: 18px; font-weight: 700; }
+.cockpit-kachel .modell { font-size: 12px; color: var(--tm-grau); }
+.cockpit-kachel .fuss { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+
+.cockpit-vorschau {
+  background: var(--tm-weiss);
+  border: 1px solid var(--tm-linie);
+  border-radius: var(--cockpit-radius-l);
+  padding: 12px;
+  min-height: 300px;
+  box-shadow: var(--cockpit-schatten-weich);
+}
+
+/* Zwei Spalten ab 1200 px */
+.cockpit-zweispalt {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 1200px) {
+  .cockpit-zweispalt { grid-template-columns: 1fr 1fr; }
+}
+
+/* Status gespeichert */
+.cockpit-speicherstand {
+  font-size: 12px;
+  color: var(--tm-grau);
+}
+.cockpit-speicherstand.aktiv { color: #1B4E2B; }
+
+/* Zeitungen & Rufnummern: Ablagefläche, Spaltenwahl, Tabelle */
+.cockpit-ablage {
+  border: 2px dashed var(--tm-linie);
+  border-radius: var(--cockpit-radius-l);
+  background: var(--tm-hell);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--tm-grau);
+  transition: border-color 120ms, background 120ms;
+}
+.cockpit-ablage.aktiv { border-color: var(--tm-rot); background: var(--tm-rose); }
+.cockpit-spalten { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.cockpit-tabelle { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cockpit-tabelle th {
+  text-align: left; font-size: 12px; font-weight: 700; color: var(--tm-grau);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 8px 10px; border-bottom: 2px solid var(--tm-linie); white-space: nowrap;
+}
+.cockpit-tabelle td { padding: 8px 10px; border-bottom: 1px solid var(--tm-linie); vertical-align: top; }
+.cockpit-tabelle tr.offen td { background: #FFF8E6; }
+.cockpit-tabelle tr.aus td { color: var(--tm-grau); background: #FAF9F7; }
+.cockpit-tabelle .leise { color: var(--tm-grau); }
+.cockpit-tabelle .alt { color: var(--tm-grau); text-decoration: line-through; }
+.cockpit-tabelle .warnung { font-size: 12px; color: #6B4A00; margin-top: 4px; }
+.cockpit-tabelle .fehlertext { font-size: 12px; color: #6B0820; font-weight: 600; }
+.cockpit-tabelle select { min-height: 36px; border: 1px solid var(--tm-linie); border-radius: var(--cockpit-radius-s); padding: 4px 8px; background: var(--tm-weiss); max-width: 280px; }
+.cockpit-tabelle input[type='checkbox'] { width: 20px; height: 20px; accent-color: var(--tm-rot); }
+.cockpit-feld.kompakt { margin-bottom: 0; min-width: 170px; }
+.cockpit-feld.kompakt input { min-height: 36px; padding: 6px 10px; }
+.cockpit-knopf:disabled { opacity: 0.45; cursor: not-allowed; }

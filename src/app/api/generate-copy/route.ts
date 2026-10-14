@@ -3,7 +3,7 @@
 // Immer 3 Varianten pro Slot; Ton wählbar.
 
 import { NextResponse } from 'next/server'
-import { ClaudeFehler, claudeAnfragen, jsonAusText } from '@/lib/anthropic'
+import { ClaudeFehler, claudeJson } from '@/lib/anthropic'
 import { LIMITS } from '@/lib/eingabe-limit'
 
 export const runtime = 'nodejs'
@@ -78,13 +78,13 @@ ${body.briefing || '(kein Briefing)'}
 `
 
   try {
-    const antwort = await claudeAnfragen({
+    const antwort = await claudeJson<{ varianten: string[]; begruendung?: string }>({
       systemPrompt: SYSTEM_COPY,
       nachrichten: [{ role: 'user', content: auftrag }],
       maxTokens: 700,
       temperature: 0.8,
     })
-    const daten = jsonAusText<{ varianten: string[]; begruendung?: string }>(antwort.text)
+    const daten = antwort.daten
 
     return NextResponse.json({
       ok: true,

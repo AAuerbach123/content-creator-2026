@@ -10,6 +10,7 @@ import { useSprache } from '@/components/SpracheProvider'
 import { pad2 } from '@/lib/serie/generator'
 import type { MondaySpieltag } from '@/lib/serie/monday-typen'
 import { serienGewinnerLaden, type SerienGewinner } from '@/lib/db'
+import { datenMitStamm, einfuehrungLaden, stammLaden, type EinfuehrungEintrag, type ZeitungenStamm } from '@/lib/cockpit/zeitungen-stamm'
 import { htmlMaskieren, sichtbar, spielMitText, type SerieFrage, type TextOverride } from '@/lib/serie/serie-ki'
 import {
   anzeigeDateiname,
@@ -59,10 +60,17 @@ export default function SerieSeite() {
   const mittel = !!fenster && fenster.w >= 720
   const schmal = !fenster || fenster.w < 640
 
-  const [basis, setBasis] = useState<SerienBasis | null>(null)
+  const [basisRoh, setBasis] = useState<SerienBasis | null>(null)
   const [ladeFehler, setLadeFehler] = useState<string | null>(null)
   const [spielId, setSpielId] = useState<string>('geldregen')
   const [monat, setMonat] = useState<string>('2027-11')
+  // Rufnummern + Teilnehmer je Spiel (Cockpit → Zeitungen & Rufnummern) und Einführungstext 1. Spieltag
+  const [stamm, setStamm] = useState<ZeitungenStamm | undefined>(undefined)
+  const [einf, setEinf] = useState<EinfuehrungEintrag | undefined>(undefined)
+  const basis = useMemo<SerienBasis | null>(
+    () => (basisRoh ? (stamm ? { ...basisRoh, daten: datenMitStamm(basisRoh.daten, stamm) } : basisRoh) : null),
+    [basisRoh, stamm],
+  )
   const [gewaehlt, setGewaehlt] = useState<string[]>([])
   const [vorschauId, setVorschauId] = useState<string>('')
   const [vorschlag, setVorschlag] = useState<Vorschlag>('A')
@@ -138,12 +146,30 @@ export default function SerieSeite() {
     gewLaden().catch(() => setGewListe([]))
   }, [gewLaden])
 
+  useEffect(() => {
+    let aktiv = true
+    stammLaden(spielId).then((s) => { if (aktiv) setStamm(s) }).catch(() => setStamm(undefined))
+    return () => { aktiv = false }
+  }, [spielId])
+  useEffect(() => {
+    let aktiv = true
+    einfuehrungLaden(spielId, monat).then((e) => { if (aktiv) setEinf(e) }).catch(() => setEinf(undefined))
+    return () => { aktiv = false }
+  }, [spielId, monat])
+  // Teilnehmende Zeitungen des Spiels vorauswählen (aus der hochgeladenen Liste; sonst alle)
+  useEffect(() => {
+    if (!basisRoh) return
+    setGewaehlt(stamm?.teilnehmer?.length ? stamm.teilnehmer : basisRoh.daten.zeitungen.map((x) => x.id))
+  }, [basisRoh, stamm])
+
   const zeitungen = basis?.daten.zeitungen ?? []
   const gewaehlteZeitungen = zeitungen.filter((z) => gewaehlt.includes(z.id))
   const z = zeitungen.find((x) => x.id === vorschauId) ?? gewaehlteZeitungen[0] ?? zeitungen[0]
 
   const wirksameInhalte = useMemo(() => {
-    const basisInhalte = fragenAnwenden(inhalte, kiFragenAktiv ? kiFragen : null)
+    const roh = fragenAnwenden(inhalte, kiFragenAktiv ? kiFragen : null)
+    // Einführungstext (Cockpit) am 1. Spieltag; Klartext – wird im Generator maskiert
+    const basisInhalte = einf ? roh.map((inh) => (inh.tag === 1 ? { ...inh, einfuehrung: { titel: einf.titel, text: einf.text } } : inh)) : roh
     if (!gewListe.length || !z) return basisInhalte
     return basisInhalte.map((inh) => {
       const echte = gewListe
@@ -151,7 +177,7 @@ export default function SerieSeite() {
         .map((g) => ({ name: htmlMaskieren(g.name), ort: htmlMaskieren(g.ort), betrag: htmlMaskieren(g.betrag), text: htmlMaskieren(g.text), foto: g.fotoHash ? fotos[g.fotoHash] : undefined }))
       return echte.length ? { ...inh, gewinner: echte } : inh
     })
-  }, [inhalte, kiFragen, kiFragenAktiv, gewListe, fotos, z])
+  }, [inhalte, kiFragen, kiFragenAktiv, gewListe, fotos, z, einf])
   const inhalt = wirksameInhalte[Math.min(tagIndex, Math.max(0, wirksameInhalte.length - 1))]
 
   const args: VorschauArgs | null = basis && z && inhalt ? { basis, spiel, z, inhalt, vorschlag, gewinner, monat, kiText: kiFragenAktiv && !!kiFragen } : null
@@ -211,7 +237,7 @@ export default function SerieSeite() {
 
   // Export-Auftrag für „Serien-Anzeigen erstellen.command“: ganzer Monat (Vorproduktion) oder nur einzelne Spieltage (Tages-Update mit Gewinnern)
   const auftragLaden = (tage?: number[]) => {
-    const auftrag = { spiel: spielId, monat, zeitungen: gewaehlt.join(','), vorschlaege: 'A,B,C', gewinner: '1,4', tage: tage ?? [], inhalte: wirksameInhalte, erstelltAm: new Date().toISOString() }
+    const auftrag = { spiel: spielId, monat, zeitungen: gewaehlt.join(','), vorschlaege: 'A,B,C', gewinner: '1,4', tage: tage ?? [], inhalte: wirksameInhalte, nummern: stamm?.aenderungen ?? {}, erstelltAm: new Date().toISOString() }
     const b = new Blob([JSON.stringify(auftrag, null, 1)], { type: 'application/json' })
     const u = URL.createObjectURL(b)
     const l = document.createElement('a')
@@ -231,7 +257,7 @@ export default function SerieSeite() {
     <div style={{ minHeight: '100dvh', background: '#ffffff', color: TEXT, fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', borderTop: `4px solid ${ROT}`, overflowX: 'clip' }}>
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, padding: schmal ? '10px 14px' : '12px 24px', borderBottom: '1px solid #ECEDF1' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
-          <Link href="/" aria-label={T('serieZurStart')} style={{ display: 'block', flexShrink: 0 }}>
+          <Link href="/erweitert" aria-label={T('serieZurStart')} style={{ display: 'block', flexShrink: 0 }}>
             <img src="/telemedia-logo.png" alt={T('startLogoAlt')} width={1119} height={388} style={{ height: schmal ? 40 : 50, width: 'auto', display: 'block' }} />
           </Link>
           <span style={{ fontSize: schmal ? 15 : 17, fontWeight: 700, borderLeft: `1px solid ${HELLGRAU}`, paddingLeft: 14, whiteSpace: 'nowrap' }}>{T('cardSerie')}</span>
@@ -243,7 +269,7 @@ export default function SerieSeite() {
           />
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          <Link href="/" style={{ ...knopfKlein, textDecoration: 'none' }}>
+          <Link href="/erweitert" style={{ ...knopfKlein, textDecoration: 'none' }}>
             {T('serieZurStart')}
           </Link>
           <HandbuchKnopf anker="serie" />

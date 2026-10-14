@@ -1,0 +1,484 @@
+{
+ "_hinweis": "Tagesfragen Geldregen 2027 (Nov./Dez.). Spieltage: Mo–Fr je ein Spieltag, Samstag+Sonntag ein Spieltag. 'richtig' = Endziffer der richtigen Antwort. Feiertage (1.11. Allerheiligen, 24.–26.12., 31.12.) mit Verlagen abklären. Geldregen November+Dezember 2027 = EINE durchgehende Aktion: Spieltage im Dezember zählen weiter (27–53), Start-Hinweis nur am 1. November.",
+ "2027-11": [
+  {
+   "tag": 1,
+   "datum": "2027-11-01",
+   "label": "Montag, 1. November",
+   "frage": "Welcher Feiertag wird am 1. November in mehreren Bundesländern begangen?",
+   "a1": "Allerheiligen",
+   "a2": "Fronleichnam",
+   "richtig": 1
+  },
+  {
+   "tag": 2,
+   "datum": "2027-11-02",
+   "label": "Dienstag, 2. November",
+   "frage": "Wie viele Tage hat der Monat November?",
+   "a1": "31 Tage",
+   "a2": "30 Tage",
+   "richtig": 2
+  },
+  {
+   "tag": 3,
+   "datum": "2027-11-03",
+   "label": "Mittwoch, 3. November",
+   "frage": "Welcher Vogel zieht im Herbst in großen Keilformationen nach Süden?",
+   "a1": "Kranich",
+   "a2": "Amsel",
+   "richtig": 1
+  },
+  {
+   "tag": 4,
+   "datum": "2027-11-04",
+   "label": "Donnerstag, 4. November",
+   "frage": "Welches Tier hält einen Winterschlaf?",
+   "a1": "Reh",
+   "a2": "Igel",
+   "richtig": 2
+  },
+  {
+   "tag": 5,
+   "datum": "2027-11-05",
+   "label": "Freitag, 5. November",
+   "frage": "Wie heißt der Gedenktag am 11. November mit Laternenumzügen?",
+   "a1": "Martinstag",
+   "a2": "Nikolaustag",
+   "richtig": 1
+  },
+  {
+   "tag": 6,
+   "datum": "2027-11-06",
+   "label": "Samstag/Sonntag, 6./7. November",
+   "frage": "Welches orangefarbene Herbstgemüse wird gern zu Suppe verarbeitet?",
+   "a1": "Gurke",
+   "a2": "Kürbis",
+   "richtig": 2
+  },
+  {
+   "tag": 7,
+   "datum": "2027-11-08",
+   "label": "Montag, 8. November",
+   "frage": "In welcher Stadt steht das Brandenburger Tor?",
+   "a1": "Hamburg",
+   "a2": "Berlin",
+   "richtig": 2
+  },
+  {
+   "tag": 8,
+   "datum": "2027-11-09",
+   "label": "Dienstag, 9. November",
+   "frage": "Was geschah am 9. November 1989 in Berlin?",
+   "a1": "Der Mauerfall",
+   "a2": "Die Olympischen Spiele",
+   "richtig": 1
+  },
+  {
+   "tag": 9,
+   "datum": "2027-11-10",
+   "label": "Mittwoch, 10. November",
+   "frage": "Wie viele Beine hat eine Spinne?",
+   "a1": "Sechs",
+   "a2": "Acht",
+   "richtig": 2
+  },
+  {
+   "tag": 10,
+   "datum": "2027-11-11",
+   "label": "Donnerstag, 11. November",
+   "frage": "Was beginnt traditionell am 11.11. um 11:11 Uhr?",
+   "a1": "Die Karnevalszeit",
+   "a2": "Die Adventszeit",
+   "richtig": 1
+  },
+  {
+   "tag": 11,
+   "datum": "2027-11-12",
+   "label": "Freitag, 12. November",
+   "frage": "Welcher Planet ist der Sonne am nächsten?",
+   "a1": "Venus",
+   "a2": "Merkur",
+   "richtig": 2
+  },
+  {
+   "tag": 12,
+   "datum": "2027-11-13",
+   "label": "Samstag/Sonntag, 13./14. November",
+   "frage": "Welcher Baum trägt Eicheln?",
+   "a1": "Eiche",
+   "a2": "Birke",
+   "richtig": 1
+  },
+  {
+   "tag": 13,
+   "datum": "2027-11-15",
+   "label": "Montag, 15. November",
+   "frage": "Wie viele Spieler einer Fußballmannschaft stehen auf dem Platz?",
+   "a1": "Elf",
+   "a2": "Zwölf",
+   "richtig": 1
+  },
+  {
+   "tag": 14,
+   "datum": "2027-11-16",
+   "label": "Dienstag, 16. November",
+   "frage": "Welcher Fluss fließt durch Köln?",
+   "a1": "Main",
+   "a2": "Rhein",
+   "richtig": 2
+  },
+  {
+   "tag": 15,
+   "datum": "2027-11-17",
+   "label": "Mittwoch, 17. November",
+   "frage": "Wer komponierte die „Mondscheinsonate“?",
+   "a1": "Ludwig van Beethoven",
+   "a2": "Johann Strauss",
+   "richtig": 1
+  },
+  {
+   "tag": 16,
+   "datum": "2027-11-18",
+   "label": "Donnerstag, 18. November",
+   "frage": "Welches Tier ist das Wappentier Berlins?",
+   "a1": "Adler",
+   "a2": "Bär",
+   "richtig": 2
+  },
+  {
+   "tag": 17,
+   "datum": "2027-11-19",
+   "label": "Freitag, 19. November",
+   "frage": "Wie nennt man ein Jahr mit 366 Tagen?",
+   "a1": "Kalenderjahr",
+   "a2": "Schaltjahr",
+   "richtig": 2
+  },
+  {
+   "tag": 18,
+   "datum": "2027-11-20",
+   "label": "Samstag/Sonntag, 20./21. November",
+   "frage": "Wie heißt der letzte Sonntag vor dem 1. Advent bei den Protestanten?",
+   "a1": "Totensonntag",
+   "a2": "Palmsonntag",
+   "richtig": 1
+  },
+  {
+   "tag": 19,
+   "datum": "2027-11-22",
+   "label": "Montag, 22. November",
+   "frage": "Wie heißt der höchste Berg Deutschlands?",
+   "a1": "Watzmann",
+   "a2": "Zugspitze",
+   "richtig": 2
+  },
+  {
+   "tag": 20,
+   "datum": "2027-11-23",
+   "label": "Dienstag, 23. November",
+   "frage": "Aus welchem Land stammt die Pizza?",
+   "a1": "Spanien",
+   "a2": "Italien",
+   "richtig": 2
+  },
+  {
+   "tag": 21,
+   "datum": "2027-11-24",
+   "label": "Mittwoch, 24. November",
+   "frage": "Wie viele Kerzen hat ein klassischer Adventskranz?",
+   "a1": "Vier",
+   "a2": "Sechs",
+   "richtig": 1
+  },
+  {
+   "tag": 22,
+   "datum": "2027-11-25",
+   "label": "Donnerstag, 25. November",
+   "frage": "Welche Stadt ist für ihre Lebkuchen besonders berühmt?",
+   "a1": "Nürnberg",
+   "a2": "Hamburg",
+   "richtig": 1
+  },
+  {
+   "tag": 23,
+   "datum": "2027-11-26",
+   "label": "Freitag, 26. November",
+   "frage": "In welcher Stadt findet der Striezelmarkt statt?",
+   "a1": "Leipzig",
+   "a2": "Dresden",
+   "richtig": 2
+  },
+  {
+   "tag": 24,
+   "datum": "2027-11-27",
+   "label": "Samstag/Sonntag, 27./28. November",
+   "frage": "Am 28. November ist 1. Advent. Wie viele Kerzen brennen dann?",
+   "a1": "Eine",
+   "a2": "Alle vier",
+   "richtig": 1
+  },
+  {
+   "tag": 25,
+   "datum": "2027-11-29",
+   "label": "Montag, 29. November",
+   "frage": "Wie viele Türchen hat ein klassischer Adventskalender?",
+   "a1": "24",
+   "a2": "31",
+   "richtig": 1
+  },
+  {
+   "tag": 26,
+   "datum": "2027-11-30",
+   "label": "Dienstag, 30. November",
+   "frage": "Welcher Monat folgt auf den November?",
+   "a1": "Oktober",
+   "a2": "Dezember",
+   "richtig": 2
+  }
+ ],
+ "2027-12": [
+  {
+   "tag": 27,
+   "datum": "2027-12-01",
+   "label": "Mittwoch, 1. Dezember",
+   "frage": "Welcher Gedenktag wird am 6. Dezember gefeiert?",
+   "a1": "Nikolaustag",
+   "a2": "Martinstag",
+   "richtig": 1
+  },
+  {
+   "tag": 28,
+   "datum": "2027-12-02",
+   "label": "Donnerstag, 2. Dezember",
+   "frage": "Wie heißen die kleinen Kekse, die man zu Weihnachten backt?",
+   "a1": "Krapfen",
+   "a2": "Plätzchen",
+   "richtig": 2
+  },
+  {
+   "tag": 29,
+   "datum": "2027-12-03",
+   "label": "Freitag, 3. Dezember",
+   "frage": "Woraus wird Marzipan hauptsächlich hergestellt?",
+   "a1": "Haselnüssen",
+   "a2": "Mandeln",
+   "richtig": 2
+  },
+  {
+   "tag": 30,
+   "datum": "2027-12-04",
+   "label": "Samstag/Sonntag, 4./5. Dezember",
+   "frage": "Am 5. Dezember ist 2. Advent. Wie viele Kerzen brennen dann?",
+   "a1": "Zwei",
+   "a2": "Drei",
+   "richtig": 1
+  },
+  {
+   "tag": 31,
+   "datum": "2027-12-06",
+   "label": "Montag, 6. Dezember",
+   "frage": "Was stellen Kinder in der Nacht vor dem Nikolaustag vor die Tür?",
+   "a1": "Regenschirm",
+   "a2": "Stiefel",
+   "richtig": 2
+  },
+  {
+   "tag": 32,
+   "datum": "2027-12-07",
+   "label": "Dienstag, 7. Dezember",
+   "frage": "Welcher Baum ist bei uns der beliebteste Weihnachtsbaum?",
+   "a1": "Nordmanntanne",
+   "a2": "Kiefer",
+   "richtig": 1
+  },
+  {
+   "tag": 33,
+   "datum": "2027-12-08",
+   "label": "Mittwoch, 8. Dezember",
+   "frage": "Wie viele Monate hat ein Jahr?",
+   "a1": "Dreizehn",
+   "a2": "Zwölf",
+   "richtig": 2
+  },
+  {
+   "tag": 34,
+   "datum": "2027-12-09",
+   "label": "Donnerstag, 9. Dezember",
+   "frage": "Wo wohnt der Weihnachtsmann der Legende nach?",
+   "a1": "Am Südpol",
+   "a2": "Am Nordpol",
+   "richtig": 2
+  },
+  {
+   "tag": 35,
+   "datum": "2027-12-10",
+   "label": "Freitag, 10. Dezember",
+   "frage": "Welches Getränk gibt es auf Weihnachtsmärkten heiß?",
+   "a1": "Glühwein",
+   "a2": "Eistee",
+   "richtig": 1
+  },
+  {
+   "tag": 36,
+   "datum": "2027-12-11",
+   "label": "Samstag/Sonntag, 11./12. Dezember",
+   "frage": "Welche Farbe hat die Mütze des Weihnachtsmanns meistens?",
+   "a1": "Blau",
+   "a2": "Rot",
+   "richtig": 2
+  },
+  {
+   "tag": 37,
+   "datum": "2027-12-13",
+   "label": "Montag, 13. Dezember",
+   "frage": "Welches Tier zieht den Schlitten des Weihnachtsmanns?",
+   "a1": "Rentier",
+   "a2": "Pferd",
+   "richtig": 1
+  },
+  {
+   "tag": 38,
+   "datum": "2027-12-14",
+   "label": "Dienstag, 14. Dezember",
+   "frage": "Wie heißt die Hauptstadt von Österreich?",
+   "a1": "Salzburg",
+   "a2": "Wien",
+   "richtig": 2
+  },
+  {
+   "tag": 39,
+   "datum": "2027-12-15",
+   "label": "Mittwoch, 15. Dezember",
+   "frage": "Welches Gewürz wird aus der Rinde eines Baumes gewonnen?",
+   "a1": "Zimt",
+   "a2": "Vanille",
+   "richtig": 1
+  },
+  {
+   "tag": 40,
+   "datum": "2027-12-16",
+   "label": "Donnerstag, 16. Dezember",
+   "frage": "Welches Instrument hat 88 Tasten?",
+   "a1": "Klavier",
+   "a2": "Akkordeon",
+   "richtig": 1
+  },
+  {
+   "tag": 41,
+   "datum": "2027-12-17",
+   "label": "Freitag, 17. Dezember",
+   "frage": "Welches Gebäck aus Dresden steckt voller Rosinen?",
+   "a1": "Berliner",
+   "a2": "Stollen",
+   "richtig": 2
+  },
+  {
+   "tag": 42,
+   "datum": "2027-12-18",
+   "label": "Samstag/Sonntag, 18./19. Dezember",
+   "frage": "Am 19. Dezember ist 4. Advent. Wie viele Kerzen brennen dann?",
+   "a1": "Drei",
+   "a2": "Vier",
+   "richtig": 2
+  },
+  {
+   "tag": 43,
+   "datum": "2027-12-20",
+   "label": "Montag, 20. Dezember",
+   "frage": "Wer schrieb das Märchen „Hänsel und Gretel“ auf?",
+   "a1": "Brüder Grimm",
+   "a2": "Hans Christian Andersen",
+   "richtig": 1
+  },
+  {
+   "tag": 44,
+   "datum": "2027-12-21",
+   "label": "Dienstag, 21. Dezember",
+   "frage": "Welcher Vogel kommt traditionell als Weihnachtsbraten auf den Tisch?",
+   "a1": "Taube",
+   "a2": "Gans",
+   "richtig": 2
+  },
+  {
+   "tag": 45,
+   "datum": "2027-12-22",
+   "label": "Mittwoch, 22. Dezember",
+   "frage": "Aus welchem Land stammt das Lied „Stille Nacht“?",
+   "a1": "Österreich",
+   "a2": "England",
+   "richtig": 1
+  },
+  {
+   "tag": 46,
+   "datum": "2027-12-23",
+   "label": "Donnerstag, 23. Dezember",
+   "frage": "Wie viele Tage sind es vom 23. Dezember bis Heiligabend?",
+   "a1": "Ein Tag",
+   "a2": "Zwei Tage",
+   "richtig": 1
+  },
+  {
+   "tag": 47,
+   "datum": "2027-12-24",
+   "label": "Freitag, 24. Dezember",
+   "frage": "Wie wird der 24. Dezember genannt?",
+   "a1": "Silvester",
+   "a2": "Heiligabend",
+   "richtig": 2
+  },
+  {
+   "tag": 48,
+   "datum": "2027-12-25",
+   "label": "Samstag/Sonntag, 25./26. Dezember",
+   "frage": "Wie viele Weihnachtsfeiertage gibt es in Deutschland?",
+   "a1": "Zwei",
+   "a2": "Drei",
+   "richtig": 1
+  },
+  {
+   "tag": 49,
+   "datum": "2027-12-27",
+   "label": "Montag, 27. Dezember",
+   "frage": "Welcher Planet wird auch „Roter Planet“ genannt?",
+   "a1": "Jupiter",
+   "a2": "Mars",
+   "richtig": 2
+  },
+  {
+   "tag": 50,
+   "datum": "2027-12-28",
+   "label": "Dienstag, 28. Dezember",
+   "frage": "Wie heißt der letzte Tag des Jahres?",
+   "a1": "Silvester",
+   "a2": "Neujahr",
+   "richtig": 1
+  },
+  {
+   "tag": 51,
+   "datum": "2027-12-29",
+   "label": "Mittwoch, 29. Dezember",
+   "frage": "Womit stößt man an Silvester um Mitternacht oft an?",
+   "a1": "Kakao",
+   "a2": "Sekt",
+   "richtig": 2
+  },
+  {
+   "tag": 52,
+   "datum": "2027-12-30",
+   "label": "Donnerstag, 30. Dezember",
+   "frage": "Welcher Glücksbringer wird zu Silvester gern verschenkt?",
+   "a1": "Regenschirm",
+   "a2": "Schornsteinfeger",
+   "richtig": 2
+  },
+  {
+   "tag": 53,
+   "datum": "2027-12-31",
+   "label": "Freitag, 31. Dezember",
+   "frage": "Wann beginnt das neue Jahr?",
+   "a1": "Um Mitternacht",
+   "a2": "Um 6 Uhr morgens",
+   "richtig": 1
+  }
+ ]
+}

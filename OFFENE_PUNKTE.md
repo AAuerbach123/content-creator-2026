@@ -190,3 +190,47 @@ Online (Cloudflare) einmalig:
 npx wrangler secret put MONDAY_API_TOKEN
 ```
 Zum Testen ein **privates** Board mit den Spalten „Datum“ (Datum), „Frage“, „Antwort 1“, „Antwort 2“, „Richtige Antwort“, „Dateiname“ (Text) anlegen; Board-ID steht in der URL nach `/boards/`. Testmodus bleibt an.
+
+---
+
+## 15. Cockpit 2027 im Browser prüfen (Loop „Cockpit 2027")
+
+```bash
+npm run dev
+```
+→ Startseite öffnet sich. Neue Karte **„Cockpit 2027 (einfach)"** (Position 1 im Kreis) klicken, oder direkt `http://localhost:3000/cockpit` öffnen.
+
+Schnell-Test für Geldregen (sollte unter 3 Minuten dauern):
+1. Kachel **Geldregen** → Phase 1 „Nein, Vorschlag A/B/C" → **Vorlage übernehmen**.
+2. Phase 2 → **„Bestehende Kampagne übernehmen"** (nimmt automatisch 2027-11 mit 30 Spieltagen aus `fragen_2027.json`).
+3. Phase 3 → beim gewählten Spieltag die Quelle eintragen (ohne Quelle meldet die Prüfung „Flowchart Seite 4 Pflicht").
+4. Phase 4 → Spieltag 2 öffnen, „+ Gewinner hinzufügen", Felder füllen, Gewinnertext tippen (Zähler beobachten). Optional **„Vorschlag"**-Knopf mit Stichworten testen.
+5. Phase 5 → **Cmd/Ctrl+Enter** = Prüfen und freigeben.
+
+## 16. Cockpit 2027 online stellen (nach erfolgreichem Browser-Test)
+
+Kein neuer Secret, kein neues Paket – nur bauen und deployen:
+```bash
+npm run build:vinext && npm run deploy:vinext
+```
+
+## 17. Dexie-Migration auf v7 (automatisch beim ersten Browser-Start)
+
+Wenn du das Cockpit zum ersten Mal öffnest, legt Dexie die neuen Stores `kampagnen`, `spieltage` und `cockpitVorlagen` an. Vorhandene Daten (Jobs, Assets, Serien-Gewinner usw.) bleiben erhalten – geprüft gegen die vorherigen Versionen 1 bis 6. Zum Zurücksetzen (nur falls jemals nötig):
+
+```bash
+# Chrome Dev-Tools öffnen → Application → IndexedDB → ContentCreator2026 → Delete database
+```
+
+## 18. Shortcut im Cockpit
+
+- `Cmd+Enter` (Mac) bzw. `Ctrl+Enter` (Windows/Linux) in Phase 5 löst „Prüfen und freigeben" aus.
+- Weitere Shortcuts (`N` nächster Tag, `G` Gewinner, `?` Hilfe) sind in `docs/cockpit-test.md` als Loop-2-Punkt eingetragen und noch nicht belegt.
+
+## 19. Prüfläufe nach Code-Änderungen am Cockpit
+
+```bash
+node scripts/check-kontrast.mjs && node scripts/check-i18n.mjs && node scripts/check-umlaute.mjs && node scripts/check-hilfe.mjs && node scripts/check-spielauswahl.mjs && node_modules/.bin/tsc --noEmit -p . && node scripts/check-serie.mjs 2027-11 && node scripts/check-serie.mjs 2027-12
+```
+
+Alle müssen grün melden; `check-serie 2027-11/12` muss weiterhin **3213 identisch** (Nov) bzw. die Dez-Anzahl zeigen, damit Regel 5 (Geldregen Nov/Dez bytegleich) eingehalten ist.

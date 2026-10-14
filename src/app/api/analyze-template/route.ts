@@ -6,8 +6,7 @@
 import { NextResponse } from 'next/server'
 import {
   ClaudeFehler,
-  claudeAnfragen,
-  jsonAusText,
+  claudeJson,
   type ClaudeNachricht,
 } from '@/lib/anthropic'
 import { ERLAUBTE_BILD_MIMES, LIMITS, begrenzeBase64 } from '@/lib/eingabe-limit'
@@ -72,14 +71,14 @@ export async function POST(request: Request) {
   ]
 
   try {
-    const antwort = await claudeAnfragen({
+    const antwort = await claudeJson<Record<string, unknown>>({
       systemPrompt: SYSTEM_ANALYSE,
       nachrichten,
       maxTokens: 1400,
       temperature: 0.2,
     })
 
-    const daten = jsonAusText<Record<string, unknown>>(antwort.text)
+    const daten = antwort.daten
 
     return NextResponse.json({
       ok: true,

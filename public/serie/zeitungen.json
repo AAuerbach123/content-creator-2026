@@ -1,0 +1,563 @@
+{
+ "_hinweis": "Quelle Nummern: 'Nummern für AA_ Geldregen .xlsx' (Okt. 2026). Formate: Geldregen-Anzeigen März 2026 bzw. Verlage/Bestandsaufnahme-Zeitungen.md. Hausfarbe = Farbe des obersten Logos; bei schwarzem Logo eine passende Farbe (markiert mit farbe_quelle='gewählt'). nummer=null => Nummer fehlt noch, Anzeige zeigt gelben Platzhalter. 'pruefen' = offene Punkte.",
+ "tnb_gruppen": {
+  "_reihenfolge": [
+   "FUNKE",
+   "NOZ",
+   "NPG",
+   "HCSB",
+   "SAAR",
+   "NUE"
+  ],
+  "FUNKE": "FUNKE Medien Thüringen GmbH",
+  "NOZ": "NOZ/mh:n Mediengruppe",
+  "NPG": "Neue Pressegesellschaft mbH & Co. KG, die SÜDWEST PRESSE und den Partnertiteln der Redaktionsgemeinschaft und deren jeweilige Online-Angebote",
+  "HCSB": "Verlagsgruppe HCSB",
+  "SAAR": "Saarbrücker Zeitung und Trierischer Volksfreund Medienhaus GmbH",
+  "NUE": "Verlag Nürnberger Presse Druckhaus Nürnberg GmbH & Co. KG und Heimatverlage, Fränkische Landeszeitung"
+ },
+ "hotline_texte": {
+  "FUNKE": "Fragen zum Gewinnspiel: 0800-7779872. Keine Gewinnspielteilnahme unter dieser Nummer (Telemedia Interactive GmbH, kostenlos)",
+  "SWMH": "Fragen zur Teilnahme, sprechen Sie uns persönlich: 0800/2224449 Keine Gewinnspielteilnahme. (Telemedia Interactive GmbH, kostenlos)",
+  "SWP": "Fragen zur Teilnahme, sprechen Sie uns persönlich: 0800-7779889 · Keine Gewinnspielteilnahme. (Telemedia Interactive GmbH, kostenlos)",
+  "NOZ": "Fragen zur Teilnahme, sprechen Sie uns persönlich: 0800/2223365 Keine Gewinnspielteilnahme. (Telemedia Interactive GmbH, kostenlos)",
+  "NUE": "Fragen zur Teilnahme, sprechen Sie uns persönlich: 0800/1011326. Keine Gewinnspielteilnahme. (Telemedia Interactive GmbH, kostenlos)",
+  "SAAR": null,
+  "SHZ": "Fragen zur Teilnahme, keine Gewinnspielteilnahme: 0800/2223365 (Telemedia Interactive GmbH, kostenlos)"
+ },
+ "datenschutz_texte": {
+  "FUNKE": "Datenschutzhinweise nach DSGVO erhalten Sie unter www.funkemedien.de/datenschutzinformation oder der kostenfreien Rufnummer 0800 8043333.",
+  "TMIA": "Die ausführlichen Datenschutzhinweise finden Sie unter: datenschutz.tmia.de.",
+  "SAAR": null
+ },
+ "veranstalter_texte": {
+  "NUE": "Das Gewinnspiel wird durchgeführt von der Verlag Nürnberger Presse Druckhaus Nürnberg GmbH & Co. KG, Kressengartenstraße 4, 90402 Nürnberg."
+ },
+ "zeitungen": [
+  {
+   "id": "schwabo",
+   "name": "Schwarzwälder Bote / Lahrer Zeitung / Die Neckarquelle",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 81",
+   "format": [
+    280,
+    190
+   ],
+   "logos": [
+    "schwabo",
+    "lahrer",
+    "neckarquelle"
+   ],
+   "farbe": "#3D7A2A",
+   "farbe_quelle": "grüne Linie im obersten Logo (Schwarzwälder Bote), abgedunkelt",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Rottweil",
+    "Villingen-Schwenningen",
+    "Oberndorf",
+    "Lahr"
+   ]
+  },
+  {
+   "id": "frankenpost",
+   "name": "Frankenpost",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 82",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "frankenpost"
+   ],
+   "farbe": "#D9202C",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Hof",
+    "Selb",
+    "Marktredwitz",
+    "Wunsiedel"
+   ]
+  },
+  {
+   "id": "neuepresse",
+   "name": "Neue Presse",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 83",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "neuepresse"
+   ],
+   "farbe": "#0077B6",
+   "farbe_quelle": "Logo-Cyan, abgedunkelt für Lesbarkeit",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Coburg",
+    "Rödental",
+    "Neustadt bei Coburg",
+    "Bad Rodach"
+   ]
+  },
+  {
+   "id": "suhl",
+   "name": "Suhler Verlagsgesellschaft (Freies Wort / Südthüringer Zeitung / Meininger Tageblatt)",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 84",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "freieswort",
+    "suedthueringer",
+    "meininger"
+   ],
+   "farbe": "#00894D",
+   "farbe_quelle": "oberstes Logo (Freies Wort)",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Suhl",
+    "Meiningen",
+    "Ilmenau",
+    "Hildburghausen"
+   ]
+  },
+  {
+   "id": "kurier",
+   "name": "Nordbayerischer Kurier",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 85",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "kurier"
+   ],
+   "farbe": "#0B5537",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Bayreuth",
+    "Pegnitz",
+    "Bindlach",
+    "Creußen"
+   ]
+  },
+  {
+   "id": "stz-stn",
+   "name": "Stuttgarter Zeitung / Stuttgarter Nachrichten",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 86",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "stn",
+    "stz"
+   ],
+   "farbe": "#0072B5",
+   "farbe_quelle": "oberstes Logo (Stuttgarter Nachrichten, blaue Linie)",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Stuttgart",
+    "Leonberg",
+    "Fellbach",
+    "Kornwestheim"
+   ]
+  },
+  {
+   "id": "esslinger",
+   "name": "Esslinger Zeitung / Cannstatter Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "ez",
+    "cz"
+   ],
+   "farbe": "#8C1D40",
+   "farbe_quelle": "gewählt (Logo schwarz) – Weinrot",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Esslingen",
+    "Bad Cannstatt",
+    "Plochingen",
+    "Ostfildern"
+   ],
+   "pruefen": "Nummer fehlt in der Excel-Liste (vermutlich 01378 40 87 xx – nicht bestätigt)"
+  },
+  {
+   "id": "boeblingen",
+   "name": "Kreiszeitung Böblinger Bote",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "format": [
+    321,
+    220
+   ],
+   "logos": [
+    "krzbb"
+   ],
+   "farbe": "#2F5D8A",
+   "farbe_quelle": "gewählt (Logo schwarz) – Stahlblau",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Böblingen",
+    "Sindelfingen",
+    "Holzgerlingen",
+    "Ehningen"
+   ],
+   "pruefen": "Nummer fehlt in der Excel-Liste (vermutlich 01378 40 88 xx – nicht bestätigt)"
+  },
+  {
+   "id": "oberbadische",
+   "name": "Die Oberbadische / Markgräfler Tagblatt / Weiler Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 89",
+   "format": [
+    280,
+    190
+   ],
+   "logos": [
+    "oberbadische"
+   ],
+   "farbe": "#1B63B8",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWMH",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Lörrach",
+    "Müllheim",
+    "Weil am Rhein",
+    "Rheinfelden"
+   ]
+  },
+  {
+   "id": "swp",
+   "name": "SÜDWEST PRESSE",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 38",
+   "format": [
+    321,
+    220
+   ],
+   "logos": [],
+   "farbe": "#00539F",
+   "farbe_quelle": "gewählt (kein Logo vorhanden)",
+   "tnb_gruppe": "NPG",
+   "hotline": "SWP",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Ulm",
+    "Neu-Ulm",
+    "Göppingen",
+    "Geislingen"
+   ],
+   "pruefen": "Kein SWP-Logo vorhanden (2026 ohne Logo: 'Ihre Tageszeitung präsentiert'). Hausfarbe angenommen."
+  },
+  {
+   "id": "shz",
+   "name": "sh:z",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 27",
+   "format": [
+    278,
+    190
+   ],
+   "logos": [
+    "shz"
+   ],
+   "farbe": "#001E59",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NOZ",
+   "hotline": "SHZ",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Flensburg",
+    "Husum",
+    "Schleswig",
+    "Itzehoe"
+   ]
+  },
+  {
+   "id": "beige",
+   "name": "beige (wie BEIG 2026)",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 47",
+   "format": [
+    278,
+    190
+   ],
+   "logos": [
+    "shz"
+   ],
+   "farbe": "#001E59",
+   "farbe_quelle": "Logo (sh:z, wie BEIG-Anzeige 2026)",
+   "tnb_gruppe": "NOZ",
+   "hotline": "SHZ",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Rendsburg",
+    "Heide",
+    "Elmshorn",
+    "Pinneberg"
+   ],
+   "pruefen": "Welche Zeitung ist 'beige'? Angenommen: BEIG-Anzeige 2026 (278 x 190, sh:z-Logo)."
+  },
+  {
+   "id": "noz",
+   "name": "noz",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 57",
+   "format": [
+    318,
+    220
+   ],
+   "logos": [
+    "noz"
+   ],
+   "farbe": "#001E59",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NOZ",
+   "hotline": "NOZ",
+   "datenschutz": "TMIA",
+   "orte": [
+    "Osnabrück",
+    "Bramsche",
+    "Melle",
+    "Georgsmarienhütte"
+   ]
+  },
+  {
+   "id": "otz",
+   "name": "Ostthüringer Zeitung",
+   "kicker": "OTZ-GELDREGEN",
+   "nummer": "01379 89 00",
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "otz"
+   ],
+   "farbe": "#D71920",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "FUNKE",
+   "hotline": "FUNKE",
+   "datenschutz": "FUNKE",
+   "orte": [
+    "Gera",
+    "Altenburg",
+    "Greiz",
+    "Saalfeld"
+   ]
+  },
+  {
+   "id": "ta",
+   "name": "Thüringer Allgemeine",
+   "kicker": "TA-GELDREGEN",
+   "nummer": "01379 44 12",
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "ta"
+   ],
+   "farbe": "#008940",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "FUNKE",
+   "hotline": "FUNKE",
+   "datenschutz": "FUNKE",
+   "orte": [
+    "Erfurt",
+    "Weimar",
+    "Gotha",
+    "Nordhausen"
+   ]
+  },
+  {
+   "id": "tlz",
+   "name": "Thüringische Landeszeitung",
+   "kicker": "TLZ-GELDREGEN",
+   "nummer": "01379 44 13",
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "tlz"
+   ],
+   "farbe": "#436D9B",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "FUNKE",
+   "hotline": "FUNKE",
+   "datenschutz": "FUNKE",
+   "orte": [
+    "Weimar",
+    "Jena",
+    "Apolda",
+    "Bad Berka"
+   ]
+  },
+  {
+   "id": "sz",
+   "name": "Saarbrücker Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 61",
+   "format": [
+    325,
+    240
+   ],
+   "logos": [
+    "sz"
+   ],
+   "farbe": "#004D7F",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "SAAR",
+   "hotline": "SAAR",
+   "datenschutz": "SAAR",
+   "orte": [
+    "Saarbrücken",
+    "Saarlouis",
+    "Neunkirchen",
+    "Homburg"
+   ],
+   "pruefen": "Hotline-Satz und Datenschutz-Hinweis SAAR fehlen (keine Geldregen-Anzeige 2026 vorhanden)."
+  },
+  {
+   "id": "tv",
+   "name": "Trierischer Volksfreund",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 62",
+   "format": [
+    325,
+    240
+   ],
+   "logos": [
+    "tv"
+   ],
+   "farbe": "#325472",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "SAAR",
+   "hotline": "SAAR",
+   "datenschutz": "SAAR",
+   "orte": [
+    "Trier",
+    "Bitburg",
+    "Wittlich",
+    "Saarburg"
+   ],
+   "pruefen": "Hotline-Satz und Datenschutz-Hinweis SAAR fehlen."
+  },
+  {
+   "id": "pm",
+   "name": "Pfälzischer Merkur (Excel: 'Pfälzischer Kurier')",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 80 63",
+   "format": [
+    325,
+    240
+   ],
+   "logos": [
+    "pm"
+   ],
+   "farbe": "#B7274C",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "SAAR",
+   "hotline": "SAAR",
+   "datenschutz": "SAAR",
+   "orte": [
+    "Zweibrücken",
+    "Contwig",
+    "Hornbach",
+    "Dellfeld"
+   ],
+   "pruefen": "Excel nennt 'Pfälzischer Kurier' – Logo vorhanden nur 'Pfälzischer Merkur'. Hotline/Datenschutz SAAR fehlen."
+  },
+  {
+   "id": "nuernberg",
+   "name": "Nürnberger Nachrichten / Nürnberger Zeitung (VNP)",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 22 02",
+   "format": [
+    280,
+    219
+   ],
+   "logos": [
+    "vnp",
+    "nn",
+    "nz"
+   ],
+   "farbe": "#0083C1",
+   "farbe_quelle": "oberstes Logo (VNP-Cyan), abgedunkelt für Lesbarkeit",
+   "tnb_gruppe": "NUE",
+   "hotline": "NUE",
+   "datenschutz": "TMIA",
+   "veranstalter": "NUE",
+   "orte": [
+    "Nürnberg",
+    "Fürth",
+    "Erlangen",
+    "Schwabach"
+   ]
+  },
+  {
+   "id": "flz",
+   "name": "Fränkische Landeszeitung",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "format": [
+    280,
+    219
+   ],
+   "logos": [
+    "flz"
+   ],
+   "farbe": "#1D64AF",
+   "farbe_quelle": "Logo",
+   "tnb_gruppe": "NUE",
+   "hotline": "NUE",
+   "datenschutz": "TMIA",
+   "veranstalter": "NUE",
+   "orte": [
+    "Ansbach",
+    "Rothenburg ob der Tauber",
+    "Dinkelsbühl",
+    "Feuchtwangen"
+   ],
+   "pruefen": "Nummer fehlt in der Excel-Liste. 2026 lief FLZ in der Nürnberger Anzeige mit. Format angenommen wie Nürnberg."
+  }
+ ],
+ "aktionszeitraum": {
+  "2027-11": "vom 01.11.2027 bis 31.12.2027",
+  "2027-12": "vom 01.11.2027 bis 31.12.2027",
+  "_hinweis": "Durchgehende Geldregen-Aktion Nov+Dez 2027 (Andreas A., 06.10.2026). Fehlt ein Monat, gilt der Kalendermonat."
+ }
+}

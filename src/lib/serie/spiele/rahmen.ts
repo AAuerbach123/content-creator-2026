@@ -7,7 +7,7 @@
 // alle Inhaltsblöcke tragen .blk[data-n] (Überlappungsprüfung); .card/.ant/.tile werden auf Überlauf geprüft.
 
 import { FIT_JS } from '../fit-source'
-import { BODY_H, PAKETE, PREIS, W, basisCss, bild, fehlt, mischen, pad2, pyRound, GEW_NAMEN, ZITATE } from '../generator'
+import { BODY_H, PAKETE, PREIS, W, basisCss, bild, fehlt, maskiere, mischen, pad2, pyRound, GEW_NAMEN, ZITATE } from '../generator'
 import type { GewinnerAnzahl, PfadFn, Vorschlag, Zeitung } from '../types'
 import { istMittwoch } from './kalender'
 import { spielTnb } from './tnb'
@@ -115,10 +115,18 @@ function gewLabel(inh: Inhalt): string {
 }
 
 function gewinner(spiel: SpielDef, z: Zeitung, inh: Inhalt, g: GewinnerAnzahl, rahmen: string, groesse: number, spalten: number): string {
+  // 1. Spieltag mit eigenem Einführungstext (im Cockpit erfasst): ersetzt den Gewinnerblock. Ohne Text unverändert.
+  const ef = inh.einfuehrung
+  if (inh.tag === 1 && ef && (ef.titel?.trim() || ef.text?.trim())) {
+    const titel = ef.titel?.trim() ? maskiere(ef.titel.trim()) : `Heute startet ${spiel.name}!`
+    const text = ef.text?.trim() ? maskiere(ef.text.trim()).replace(/\n/g, '<br>') : ''
+    return `<div class="gq"><span class="glbl">UNSERE GLÜCKSPILZE</span><b class="gb">${titel}</b>${text ? `<small class="gzit">${text}</small>` : ''}</div>`
+  }
   const { g1, g4 } = gewinnerDaten(spiel, z, inh)
+  const echt = Boolean(inh.gewinner && inh.gewinner.length)
   if (g === 4) {
     const cells = g4
-      .map((x) => `<div class="gz">${bild([x.i, x.name, x.betrag, x.zitat, x.ort, x.foto], groesse, groesse, '50%', `border:3px solid ${rahmen};`)}<div class="gq"><b>${x.betrag}</b>${x.name}<br><small>${x.ort}</small></div></div>`)
+      .map((x) => `<div class="gz">${bild([x.i, x.name, x.betrag, x.zitat, x.ort, x.foto], groesse, groesse, '50%', `border:3px solid ${rahmen};`)}<div class="gq"><b>${x.betrag}</b>${x.name}<br><small>${x.ort}</small>${echt && x.zitat ? `<small class="gz4" style="display:block;font-size:12px;line-height:1.15;font-style:italic;margin-top:2px">${x.zitat}</small>` : ''}</div></div>`)
       .join('')
     return `<div class="glbl">UNSERE GLÜCKSPILZE</div><div class="gg" style="grid-template-columns:repeat(${spalten},1fr)">${cells}</div>`
   }

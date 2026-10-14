@@ -21,7 +21,7 @@ export default function UebersichtSeite() {
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
-        <Link href="/" style={{ color: '#f5f5f7', textDecoration: 'none', fontSize: 13 }}>
+        <Link href="/erweitert" style={{ color: '#f5f5f7', textDecoration: 'none', fontSize: 13 }}>
           ← ContentCreator2026
         </Link>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

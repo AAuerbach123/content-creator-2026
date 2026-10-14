@@ -20,7 +20,14 @@ const EINSTIEG_ZU_JOB: Record<
   nachfrage: undefined,
 }
 
-export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) => void }) {
+export default function KIZentrum({
+  onJobStart,
+  kompakt = false,
+}: {
+  onJobStart: (jobId: string) => void
+  /** schmalere Variante für die Mitte des Funktionskreises */
+  kompakt?: boolean
+}) {
   const { T, sprache } = useSprache()
   const [text, setText] = useState('')
   const [laedt, setLaedt] = useState(false)
@@ -93,17 +100,22 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
     }
   }, [laedt, onJobStart, sprache, text])
 
+  // Telemedia-Farben: Rot #C8102E (Los-Knopf, Akzent), Dunkelrot #9E0B22 (Hover),
+  // zartrosa #F9E6EA / #FBF5F7 (Textfeld), Grau-Text #6E7380, Schrift #1d1d1f.
+  const bereit = !!text.trim() && !laedt
+
   return (
     <section
       style={{
         width: '100%',
-        maxWidth: 760,
-        background: 'rgba(255,255,255,0.92)',
-        border: '1px solid rgba(0,0,0,0.08)',
-        borderRadius: 20,
-        padding: '28px 28px 20px',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-        color: '#0b0b0f',
+        maxWidth: 1000,
+        background: '#ffffff',
+        border: '1px solid #EBC5CD',
+        borderTop: '5px solid #C8102E',
+        borderRadius: kompakt ? 20 : 22,
+        padding: kompakt ? '20px 22px 16px' : '34px 38px 26px',
+        boxShadow: '0 18px 50px rgba(158,11,34,0.13), 0 2px 6px rgba(0,0,0,0.04)',
+        color: '#1d1d1f',
       }}
     >
       <div
@@ -111,18 +123,23 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: 14,
+          marginBottom: kompakt ? 10 : 14,
           gap: 8,
         }}
       >
-        <label htmlFor="ki-input" style={{ fontSize: 20, fontWeight: 600 }}>
+        <label
+          htmlFor="ki-input"
+          style={{ fontSize: kompakt ? 24 : 32, fontWeight: 800, letterSpacing: '-0.01em', color: '#1d1d1f' }}
+        >
           {T('kiPrompt')}
         </label>
-        <HilfePopover
-          de={'Das KI-Zentrum ist der Einstieg. Beschreib dein Ziel — die KI erkennt selbst, welcher der drei Wege passt (nur Ziel / Vorstellung im Kopf / Vorlage). „Los" legt einen Job an und öffnet den JobEditor.'}
-          en={'The AI centre is the entry point. Describe your goal — the AI decides which of the three paths fits (goal only / idea in mind / reference). „Go" creates a job and opens the JobEditor.'}
-          anker="ki-zentrum"
-        />
+        <span style={{ color: '#9E0B22', flexShrink: 0 }}>
+          <HilfePopover
+            de={'Das KI-Zentrum ist der Einstieg. Beschreib dein Ziel — die KI erkennt selbst, welcher der drei Wege passt (nur Ziel / Vorstellung im Kopf / Vorlage). „Los" legt einen Job an und öffnet den JobEditor.'}
+            en={'The AI centre is the entry point. Describe your goal — the AI decides which of the three paths fits (goal only / idea in mind / reference). „Go" creates a job and opens the JobEditor.'}
+            anker="ki-zentrum"
+          />
+        </span>
       </div>
 
       <textarea
@@ -135,22 +152,32 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
             starten()
           }
         }}
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = '#C8102E'
+          e.currentTarget.style.boxShadow = '0 0 0 3px rgba(200,16,46,0.15)'
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = '#E3C3CA'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
         placeholder={T('kiPlaceholder')}
         rows={3}
         disabled={laedt}
         style={{
           width: '100%',
-          resize: 'vertical',
-          minHeight: 80,
-          background: '#faf9f6',
-          color: '#0b0b0f',
-          border: '1px solid rgba(0,0,0,0.12)',
-          borderRadius: 10,
-          padding: '12px 14px',
-          fontSize: 15,
-          lineHeight: 1.5,
+          display: 'block',
+          resize: kompakt ? 'none' : 'vertical',
+          minHeight: kompakt ? 110 : 170,
+          background: '#FBF5F7',
+          color: '#1d1d1f',
+          border: '1.5px solid #E3C3CA',
+          borderRadius: 12,
+          padding: kompakt ? '12px 14px' : '16px 18px',
+          fontSize: kompakt ? 17 : 20,
+          lineHeight: 1.45,
           fontFamily: 'inherit',
           outline: 'none',
+          transition: 'border-color 120ms ease, box-shadow 120ms ease',
         }}
       />
 
@@ -159,41 +186,54 @@ export default function KIZentrum({ onJobStart }: { onJobStart: (jobId: string) 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: 14,
+          marginTop: kompakt ? 10 : 14,
           gap: 12,
           flexWrap: 'wrap',
         }}
       >
-        <MikrofonKnopf onText={(t) => setText((v) => (v ? `${v} ${t}` : t))} />
+        <span style={{ color: '#9E0B22' }}>
+          <MikrofonKnopf onText={(t) => setText((v) => (v ? `${v} ${t}` : t))} />
+        </span>
 
         <button
           type="button"
           onClick={starten}
+          onMouseEnter={(e) => {
+            if (bereit) e.currentTarget.style.background = '#9E0B22'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '#C8102E'
+          }}
           style={{
-            background: '#0b0b0f',
+            background: '#C8102E',
             color: '#ffffff',
             border: 'none',
-            padding: '10px 22px',
-            borderRadius: 10,
+            padding: kompakt ? '12px 28px' : '15px 36px',
+            borderRadius: 12,
             fontWeight: 700,
-            fontSize: 14,
-            cursor: text.trim() && !laedt ? 'pointer' : 'not-allowed',
-            opacity: text.trim() && !laedt ? 1 : 0.5,
+            fontSize: kompakt ? 17 : 19,
+            cursor: bereit ? 'pointer' : 'not-allowed',
+            opacity: bereit ? 1 : 0.5,
             letterSpacing: '0.02em',
+            boxShadow: bereit ? '0 6px 16px rgba(200,16,46,0.30)' : 'none',
+            transition: 'background 120ms ease',
+            fontFamily: 'inherit',
           }}
-          disabled={!text.trim() || laedt}
+          disabled={!bereit}
         >
           {laedt ? T('dialogLaedt') : `${T('kiSenden')} →`}
         </button>
       </div>
 
       {fehler && (
-        <p style={{ marginTop: 12, fontSize: 12, color: '#b91c1c' }}>
+        <p style={{ marginTop: 10, marginBottom: 0, fontSize: 12, color: '#9E0B22' }}>
           ⚠ {fehler}
         </p>
       )}
 
-      <p style={{ marginTop: 12, fontSize: 11, opacity: 0.5 }}>{T('kiHinweis')}</p>
+      {!kompakt && (
+        <p style={{ marginTop: 12, marginBottom: 0, fontSize: 11.5, color: '#6E7380' }}>{T('kiHinweis')}</p>
+      )}
     </section>
   )
 }

@@ -181,7 +181,10 @@ export default function JobEditor({
 
         if (!antwort.ok || !antwort.daten) {
           setDialogFehler(antwort.fehler || null)
-          if (antwort.rohtext) await dialogAnhaengen('system', `${T('dialogRohtext')}\n${antwort.rohtext}`)
+          if (antwort.rohtext) {
+            console.warn('KI-Rohtext (kein gültiges JSON):', antwort.rohtext)
+            await dialogAnhaengen('system', T('dialogRohtext'))
+          }
           return
         }
 

@@ -17,13 +17,14 @@ Willkommen. Wenn du (Claude / anderer Agent) hier arbeitest, lies **zuerst** `LO
 - **Next.js 16** (App Router, `src/` Verzeichnis) + `@opennextjs/cloudflare` (v1). Andreas nennt das „vinext". Deploy: `npm run build:vinext && npm run deploy:vinext`.
 - **Cloudflare Workers** Bindings: `ASSETS` (statische Dateien), `BROWSER` (headless Chrome für Vektor-PDFs; steht in `wrangler.jsonc`).
 - **Basic-Auth-Proxy** in `src/proxy.ts` — nur aktiv, wenn Secret `APP_PASSWORD` gesetzt ist. Lokal offen.
-- **Client-Persistenz**: Dexie/IndexedDB, DB `ContentCreator2026`, aktuelle Version **4**. Stores:
+- **Client-Persistenz**: Dexie/IndexedDB, DB `ContentCreator2026`, aktuelle Version **5**. Stores:
   - `jobs` (Primärschlüssel `id`, Index `kanal, status, aktualisiertAm, faelligAm`)
   - `assets` (Primärschlüssel = SHA-256-Hash, content-adressiert — Regel 2)
   - `snapshots` (letzte 5 pro Job, Rotation — Regel 3)
   - `kiAktionen` (KI-Verlauf mit Tokens + Kosten — Regel 8)
   - `freigaben` (Korrekturportal-Freigaben mit Pins)
   - `vorlagen` (eigene wiederverwendbare Templates)
+  - `serienVarianten` (ab v5: im Serien-Modus übernommene Umsetzungsvarianten je Spiel – Titel/Unterzeile/Schritte/Hinweis, Index `spielId, erstelltAm`)
 - **Ein-Tab-Wächter** via `BroadcastChannel("content-creator-2026:tabguard")` (Regel 4).
 - **DE/EN** über React-Context (`SpracheProvider`) + Wörterbuch in `src/lib/i18n.ts`. Jeder sichtbare String bekommt einen Schlüssel. Harte Strings sind verboten (Regel 6).
 - **Ein-Klick-Start** via `ContentCreator starten.command`. Nach jeder Änderung an einer `.command`-Datei: `chmod +x` (macOS entfernt das Recht bei manchen Umformungen).
@@ -41,6 +42,9 @@ Alle Routen in `src/app/api/`:
 | `/api/tts` | ElevenLabs (multilingual v2) | Voiceover + Wortzeitstempel, Standard: Anneke (`m1xJVQ4AuvhAWXoSQdeA`) |
 | `/api/tts-voices` | ElevenLabs | Voice-Liste (gecached 5 min) |
 | `/api/sfx` | ElevenLabs Sound Effects | Woooosch etc. |
+| `/api/serie-varianten` | Claude | Serien-Modus: 3 Umsetzungsvarianten A/B/C (Titel, Unterzeile, Schritte, Hinweis) bzw. „Text verbessern“; Antwort wird streng geprüft (`src/lib/serie/serie-ki.ts`) |
+| `/api/serie-fragen` | Claude | Serien-Modus: Tagesfragen (Frage + 2 Antworten) als KI-Vorschlag – Fakten prüft der Mensch |
+| `/api/monday` | monday.com GraphQL (`MONDAY_API_TOKEN`) | Spieltage als Items in ein Board; Testmodus (Standard): nur privates Board, keine Personen/Updates/Benachrichtigungen |
 
 Schlüssel kommen aus `.env.local` (lokal) bzw. Cloudflare Secrets (online). Nie in Code oder Chat.
 
@@ -80,6 +84,12 @@ Kernstruktur in `src/lib/types.ts`. Wichtige Erweiterungen:
 
 - Client-seitig: `src/lib/export-raster.ts` (Canvas), `src/lib/export-pdf.ts` (pdf-lib, echte Vektor-Texte), `src/lib/export-paket.ts` (jszip für Social-Paket, Job-Backup, Adobe-Paket).
 - Vektor-PDF in mm mit optionalem 3 mm Beschnitt + Schnittmarken (LOOP Regel 9).
+
+## Serien-Anzeigen (`/serie`)
+
+- Seite `src/app/serie/` (SerieSeite + Panels). Geldregen über den freigegebenen Generator `src/lib/serie/generator.ts` (nicht ändern – `scripts/check-serie.mjs` muss 3276 identisch melden), alle anderen Spiele über `src/lib/serie/spiele/rahmen.ts`.
+- Live-Vorschau = iframe mit `srcDoc`; das Einpass-Skript (`fit-source.ts`) setzt `window.__pruefung`, die Seite liest es aus (gleicher Ursprung) → Prüfampel. Browser-Helfer in `src/lib/serie/serie-client.ts`.
+- Mail: Anhänge (PDF/PNG über SVG-foreignObject → Canvas → pdf-lib, plus eigenständiges HTML) + `navigator.share`; Fallback Download + `mailto:`. Das Tool sendet nie selbst.
 
 ## Korrekturportal
 

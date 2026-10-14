@@ -29,3 +29,13 @@ next-env.d.ts
 # Video-Renderer-Zwischendateien
 /public/remotion/
 /public/renders/
+
+# Prüfseiten / Altdateien (lokal, groß)
+_pruef/
+_alt/
+public/_vorschau-gr/
+_quellen_loop_2026-10/
+_quellen_cockpit/
+
+# Lokale Claude-Einstellungen (nicht ins Repo)
+.claude/settings.local.json

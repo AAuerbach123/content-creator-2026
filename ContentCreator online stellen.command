@@ -16,8 +16,8 @@ if ! npm run deploy:vinext; then
 fi
 
 echo ""; echo "3/3  Sichere Änderungen auf GitHub …"
-git add wrangler.jsonc OFFENE_PUNKTE.md "OpenAI testen.command" "ContentCreator online stellen.command" 2>/dev/null
-git commit -m "chore(deploy): KV-Speicher FREIGABEN für das Korrekturportal + OpenAI-Test + Online-Command" >/dev/null 2>&1 && echo "Commit erstellt."
+git add src wrangler.jsonc OFFENE_PUNKTE.md "OpenAI testen.command" "ContentCreator online stellen.command" 2>/dev/null
+git commit -m "fix(dialog): robustes JSON (Reparatur + Wiederholung) statt Rohtext; KV FREIGABEN; OpenAI-Test; Online-Command" >/dev/null 2>&1 && echo "Commit erstellt."
 git push && echo "GitHub: OK"
 
 echo ""

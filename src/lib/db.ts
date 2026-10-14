@@ -1,6 +1,26 @@
 import Dexie, { type Table } from 'dexie'
 import type { Asset, EigeneVorlage, Freigabe, Job, KIAktion, Snapshot } from './types'
 import { sha256Hex } from './hash'
+import type { GespeicherteVariante } from './serie/serie-ki'
+import type { CockpitVorlage, Kampagne, Spieltag } from './cockpit/typen'
+import type { StammEintrag } from './cockpit/zeitungen-stamm'
+
+/** Echte Gewinnerin / echter Gewinner im Serien-Modus. Foto liegt im Assets-Store (Hash), nie im Datensatz. */
+export type SerienGewinner = {
+  id: string
+  spielId: string
+  monat: string
+  /** Spieltag, in dessen Anzeige die Person erscheint */
+  tag: number
+  /** Zeitungs-IDs, in deren Anzeige die Person erscheint; leer = alle Zeitungen */
+  zeitungen: string[]
+  name: string
+  ort: string
+  betrag: string
+  text: string
+  fotoHash?: string
+  erstelltAm: number
+}
 
 const DB_NAME = 'ContentCreator2026'
 const SNAPSHOT_LIMIT = 5 // Regel 3: letzte 5 Stände pro Job
@@ -44,9 +64,65 @@ class ContentCreatorDB extends Dexie {
       freigaben: 'id, jobId, artefaktId, erstelltAm',
       vorlagen: 'id, name, kanal, erstelltAm',
     })
+    // Version 5: Serien-Modus – übernommene Umsetzungsvarianten je Spiel (Titel/Unterzeile/Schritte/Hinweis)
+    this.version(5).stores({
+      jobs: 'id, kanal, status, aktualisiertAm, faelligAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
+      vorlagen: 'id, name, kanal, erstelltAm',
+      serienVarianten: 'id, spielId, erstelltAm',
+    })
+    // Version 6: Serien-Modus – echte Gewinnerinnen/Gewinner (Foto als Asset-Hash, Regel 2)
+    this.version(6).stores({
+      jobs: 'id, kanal, status, aktualisiertAm, faelligAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
+      vorlagen: 'id, name, kanal, erstelltAm',
+      serienVarianten: 'id, spielId, erstelltAm',
+      serienGewinner: 'id, [spielId+monat], tag, erstelltAm',
+    })
+    // Version 7: Cockpit 2027 – Kampagnen, Spieltage, Cockpit-Vorlagen (Phase 2 LOOP-Cockpit-2027.md)
+    this.version(7).stores({
+      jobs: 'id, kanal, status, aktualisiertAm, faelligAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
+      vorlagen: 'id, name, kanal, erstelltAm',
+      serienVarianten: 'id, spielId, erstelltAm',
+      serienGewinner: 'id, [spielId+monat], tag, erstelltAm',
+      kampagnen: 'id, spielId, monat, aktualisiertAm',
+      spieltage: 'id, kampagneId, datum, status',
+      cockpitVorlagen: 'id, name, erstelltAm',
+    })
+    // Version 8: Stammdaten (Zeitungen & Rufnummern aus Upload; Original-JSON bleibt unverändert)
+    this.version(8).stores({
+      jobs: 'id, kanal, status, aktualisiertAm, faelligAm',
+      assets: 'hash, mimeType, hinzugefuegtAm',
+      snapshots: 'id, jobId, erstelltAm',
+      kiAktionen: 'id, jobId, route, zeitpunkt',
+      freigaben: 'id, jobId, artefaktId, erstelltAm',
+      vorlagen: 'id, name, kanal, erstelltAm',
+      serienVarianten: 'id, spielId, erstelltAm',
+      serienGewinner: 'id, [spielId+monat], tag, erstelltAm',
+      kampagnen: 'id, spielId, monat, aktualisiertAm',
+      spieltage: 'id, kampagneId, datum, status',
+      cockpitVorlagen: 'id, name, erstelltAm',
+      stammdaten: 'id',
+    })
   }
 
   vorlagen!: Table<EigeneVorlage, string>
+  serienVarianten!: Table<GespeicherteVariante, string>
+  serienGewinner!: Table<SerienGewinner, string>
+  kampagnen!: Table<Kampagne, string>
+  spieltage!: Table<Spieltag, string>
+  cockpitVorlagen!: Table<CockpitVorlage, string>
+  stammdaten!: Table<StammEintrag, string>
 }
 
 let instance: ContentCreatorDB | undefined
@@ -115,12 +191,15 @@ export async function jobLoeschen(id: string): Promise<void> {
 // mehr referenziert wird. Liefert Anzahl gelöschter Assets zurück.
 export async function assetsAufraeumen(): Promise<{ geloescht: number; behalten: number }> {
   const db = getDb()
-  const [jobs, snaps, vorlagen] = await Promise.all([
+  const [jobs, snaps, vorlagen, gewinner] = await Promise.all([
     db.jobs.toArray(),
     db.snapshots.toArray(),
     db.vorlagen.toArray(),
+    db.serienGewinner.toArray(),
   ])
   const gebraucht = new Set<string>()
+  // Gewinnerfotos des Serien-Modus sind ebenfalls Assets → nie als verwaist löschen
+  for (const g of gewinner) if (g.fotoHash) gebraucht.add(g.fotoHash)
   const sammle = (job: Job | undefined) => {
     if (!job) return
     for (const a of job.artefakte || []) {
@@ -294,4 +373,101 @@ export async function vorlagenLaden(): Promise<EigeneVorlage[]> {
 
 export async function vorlageLoeschen(id: string): Promise<void> {
   await getDb().vorlagen.delete(id)
+}
+
+// ------------------- Serien-Modus: gespeicherte Umsetzungsvarianten -------------------
+
+export async function serienVarianteSpeichern(v: GespeicherteVariante): Promise<void> {
+  await getDb().serienVarianten.put(v)
+}
+
+export async function serienVariantenLaden(spielId: string): Promise<GespeicherteVariante[]> {
+  const liste = await getDb().serienVarianten.where('spielId').equals(spielId).toArray()
+  return liste.sort((a, b) => b.erstelltAm - a.erstelltAm)
+}
+
+export async function serienVarianteLoeschen(id: string): Promise<void> {
+  await getDb().serienVarianten.delete(id)
+}
+
+// ------------------- Serien-Gewinner -------------------
+
+export async function serienGewinnerLaden(spielId: string, monat: string): Promise<SerienGewinner[]> {
+  const liste = await getDb().serienGewinner.where('[spielId+monat]').equals([spielId, monat]).toArray()
+  return liste.sort((a, b) => a.tag - b.tag || a.erstelltAm - b.erstelltAm)
+}
+
+export async function serienGewinnerSpeichern(g: SerienGewinner): Promise<void> {
+  await getDb().serienGewinner.put(g)
+}
+
+export async function serienGewinnerLoeschen(id: string): Promise<void> {
+  await getDb().serienGewinner.delete(id)
+}
+
+// ------------------- Cockpit 2027: Kampagnen -------------------
+
+export async function kampagneSpeichern(k: Kampagne): Promise<void> {
+  const aktuell: Kampagne = { ...k, aktualisiertAm: Date.now() }
+  await getDb().kampagnen.put(aktuell)
+}
+
+export async function kampagneLaden(id: string): Promise<Kampagne | undefined> {
+  return getDb().kampagnen.get(id)
+}
+
+export async function kampagneFuerSpiel(spielId: string): Promise<Kampagne[]> {
+  const liste = await getDb().kampagnen.where('spielId').equals(spielId).toArray()
+  return liste.sort((a, b) => b.aktualisiertAm - a.aktualisiertAm)
+}
+
+export async function alleKampagnen(): Promise<Kampagne[]> {
+  return getDb().kampagnen.orderBy('aktualisiertAm').reverse().toArray()
+}
+
+export async function kampagneLoeschen(id: string): Promise<void> {
+  const db = getDb()
+  await db.transaction('rw', db.kampagnen, db.spieltage, async () => {
+    await db.kampagnen.delete(id)
+    const ids = await db.spieltage.where('kampagneId').equals(id).primaryKeys()
+    if (ids.length) await db.spieltage.bulkDelete(ids as string[])
+  })
+}
+
+// ------------------- Cockpit 2027: Spieltage -------------------
+
+export async function spieltagSpeichern(s: Spieltag): Promise<void> {
+  const aktuell: Spieltag = { ...s, aktualisiertAm: Date.now() }
+  await getDb().spieltage.put(aktuell)
+}
+
+export async function spieltageLaden(kampagneId: string): Promise<Spieltag[]> {
+  const liste = await getDb().spieltage.where('kampagneId').equals(kampagneId).toArray()
+  return liste.sort((a, b) => a.datum.localeCompare(b.datum))
+}
+
+export async function spieltagLaden(id: string): Promise<Spieltag | undefined> {
+  return getDb().spieltage.get(id)
+}
+
+export async function spieltagLoeschen(id: string): Promise<void> {
+  await getDb().spieltage.delete(id)
+}
+
+// ------------------- Cockpit 2027: Vorlagen (Baustein V) -------------------
+
+export async function cockpitVorlageSpeichern(v: CockpitVorlage): Promise<void> {
+  await getDb().cockpitVorlagen.put(v)
+}
+
+export async function cockpitVorlagenLaden(): Promise<CockpitVorlage[]> {
+  return getDb().cockpitVorlagen.orderBy('erstelltAm').reverse().toArray()
+}
+
+export async function cockpitVorlageLaden(id: string): Promise<CockpitVorlage | undefined> {
+  return getDb().cockpitVorlagen.get(id)
+}
+
+export async function cockpitVorlageLoeschen(id: string): Promise<void> {
+  await getDb().cockpitVorlagen.delete(id)
 }

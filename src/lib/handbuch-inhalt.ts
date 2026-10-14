@@ -364,6 +364,15 @@ export const HANDBUCH_ABSCHNITTE: HandbuchAbschnitt[] = [
       'Via the start card “Presentations” or /praesentationen. Three modes: (1) “Single” – one publisher name (optional) + terms (AZS in cents, RSP share in %) → one PPTX. (2) “Publisher list (CSV)” – one line per publisher Name;AZS-cents;RSP-percent → ZIP with all PPTX plus a CSV overview. (3) “Variants (CSV)” – one line per combination AZS-cents;RSP-percent (no publisher name) → ZIP of variant PPTX. Optional without speaker notes (good for PDF printing) and optional PDF (needs LibreOffice at /Applications/LibreOffice.app). Calculation stays identical to the original: 24 game days + 4 super days = 14,000 € prize money, 120,000 calls/month, 20 % share for AZS; RSP: 20 % of 1,200,000 × 0.36 € − 20 % × 70,000 €. pptxgenjs@4.0.1 must be installed once (see OFFENE_PUNKTE.md #13).',
   },
   {
+    anker: 'cockpit',
+    titelDe: 'Cockpit 2027 (einfache Bedienung je Spielkonzept)',
+    titelEn: 'Cockpit 2027 (simple operation per game concept)',
+    koerperDe:
+      'Über die Startkarte „Cockpit 2027 (einfach)" oder direkt /cockpit. Jeder Monat hat sein eigenes Spielkonzept mit nur fünf Phasen: 1 Vorlage (einmal, Grafiker), 2 Kampagne einstellen (einmal), 3 Rätsel erstellen (für jeden Spieltag), 4 Gewinner vom Vortag (täglich, inkl. Gewinnertext), 5 Prüfen und freigeben (täglich). Drei gemeinsame Bausteine sind in allen Spielen gleich: V (Vorlage importieren), G (Gewinner erfassen), F (Prüfen und freigeben). Ziel: ein ganzer Spieltag inkl. Gewinner in unter fünf Minuten – ohne Anleitung. Oben rechts wechselt der Rollen-Umschalter zwischen Grafiker, Redaktion und Prüfer; jede Rolle sieht zuerst ihre Aufgaben. Die bisherige Oberfläche (JobEditor, Serien-Modus, Präsentationen) bleibt über „Erweitert ↗" erreichbar.',
+    koerperEn:
+      'Via the start card "Cockpit 2027 (simple)" or /cockpit directly. Every month has its own game concept with just five phases: 1 Template (once, designer), 2 Set up campaign (once), 3 Create puzzles (per game day), 4 Winners of previous day (daily, incl. winner text), 5 Check and approve (daily). Three shared blocks are the same in every game: V (import template), G (enter winners), F (check and approve). Goal: a complete game day incl. winners in under five minutes – without instructions. The role switch in the top right toggles Designer, Editorial and Reviewer; each role sees its own tasks first. The previous interface (JobEditor, series mode, presentations) remains reachable via "Advanced ↗".',
+  },
+  {
     anker: 'grenzen',
     titelDe: 'Grenzen der KI',
     titelEn: 'AI limits',

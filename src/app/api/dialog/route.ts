@@ -5,8 +5,7 @@
 import { NextResponse } from 'next/server'
 import {
   ClaudeFehler,
-  claudeAnfragen,
-  jsonAusText,
+  claudeJson,
   type ClaudeNachricht,
 } from '@/lib/anthropic'
 import {
@@ -101,14 +100,14 @@ export async function POST(request: Request) {
   ]
 
   try {
-    const antwort = await claudeAnfragen({
+    const antwort = await claudeJson<Record<string, unknown>>({
       systemPrompt: system,
       nachrichten,
       maxTokens: body.aktion === 'drei-richtungen' ? 2200 : 1400,
       temperature: body.aktion === 'drei-richtungen' ? 0.9 : 0.6,
     })
 
-    const daten = jsonAusText<Record<string, unknown>>(antwort.text)
+    const daten = antwort.daten
 
     return NextResponse.json({
       ok: true,

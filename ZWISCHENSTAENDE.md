@@ -336,3 +336,45 @@
 
 **Bewusst verschoben (Entscheidungs-Log):**
 - **Modell-Umschalter AZS/RSP, Preis-Editor pro Spiel/Monat, Jackpot-Schalter, Dateinamen mit Modell, Merken der letzten Kombination.** Diese Teile greifen tief in `rahmen.ts` + `generator.ts` ein, und Geldregen 2027-11/-12 muss weiter 100 % bytegleich bleiben (`check-serie`). Darum als eigener, zusammenhängender Loop vermerkt: `IDEEN_NAECHSTE_LOOPS.md` #32 (Umschalter+Preise+Jackpot), #33 (Merken). Offene fachliche Rückfragen stehen in `public/serie/OFFENE_PUNKTE.md` #19 (RSP bei Rätselspielen) und #20 (Jackpot bei Rätselspielen).
+
+### Phase 8 — Cockpit 2027 (einfache Bedienung je Spielkonzept) ✅
+
+**Was geht:**
+- Neue Route `/cockpit` mit eigenem Layout (`src/app/cockpit/layout.tsx`, `cockpit.css`): Markenfarben Telemedia (`--tm-rot` #9B1438, Gold #E8B64A u. a.), blasser Markenhintergrund (radiale Gradienten mit 4–8 % Deckkraft), weiße Karten mit `--cockpit-schatten-weich`, sticky Kopfzeile und sticky Aktionsleiste.
+- **Startseite `/cockpit`** (`CockpitStartseite.tsx`): Frage „Welches Spiel bearbeitest du?" + 9 Kacheln nach Monat (Geldregen + 8 weitere Spielkonzepte, sortiert nach `monate[0]`). Daneben „Heute zu tun" (leerer Zustand – zieht später aus Status-Chips der Spieltage) und „Gemeinsame Bausteine V/G/F".
+- **Startkarte „Cockpit 2027 (einfach)"** auf dem Kreis (Pos. 1, rot, DE/EN) → ergänzt die bestehende Kachelsammlung ohne irgendwas zu entfernen.
+- **Design-System** unter `src/components/cockpit/`: `Karte`, `Schrittleiste`, `StatusChip` (grau/gelb/rot/grün mit Symbol), `Aktionsleiste`, `Feld` (Label + Zähler + Fehler + aria-describedby), `LeererZustand`, `Hinweis` (aria-live), `VorschauRahmen`, `RollenUmschalter` (Grafiker / Redaktion / Prüfer, persistiert in localStorage).
+- **Datenmodell** (`src/lib/cockpit/typen.ts`): `Kampagne`, `Spieltag`, `CockpitVorlage`, `Preise` (geldpakete / tagespreis / juli), `SpieltagRaetsel`, `SpieltagGewinner`. **Dexie v7** in `src/lib/db.ts` erweitert um `kampagnen`, `spieltage`, `cockpitVorlagen` – Migration ohne Datenverlust über Dexie-Versionen.
+- **Adapter** `src/lib/cockpit/zu-serie.ts`: wandelt Kampagne + Spieltage in die bestehenden Serien-Eingaben (`fragen_2027.json`-Struktur und `Inhalt[]`) – kein zweiter Generator, nur Übersetzung.
+- **Import** `src/lib/cockpit/import.ts`: liest `public/serie/*.json` und legt eine Geldregen-Kampagne 2027-11 oder -12 mit allen 30 Spieltagen an. Erlaubt sofortigen Test mit echten Daten.
+- **Spiel-Seite `/cockpit/<spielId>`** (`SpielSeite.tsx` + Dynamic-Route): 5-Phasen-Stepper (Vorlage / Kampagne / Rätsel / Gewinner / Freigabe). Phasen tauschen den Inhaltsbereich; Zurück/Weiter unter dem Inhalt.
+- **Phase 1 Vorlage** (`VorlagePanel.tsx`): Weg „Ja, Datei hochladen" ↔ „Nein, Vorschlag A/B/C". Upload geht via `assetSpeichern` (Regel 2 – kein Blob im Job-JSON) und ruft `/api/analyze-template` auf; A/B/C speichert ohne Datei. „Vorlage freigeben und sperren" setzt `gesperrt=true`.
+- **Phase 2 Kampagne** (`KampagnePanel.tsx`): Monat (vorbelegt), Modell (AZS/RSP) nur bei „AZS oder RSP"-Spielen, Antwortformat (Lösungswort / Endziffer), Tagespreis + Supermittwoch. Für **Geldregen** erscheint zusätzlich ein Knopf **„Bestehende Kampagne übernehmen"**, der die 30 Nov- bzw. Dez-Spieltage sofort anlegt.
+- **Phase 3 Rätsel** (`RaetselPanel.tsx` + `raetsel-regeln.ts`): Spieltag-Auswahl, Formular passend zum Antwortformat (Frage/Antwort 1+2/richtig oder Lösungswort). Prüfregeln je Spielkonzept als Klartext-Liste (`geldregen` prüft Pflichtfeld „Quelle" + doppelte Frage, `aus2mach1` prüft Lösungswort+Begriffe, `fehlerjagd` prüft Anzahl, `brueckenraetsel` prüft Wortpaare, `gitterraetsel` prüft Wörterliste …). Stapel-/Tagesmodus-Umschalter (Stapel-KI selbst folgt in Loop 2).
+- **Phase 4 Gewinner** (`GewinnerPanel.tsx`): Gewinnerkarten mit Name (Pflicht), Wohnort (freiwillig), Betrag (Auswahl aus den Preisstufen der Kampagne), Foto-Upload (als Asset-Hash, Regel 2), Einwilligung (Pflicht vor Freigabe), **Gewinnertext mit Zeichenzähler** (max. 90 Zeichen bei 1 Gewinner, max. 45 bei ≥ 2 – Grenzen als Konstanten `GEWINNERTEXT_MAX_1 / _4`). Knopf **„Vorschlag"** schickt Stichworte an `/api/dialog` und füllt das Feld. 1. Spieltag zeigt automatisch den Hinweis „keine Gewinner".
+- **Phase 5 Freigabe** (`FreigabePanel.tsx`): sammelt alle Prüffehler (Rätselregeln + Gewinnerpflicht + Zeichenzähler), roter Knopf „Prüfen und freigeben" (**Cmd/Ctrl+Enter** als Shortcut); Rolle „Prüfer" sieht zusätzlich „Korrektur anmerken". Freigabe setzt `status='freigegeben'` + `freigabe={wer,wann,kommentar}`.
+- **Gemeinsame Bausteine** `/cockpit/baustein/v`, `/g`, `/f`: eigenständige Seiten, die unabhängig vom Spiel-Flow Vorlagen verwalten (Bibliothek), Gewinner nachtragen und Spieltage freigeben.
+- **i18n** komplett DE/EN (`cockpit*`-Schlüssel in `src/lib/i18n.ts`). Harte Strings mit kleinen Erklärungen (zeichnet Rolle „Grafiker/Redaktion/Prüfer") bewusst in Komponenten (Hilfetexte, keine Fachbegriffe für Nutzer).
+- **Handbuch-Anker** `cockpit` (DE/EN) – wird von der neuen Startkarte angesprungen; `check-hilfe.mjs` grün.
+- **Prüfskript** `scripts/check-kontrast.mjs`: berechnet WCAG-Kontraste aller `--tm-*`-Paare → `✓ Alle textrelevanten Paare erreichen die WCAG-2.2-AA-Mindestkontraste.`
+- **Abgleichtabelle** `docs/cockpit-abgleich.md`: jeder Knoten der 13 Flowchart-Seiten → vorhandene Datei im Code oder „fehlt". Zehn Lücken identifiziert (Quelle-Pflichtfeld, Doppelte-Frage-Prüfung, Felder-Zuordnung, Musterdaten-Vorschau, Gewinnertext, Rollen-Umschalter, Status-Chips, Stapel-KI, Jackpot-Schalter, Preis-Editor); Punkte 1–7 im Cockpit umgesetzt, 8–10 in Loop 2.
+- **Durchlauf-Test** `docs/cockpit-test.md`: 12-Schritt-Checkliste mit Zielzeit ≈ 2:40 min. Heuristik-Prüfung (Nielsen 10) und WCAG 2.2 AA abgehakt.
+- `tsc --noEmit` 0 Fehler · `check-i18n.mjs` 317 Schlüssel · `check-umlaute.mjs` grün · `check-hilfe.mjs` 39 Panels · `check-spielauswahl.mjs` 12 Einträge · **`check-serie.mjs 2027-11` 3213/3213 identisch** (Geldregen-Regel 5 eingehalten).
+
+**Wie testen:**
+1. `npm run dev` → Startseite → neue Karte **„Cockpit 2027 (einfach)"** (Position 1) → `/cockpit`.
+2. Kachel **„Geldregen"** → Phase 1 „Nein, Vorschlag A/B/C" → A → „Vorlage übernehmen".
+3. Weiter → Phase 2 → **„Bestehende Kampagne übernehmen"** (für 2027-11): legt 30 Spieltage an.
+4. Weiter → Phase 3 → ersten Spieltag öffnen, Quelle eintragen (zeigt dann grüne Prüfung).
+5. Weiter → Phase 4 → Spieltag 2 wählen, „+ Gewinner hinzufügen", Felder füllen, Gewinnertext tippen (Zähler beobachten), optional „Vorschlag" mit Stichwort „neue Waschmaschine" testen.
+6. Weiter → Phase 5 → **Cmd/Ctrl+Enter** → Status wird grün.
+7. Für andere Spiele: `/cockpit/aus2mach1`, `/cockpit/fehlerjagd`, `/cockpit/kreuz-quer-april` etc. – Rätsel-Panel passt sich an.
+8. `node scripts/check-kontrast.mjs` → alle Paare grün. `node scripts/check-serie.mjs 2027-11` → 3213 identisch.
+
+**Bewusst in Loop 2 verschoben (Entscheidungs-Log):**
+- **Felder-Zuordnung per Klick** auf hochgeladene PDF/PNG-Vorlage. Grund: braucht Konva-Overlay + Koordinaten-Picker; der analysierte Textblock-Liste reicht als Zwischenstand.
+- **Stapel-KI für die ganze Kampagne auf einen Rutsch.** Grund: braucht Serverroute mit Streaming + Rate-Limit; der tägliche Modus deckt den Alltag ab.
+- **Jackpot-Schalter je Juli-Woche + Preis-Editor mit abgeleiteten Texten.** Grund: greift in `rahmen.ts` / `generator.ts` ein – gleicher Grund wie IDEEN_NAECHSTE_LOOPS.md #32/#33.
+- **monday-Upload direkt aus Phase 5.** Grund: `/api/monday` ist Testmodus auf TEST-Boards; produktive Übertragung verlangt Secret-Rotation. Übergabe läuft weiterhin über den Serien-Modus (Phase 5 verweist darauf).
+- **Foto-Zuschnitt automatisch** (Gesicht mittig). Grund: braucht Face-Detection-Paket (nur Mac-npm) – mittlerer Zuschnitt + manuell nachjustieren im Vorschau-Rahmen reicht erstmal.
+- **Shortcut-Übersicht** (`N` nächster Tag, `G` Gewinner, `?` Hilfe). Grund: nur Cmd/Ctrl+Enter ist belegt – der Rest wird mit mehr Nutzung priorisiert.
