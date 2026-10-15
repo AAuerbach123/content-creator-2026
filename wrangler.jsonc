@@ -32,7 +32,7 @@
 	"vars": {
 		"CF_ACCESS_TEAM_DOMAIN": "snowy-band-06c6.cloudflareaccess.com",
 		"CF_ACCESS_AUD": "a124fd7062b64d59718a8f654774b5beb078461fd64014987896d39509227995",
-		"COCKPIT_ADMINS": "aauerbach1234@gmail.com"
+		"COCKPIT_ADMINS": "aauerbach1234@gmail.com,jw@telemedia-interactive.de"
 	}
 	// Secrets (APP_PASSWORD, OPENAI_API_KEY, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY, MONDAY_API_TOKEN …)
 	// werden ausschliesslich per `wrangler secret put …` gesetzt – nie ins Repo.
