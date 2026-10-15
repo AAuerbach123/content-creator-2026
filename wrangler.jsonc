@@ -1,23 +1,39 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "content-creator-2026",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-08-15",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": ".open-next/assets"
-  },
-  "browser": {
-    "binding": "BROWSER"
-  },
-  "observability": {
-    "enabled": true
-  },
-  // Korrekturportal: Freigaben + Kunden-Pins (cross-browser). Angelegt am 02.10.2026.
-  "kv_namespaces": [
-    { "binding": "FREIGABEN", "id": "9557d28444cb4d09a2084b5f550da63a" }
-  ]
-  // Secrets (APP_PASSWORD, OPENAI_API_KEY, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY)
-  // werden ausschliesslich per `wrangler secret put …` gesetzt – nie ins Repo.
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "content-creator-2026",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-08-15",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".open-next/assets"
+	},
+	"browser": {
+		"binding": "BROWSER"
+	},
+	"observability": {
+		"enabled": true
+	},
+	// FREIGABEN: Korrekturportal (Job-Editor), angelegt 02.10.2026.
+	// COCKPIT_ASSETS: Cockpit-Fotos und -Dateien, angelegt 15.10.2026.
+	"kv_namespaces": [
+		{ "binding": "FREIGABEN", "id": "9557d28444cb4d09a2084b5f550da63a" },
+		{ "binding": "COCKPIT_ASSETS", "id": "1117e72ab0d84374bab6374d16bdf15a" }
+	],
+	// Cockpit 2027: zentraler Speicher (Dokumente + Protokoll), angelegt 15.10.2026.
+	"d1_databases": [
+		{ "binding": "COCKPIT_DB", "database_name": "cockpit-db", "database_id": "5ce11620-4ef1-4544-8142-4c188924adca" }
+	],
+	// Cloudflare Access (Zero Trust, Team „snowy-band-06c6“), eingerichtet 15.10.2026.
+	// Nicht geheim: Team-Domain und AUD-Tag stehen auch in jedem Access-Token.
+	// Weitere Admins vergibt man im Cockpit unter Mehr → Team & Einstellungen.
+	"vars": {
+		"CF_ACCESS_TEAM_DOMAIN": "snowy-band-06c6.cloudflareaccess.com",
+		"CF_ACCESS_AUD": "a124fd7062b64d59718a8f654774b5beb078461fd64014987896d39509227995",
+		"COCKPIT_ADMINS": "aauerbach1234@gmail.com"
+	}
+	// Secrets (APP_PASSWORD, OPENAI_API_KEY, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY, MONDAY_API_TOKEN …)
+	// werden ausschliesslich per `wrangler secret put …` gesetzt – nie ins Repo.
 }
