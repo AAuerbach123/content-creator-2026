@@ -92,7 +92,9 @@ export function pruefeInhalt(
 
   for (const l of z.logos) pf(html.includes(`logos/${l}.png`), `Logo ${l} fehlt`)
 
-  pf(!html.includes('undefined') && !html.includes('NaN'), 'Technischer Fehler im Text (undefined/NaN)')
+  // Eingebettete Bilder (data:-URLs der Gewinnerfotos) ausnehmen – Base64 enthält zufällig „NaN“.
+  const ohneBilder = html.replace(/data:[a-z]+\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=]+/gi, '')
+  pf(!/\bundefined\b/.test(ohneBilder) && !/\bNaN\b/.test(ohneBilder), 'Technischer Fehler im Text (undefined/NaN)')
 
   return { fehler, platzhalter: [...new Set(platzhalter)] }
 }

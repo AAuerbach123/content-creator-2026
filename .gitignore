@@ -42,3 +42,5 @@ _quellen_cockpit/
 
 # Cockpit: lokaler Server-Speicher (npm run dev)
 /.cockpit-daten/
+/_film/
+/Erklaerfilm/*.mp4

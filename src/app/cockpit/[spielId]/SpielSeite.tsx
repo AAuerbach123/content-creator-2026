@@ -14,6 +14,7 @@ import type { CockpitVorlage, Kampagne, Spieltag } from '@/lib/cockpit/typen'
 import Schrittleiste from '@/components/cockpit/Schrittleiste'
 import StatusChip from '@/components/cockpit/StatusChip'
 import VorlagePanel from '@/components/cockpit/VorlagePanel'
+import VorschlagWahl from '@/components/cockpit/VorschlagWahl'
 import KampagnePanel from '@/components/cockpit/KampagnePanel'
 import ZeitungenKurzinfo from '@/components/cockpit/ZeitungenKurzinfo'
 import RaetselPanel from '@/components/cockpit/RaetselPanel'
@@ -122,6 +123,18 @@ export default function SpielSeite({ spielId }: Props) {
         <VorlagePanel
           vorlage={vorlage}
           onGespeichert={(v) => setVorlage(v)}
+          startAbc={Boolean(kampagne?.vorlageAbc)}
+          abcWahl={kampagne ? (
+            <VorschlagWahl
+              kampagne={kampagne}
+              spieltage={spieltage}
+              spieltag={spieltag}
+              onGewaehlt={(k, geaendert) => {
+                setKampagne(k)
+                if (geaendert.length) setSpieltage((alt) => alt.map((x) => geaendert.find((g) => g.id === x.id) ?? x))
+              }}
+            />
+          ) : undefined}
         />
       )}
 
@@ -133,6 +146,7 @@ export default function SpielSeite({ spielId }: Props) {
           spielMonate={meta.monate}
           modellWahl={meta.modell}
           istGeldregen={meta.istGeldregen}
+          vorschlag={vorlage?.quelle === 'abc' ? vorlage.abc : undefined}
           onFertig={async (k) => {
             setKampagne(k)
             const st = await spieltageLaden(k.id)
@@ -185,7 +199,7 @@ export default function SpielSeite({ spielId }: Props) {
         />
       )}
       </div>
-      {phase >= 2 && kampagne && spieltag && <VorschauSpalte kampagne={kampagne} spieltag={spieltag} />}
+      {phase >= 2 && kampagne && spieltag && <VorschauSpalte kampagne={kampagne} spieltag={spieltag} onGestaltungAendern={() => setPhase(0)} />}
       </div>
 
       <div style={{ marginTop: 24, display: 'flex', gap: 8 }}>

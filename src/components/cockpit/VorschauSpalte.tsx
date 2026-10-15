@@ -1,7 +1,7 @@
 'use client'
 
 // Live-Vorschau neben dem Formular (Vorschlag 3): jede Eingabe erscheint sofort in der echten Anzeige.
-// Umschalter: Zeitung · Gewinner-Fassung (1 / 4) · Gestaltungsvorschlag (A / B / C).
+// Umschalter: Zeitung · Gewinner-Fassung (1 / 4). Der Gestaltungsvorschlag (A / B / C) kommt aus der Kampagne (Schritt 1).
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
@@ -11,16 +11,16 @@ import type { Kampagne, Spieltag } from '@/lib/cockpit/typen'
 import type { Inhalt } from '@/lib/serie/spiele/typen'
 import type { GewinnerAnzahl, Vorschlag } from '@/lib/serie/types'
 
-type Props = { kampagne: Kampagne; spieltag?: Spieltag }
+type Props = { kampagne: Kampagne; spieltag?: Spieltag; onGestaltungAendern?: () => void }
 
-export default function VorschauSpalte({ kampagne, spieltag }: Props) {
+export default function VorschauSpalte({ kampagne, spieltag, onGestaltungAendern }: Props) {
   const { sprache } = useSprache()
   const de = sprache === 'de'
   const monat = spieltag?.datum.slice(0, 7) ?? kampagne.monat.slice(0, 7)
   const [kontext, setKontext] = useState<AnzeigenKontext | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
   const [zeitungId, setZeitungId] = useState('')
-  const [vorschlag, setVorschlag] = useState<Vorschlag>((kampagne.vorlageAbc as Vorschlag) ?? 'A')
+  const vorschlag: Vorschlag = (kampagne.vorlageAbc as Vorschlag) ?? 'A'
   const [gewinnerWahl, setGewinnerWahl] = useState<'auto' | GewinnerAnzahl>('auto')
   const [inhalt, setInhalt] = useState<Inhalt | null>(null)
   const [pruef, setPruef] = useState<PruefStatus>({ laedt: true, ergebnis: null })
@@ -69,11 +69,14 @@ export default function VorschauSpalte({ kampagne, spieltag }: Props) {
             </button>
           ))}
         </div>
-        <div className="segment" role="radiogroup" aria-label={de ? 'Gestaltungsvorschlag' : 'Design proposal'}>
-          {(['A', 'B', 'C'] as Vorschlag[]).map((v) => (
-            <button key={v} type="button" role="radio" aria-checked={vorschlag === v} className={vorschlag === v ? 'an' : ''} onClick={() => setVorschlag(v)}>{v}</button>
-          ))}
-        </div>
+        <span className="cockpit-chip grau" title={de ? 'Gilt für Vorschau, Prüfung, Kundenportal, PDFs und monday' : 'Applies everywhere'}>
+          {de ? `Gestaltung ${vorschlag}` : `Design ${vorschlag}`}
+          {onGestaltungAendern && (
+            <button type="button" className="cockpit-knopf text" style={{ minHeight: 0, padding: '0 0 0 8px' }} onClick={onGestaltungAendern}>
+              {de ? 'ändern' : 'change'}
+            </button>
+          )}
+        </span>
       </div>
       {html && z ? (
         <AnzeigeVorschau html={html} hoehe={hoeheFuer(z)} titel={de ? 'Anzeigen-Vorschau' : 'Ad preview'} maxHoehe={720} onPruefung={setPruef} />

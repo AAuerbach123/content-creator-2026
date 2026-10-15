@@ -17,10 +17,12 @@ type Props = {
   spielMonate: string[]
   modellWahl: 'RSP' | 'AZS oder RSP'
   istGeldregen: boolean
+  /** In Schritt 1 gewählter Gestaltungsvorschlag – wird in die neue Kampagne übernommen */
+  vorschlag?: 'A' | 'B' | 'C'
   onFertig: (k: Kampagne) => void
 }
 
-export default function KampagnePanel({ spielId, spielName, spielMonate, modellWahl, istGeldregen, onFertig }: Props) {
+export default function KampagnePanel({ spielId, spielName, spielMonate, modellWahl, istGeldregen, vorschlag, onFertig }: Props) {
   const { T, sprache } = useSprache()
   const [bestehend, setBestehend] = useState<Kampagne[]>([])
   const [monat, setMonat] = useState<string>(spielMonate[0] ?? '')
@@ -52,6 +54,7 @@ export default function KampagnePanel({ spielId, spielName, spielMonate, modellW
         }
       : { art: 'tagespreis', tagespreis, supermittwoch }
     const k: Kampagne = {
+      vorlageAbc: vorschlag,
       id: crypto.randomUUID(),
       spielId,
       monat,
@@ -94,6 +97,7 @@ export default function KampagnePanel({ spielId, spielName, spielMonate, modellW
       const q = await quellenLaden()
       const paket = geldregenImportieren(q, monat, [])
       if (!paket) throw new Error(sprache === 'de' ? 'Keine Daten für diesen Monat.' : 'No data for this month.')
+      if (vorschlag && !paket.kampagne.vorlageAbc) paket.kampagne.vorlageAbc = vorschlag
       await kampagneSpeichern(paket.kampagne)
       for (const s of paket.spieltage) await spieltagSpeichern(s)
       setBestehend((v) => [paket.kampagne, ...v])

@@ -19,6 +19,12 @@ Stand 14.10.2026. Reihenfolge einhalten. Die Bezeichnungen im Cloudflare-Dashboa
 
 ## Schritt 2 · Anmeldung für Telemedia (Cloudflare Access, kostenlos bis 50 Personen)
 
+> **Erledigt am 15.10.2026** (Schritte 2 und 3): Team `snowy-band-06c6`, Login per E-Mail-Code (One-time PIN),
+> Policy „Telemedia“ (alle `@telemedia-interactive.de` + aauerbach1234@gmail.com), Worker komplett geschützt,
+> Application „Cockpit oeffentlich (Kundenportal, Foto-Link)“ mit Bypass für die Pfade aus Schritt 3 (+ `/review/*`, `/api/freigabe` für das alte Korrekturportal).
+> Team-Domain, AUD-Tag und `COCKPIT_ADMINS` stehen als `vars` in `wrangler.jsonc` (keine Secrets nötig).
+> Weitere Personen ausserhalb von @telemedia-interactive.de: Zero Trust → Access controls → Policies → „Telemedia“ → E-Mail ergänzen.
+
 1. dash.cloudflare.com → **Zero Trust** (beim ersten Mal einen Team-Namen wählen, z. B. `telemedia` → ergibt die *Team-Domain* `telemedia.cloudflareaccess.com`; Free-Plan reicht).
 2. **Access → Applications → Add an application → Self-hosted**
    - Name: `Cockpit`

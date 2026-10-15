@@ -238,7 +238,7 @@ Alle müssen grün melden; `check-serie 2027-11/12` muss weiterhin **3213 identi
 
 ## Cockpit-Ausbau „Team, Kunden, monday“ (14.10.2026) – offen
 
-1. **Einrichtung durch Andreas** (Anleitung `docs/einrichtung-login-und-kunden.md`): „Cockpit-Server einrichten.command“, Cloudflare Access + öffentliche Ausnahmen, Secrets (`CF_ACCESS_*`, `COCKPIT_ADMINS`, `CF_ACCOUNT_ID`, `CF_BROWSER_TOKEN`, optional `RESEND_API_KEY`/`MAIL_ABSENDER`/`TEAMS_WEBHOOK_URL`), danach online stellen.
+1. ~~Einrichtung Access/Ausnahmen~~ erledigt 15.10.2026 (siehe Anleitung, Schritt 2+3). Offen: Secrets für PDF online (`CF_ACCOUNT_ID`, `CF_BROWSER_TOKEN`), optional Mail/Teams. — Ursprünglich: **Einrichtung durch Andreas** (Anleitung `docs/einrichtung-login-und-kunden.md`): „Cockpit-Server einrichten.command“, Cloudflare Access + öffentliche Ausnahmen, Secrets (`CF_ACCESS_*`, `COCKPIT_ADMINS`, `CF_ACCOUNT_ID`, `CF_BROWSER_TOKEN`, optional `RESEND_API_KEY`/`MAIL_ABSENDER`/`TEAMS_WEBHOOK_URL`), danach online stellen.
 2. **Telemedia liefert:** TNB-/Hotline-/Datenschutz-Texte für IPPEN, Augsburger Allgemeine, ZVNW, Rhein-Zeitung; Format/Logo/Farbe Rhein-Zeitung; richtige Logos „Karl Sasse“ und „Kreiszeitung“; geprüfter Einwilligungstext Foto-Link.
 3. **TNB-Verlagsliste je Spiel:** Die Teilnahmebedingungen nennen heute alle Geldregen-Verlagsgruppen (`_reihenfolge`). Für andere Spiele sollte die Liste aus den tatsächlichen Teilnehmern entstehen – Wortlaut von Telemedia bestätigen lassen.
 4. **monday LIVE:** erst nach Test mit TEST-Boards `MONDAY_LIVE=1` setzen. Zeitzone der monday-Deadline prüfen (TEST-Board zeigt 13:00/12:00, Live-Board 09:00).
@@ -246,3 +246,23 @@ Alle müssen grün melden; `check-serie 2027-11/12` muss weiterhin **3213 identi
 6. **Tägliche Sammel-Mail an Verlage** (statt je Freigabe) bräuchte einen zeitgesteuerten Worker (Cron) – noch nicht gebaut.
 7. **Felder per Klick zuordnen** beim Vorlagen-Import (Grafiker) und **KI-Stapel für Rätsel** – weiterhin offen aus dem ersten Cockpit-Loop.
 8. **Local vs. online:** Lokal speichert das Cockpit in `.cockpit-daten/` auf dem Mac, online in Cloudflare D1 – zwei getrennte Bestände (gewollt).
+
+## Erklärfilm Cockpit (15.10.2026) – Befunde beim Dreh
+
+Film: `Erklaerfilm/Cockpit-Erklaerfilm.mp4` (8:28 min, Kapitel, Untertitel `.srt`, Drehbuch `Drehbuch.md`). Werkzeug: `_film/werkzeug/` (Drehbuch, Renderer), Aufnahme-Route und Demo-Daten unter `_alt/film-werkzeug/` bzw. `_alt/cockpit-daten-erklaerfilm-demo/`. Die lokalen Cockpit-Daten wurden auf den Stand vor dem Dreh zurückgesetzt.
+
+Beim Dreh gefunden und behoben:
+1. **KI-Vorschlag für den Gewinner-Zusatztext** lieferte immer „HTTP 400“ (Panel rief `/api/dialog` in falschem Format auf). Neu: eigene Route `/api/cockpit/gewinnertext` (kurzer Satz, max. Zeichenzahl, ein zweiter Versuch, wenn zu lang). Online braucht es das Secret `ANTHROPIC_API_KEY`.
+2. **Gesamtprüfung meldete „Technischer Fehler (undefined/NaN)“**, sobald echte Gewinnerfotos drin waren: Das Base64 der Fotos enthält zufällig „NaN“. `pruefen.ts` nimmt eingebettete Bilder jetzt aus. `check-serie 2027-11`: 3213 Anzeigen, 0 Fehler.
+
+Offen (Entscheidung/Layout):
+3. **Einführungstext Tag 1 (Geldregen, Vorlage A):** Im Kasten „Unsere Glückspilze“ passt nur **eine Zeile** (ca. 80 Zeichen). Das Feld erlaubt 280 Zeichen („ca. 4 Zeilen“); längere Texte meldet die Prüfung als „ragt ins TNB-Band“. Entweder Kasten vergrößern oder Feldgrenze/Hinweis anpassen.
+4. **Zusatztext zum Gewinnerbild:** Grenze 45 Zeichen, aber in der 4-Gewinner-Variante ragen schon ~42 Zeichen bei 6 Zeitungen ins TNB-Band (Zeilenumbruch auf 3 Zeilen). Grenze für 4er-Anzeigen auf ca. 35 Zeichen senken oder Schrift/Spalte anpassen.
+
+## Gestaltungsvorschläge A/B/C (15.10.2026) – umgesetzt
+
+- Schritt 1 zeigt A, B und C nebeneinander als echte Anzeige (Zeitung wählbar, 1 oder 4 Gewinner, Ansicht „Groß“). „Diesen Vorschlag nehmen“ speichert `kampagne.vorlageAbc`.
+- Vorher wurde die Wahl aus Schritt 1 nie in die Kampagne übernommen: Prüfung, Kundenportal, PDFs und monday nutzten immer A. Behoben; neue Kampagnen übernehmen die Wahl aus Schritt 1.
+- Live-Vorschau zeigt nur noch „Gestaltung X · ändern“ (kein lokaler Umschalter mehr, der nirgends galt).
+- Wechsel bei schon freigegebenen Spieltagen (ab heute): Nachfrage; diese Tage gehen auf „vorbereitet“, die Prüfung wird gelöscht, Verlagsstatus „TMI: prüfen“.
+- Offen: Für importierte Vorlagen (Datei) gibt es noch keinen eigenen Generator – die Anzeigen nutzen weiterhin A/B/C.

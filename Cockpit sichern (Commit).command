@@ -32,7 +32,7 @@ echo ""; echo "3/4  Erstelle den Commit …"
 git add -A
 git status --short | head -20
 echo "     … insgesamt $(git status --short | wc -l | tr -d ' ') Dateien"
-git commit -q -m "feat(cockpit): Team-Cockpit – zentraler Speicher, Access-Login/Rollen/Protokoll, Heute zu tun, Kalender, Live-Vorschau, Gesamtprüfung, Kundenportal, monday-Abgleich, PDFs, Foto-Link, Benachrichtigungen, Tour; Zeitungen je Spiel, Gewinnertexte, Einführungstext" \
+git commit -q -m "feat(cockpit): Gestaltungsvorschläge A/B/C nebeneinander wählen, Wahl gilt überall; fix: KI-Vorschlag Gewinnertext, Gesamtprüfung ignoriert Fotodaten; Access-Werte; Erklärfilm-Drehbuch" \
   || abbruch "Commit fehlgeschlagen (evtl. nichts zu sichern)."
 echo "     ✓ Commit erstellt: $(git log -1 --format='%h %s' | cut -c1-90)"
 

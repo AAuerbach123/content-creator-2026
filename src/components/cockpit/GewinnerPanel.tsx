@@ -134,18 +134,15 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern, 
     try {
       const g = spieltag.gewinner.find((x) => x.id === id)
       if (!g) return
-      const res = await fetch('/api/dialog', {
+      const res = await fetch('/api/cockpit/gewinnertext', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          nachrichten: [{
-            rolle: 'user',
-            text: `Formuliere einen freundlichen, kurzen Gewinnertext (maximal ${maxLen} Zeichen, ohne Anführungszeichen) auf Deutsch für eine Zeitungsanzeige. Gewinner: ${g.name || 'Gewinner/in'}${g.ort ? ' aus ' + g.ort : ''}, Betrag ${g.betrag} €. Stichworte vom Anruf: ${stichworte}. Nur einen Satz, keine Höflichkeitsfloskeln.`,
-          }],
-          systemContext: { modus: 'cockpit-gewinnertext' },
-        }),
+        body: JSON.stringify({ name: g.name, ort: g.ort, betrag: g.betrag, stichworte, maxLen }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) {
+        const j = (await res.json().catch(() => ({}))) as { fehler?: string }
+        throw new Error(j.fehler ?? `HTTP ${res.status}`)
+      }
       const data = await res.json() as { antwort?: string }
       const text = (data.antwort ?? '').trim().slice(0, maxLen * 2) // 2× als Sicherheitsmaß, Grenze setzt der Nutzer
       if (text) await aendern(id, { gewinnertext: text })

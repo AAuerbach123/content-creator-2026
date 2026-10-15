@@ -485,3 +485,12 @@ a.cockpit-chip:focus-visible { outline: none; box-shadow: var(--cockpit-fokus); 
   .cockpit-kopf-aktionen .cockpit-mehr .menue { position: static; box-shadow: none; }
   .cockpit-kopf h1 { font-size: 18px; }
 }
+
+/* Schritt 1 · Gestaltungsvorschläge A/B/C nebeneinander */
+.cockpit-vorschlag-steuer { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin-bottom: 14px; }
+.cockpit-vorschlag-steuer .cockpit-feld { flex: 1 1 260px; }
+.cockpit-vorschlaege { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 1200px) { .cockpit-vorschlaege.neben { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.cockpit-vorschlag { border: 1px solid var(--tm-linie); border-radius: var(--cockpit-radius-l); padding: 12px; background: var(--tm-weiss); min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.cockpit-vorschlag.gewaehlt { border-color: var(--tm-rot); box-shadow: 0 0 0 2px var(--tm-rose); }
+.cockpit-vorschlag header, .cockpit-vorschlag footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }

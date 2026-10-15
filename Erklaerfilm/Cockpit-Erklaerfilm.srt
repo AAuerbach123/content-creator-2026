@@ -1,0 +1,400 @@
+1
+00:00:00,300 --> 00:00:02,048
+Willkommen im Cockpit 2027.
+
+2
+00:00:02,048 --> 00:00:10,984
+In diesem Film siehst du Schritt für Schritt, wie ein Spieltag entsteht – vom Rätsel über die Gewinner bis zur Freigabe durch die Verlage.
+
+3
+00:00:11,734 --> 00:00:14,887
+Alles, was du eingibst, wird sofort zentral gespeichert.
+
+4
+00:00:14,887 --> 00:00:18,604
+Jede angemeldete Kollegin und jeder Kollege sieht denselben Stand.
+
+5
+00:00:21,954 --> 00:00:24,439
+Du öffnest das Cockpit über den gewohnten Link.
+
+6
+00:00:24,439 --> 00:00:26,395
+Ein Passwort brauchst du dafür nicht.
+
+7
+00:00:27,145 --> 00:00:31,587
+Du gibst deine Telemedia-E-Mail-Adresse ein und bekommst per Mail einen Code.
+
+8
+00:00:31,587 --> 00:00:35,452
+Den trägst du ein – und bist für vierundzwanzig Stunden angemeldet.
+
+9
+00:00:36,202 --> 00:00:39,441
+Oben rechts siehst du, wer angemeldet ist und mit welcher Rolle.
+
+10
+00:00:42,791 --> 00:00:47,518
+Die Startseite beantwortet die wichtigste Frage des Tages: Was ist heute zu tun?
+
+11
+00:00:47,518 --> 00:00:52,717
+Für jedes laufende Spiel steht hier der nächste Spieltag, an dem gearbeitet werden muss.
+
+12
+00:00:53,467 --> 00:00:56,159
+Die kleinen Felder funktionieren wie eine Ampel.
+
+13
+00:00:56,159 --> 00:01:00,757
+Ein Haken heißt erledigt, ein halber Kreis teilweise, ein leerer Kreis noch offen.
+
+14
+00:01:00,757 --> 00:01:04,177
+Hier fehlen zum Beispiel noch ein Foto und eine Einwilligung.
+
+15
+00:01:04,927 --> 00:01:12,923
+Darunter laufen die Fristen des Tages mit: Gewinner anrufen bis elf Uhr, Fotos bis vierzehn Uhr und die Freigabe-Deadline aus monday.
+
+16
+00:01:12,923 --> 00:01:17,492
+Ein Klick auf einen offenen Punkt bringt dich direkt an die richtige Stelle.
+
+17
+00:01:18,242 --> 00:01:19,933
+Darunter wählst du ein Spiel.
+
+18
+00:01:19,933 --> 00:01:24,538
+Jede Karte zeigt den Monat, das Modell und wie viele Spieltage noch offen sind.
+
+19
+00:01:25,288 --> 00:01:30,339
+Über die Leiste oben erreichst du den Kalender, das Kundenportal und die Auszahlungen.
+
+20
+00:01:30,339 --> 00:01:34,979
+Unter „Mehr“ findest du die Zeitungslisten, monday, das Protokoll und das Team.
+
+21
+00:01:38,329 --> 00:01:42,351
+Öffnest du ein Spiel, führt dich das Cockpit in fünf Schritten durch die Arbeit.
+
+22
+00:01:42,351 --> 00:01:44,964
+Du kannst jederzeit zwischen den Schritten wechseln.
+
+23
+00:01:45,714 --> 00:01:52,846
+Im ersten Schritt legst du die Vorlage fest: entweder eine eigene Datei oder einer der Vorschläge A, B oder C.
+
+24
+00:01:53,596 --> 00:02:00,616
+Im zweiten Schritt richtest du die Kampagne ein – mit Zeitraum, Geldpaketen und den Tagesfristen für Anruf und Foto.
+
+25
+00:02:00,616 --> 00:02:04,489
+Diese Zeiten erscheinen später als Countdown auf der Startseite.
+
+26
+00:02:05,239 --> 00:02:11,690
+Welche Zeitungen mitspielen und unter welcher Rufnummer, legst du für jedes Spiel mit einer eigenen Liste fest.
+
+27
+00:02:11,690 --> 00:02:14,712
+Du ziehst einfach eine Excel- oder CSV-Datei hinein.
+
+28
+00:02:14,712 --> 00:02:19,711
+Das Cockpit erkennt die Spalten selbst und zeigt dir vor dem Übernehmen eine Vorschau.
+
+29
+00:02:20,461 --> 00:02:24,371
+Darunter steht die aktuelle Liste mit Verlagsgruppe und Gewinn-Hotline.
+
+30
+00:02:24,371 --> 00:02:29,604
+Fehlt eine Nummer, erscheint in der Anzeige ein gelber Platzhalter – das fällt also sofort auf.
+
+31
+00:02:30,354 --> 00:02:32,819
+Am ersten Spieltag gibt es noch keine Gewinner.
+
+32
+00:02:32,819 --> 00:02:36,701
+Stattdessen schreibst du eine kurze Überschrift und einen Einführungstext.
+
+33
+00:02:37,451 --> 00:02:39,860
+Die Vorschau zeigt sofort, ob der Text passt.
+
+34
+00:02:39,860 --> 00:02:43,982
+Ist er zu lang, meldet das Cockpit, dass er in die Teilnahmebedingungen ragt.
+
+35
+00:02:44,732 --> 00:02:47,788
+Etwas kürzer gefasst – und schon passt die Fassung.
+
+36
+00:02:51,138 --> 00:02:53,398
+Im dritten Schritt kommen die Rätsel.
+
+37
+00:02:53,398 --> 00:02:59,445
+Die Leiste zeigt alle Spieltage mit Datum: Grün ist fertig, der gestrichelte Rahmen markiert heute.
+
+38
+00:03:00,195 --> 00:03:06,770
+Du trägst die Frage, beide Antworten und die richtige Lösung ein – dazu die Quelle für den Faktencheck.
+
+39
+00:03:06,770 --> 00:03:09,834
+Gespeichert wird automatisch, bei jeder Eingabe.
+
+40
+00:03:10,584 --> 00:03:12,747
+Rechts siehst du die echte Anzeige.
+
+41
+00:03:12,747 --> 00:03:19,727
+Über die Auswahl wechselst du die Zeitung – mit eigenem Logo, eigener Rufnummer und eigenen Teilnahmebedingungen.
+
+42
+00:03:23,077 --> 00:03:30,319
+Im vierten Schritt erfasst du die Gewinner vom Vortag: Name, Wohnort, Betrag und die Zeitung, über die gewonnen wurde.
+
+43
+00:03:30,319 --> 00:03:34,493
+Die Zeitung wählst du aus einer Liste – so bleiben die Daten sauber.
+
+44
+00:03:35,243 --> 00:03:36,933
+Das Foto lädst du einfach hoch.
+
+45
+00:03:36,933 --> 00:03:40,859
+Danach ziehst du das Gesicht in den Kreis und legst den Ausschnitt fest.
+
+46
+00:03:41,609 --> 00:03:45,632
+Ohne Einwilligung kommt kein Gewinner in die Zeitung – das Häkchen ist Pflicht.
+
+47
+00:03:46,382 --> 00:03:50,531
+Für den Zusatztext unter dem Foto reichen ein paar Stichworte vom Anruf.
+
+48
+00:03:50,531 --> 00:03:55,891
+Mit „Vorschlag“ formuliert das Cockpit daraus einen kurzen Satz, den du noch anpassen kannst.
+
+49
+00:03:56,641 --> 00:04:01,473
+Unten prüft das Cockpit die Gewinnsumme gegen den Gewinnplan und warnt, wenn etwas nicht stimmt.
+
+50
+00:04:02,223 --> 00:04:06,973
+Hat ein Gewinner kein Foto zur Hand, erzeugst du einen persönlichen Foto-Link.
+
+51
+00:04:06,973 --> 00:04:10,749
+Du schickst ihn per SMS oder E-Mail oder zeigst einen QR-Code.
+
+52
+00:04:10,749 --> 00:04:12,333
+Der Link gilt sieben Tage.
+
+53
+00:04:13,083 --> 00:04:19,374
+So sieht das auf dem Handy des Gewinners aus: Foto auswählen, Einwilligung bestätigen, absenden.
+
+54
+00:04:19,374 --> 00:04:20,684
+Ganz ohne Anmeldung.
+
+55
+00:04:21,434 --> 00:04:27,521
+Sobald das Foto ankommt, meldet sich die Glocke im Cockpit – und das Bild ist schon beim richtigen Gewinner hinterlegt.
+
+56
+00:04:28,271 --> 00:04:31,641
+In der Vorschau stehen jetzt alle vier Gewinner mit Foto und Text.
+
+57
+00:04:34,991 --> 00:04:37,210
+Im fünften Schritt wird geprüft.
+
+58
+00:04:37,210 --> 00:04:48,862
+Ein Klick auf „Alle Zeitungen prüfen“ baut jede einzelne Anzeige auf und kontrolliert sie: Texte, Rufnummern, Logos, Teilnahmebedingungen und ob alles ins Format passt.
+
+59
+00:04:49,612 --> 00:04:53,899
+Findet die Prüfung ein Problem, siehst du genau, welche Zeitung betroffen ist.
+
+60
+00:04:53,899 --> 00:04:56,482
+Freigeben lässt sich erst, wenn alles grün ist.
+
+61
+00:04:57,232 --> 00:05:01,992
+Ist alles in Ordnung, gibst du frei – auf Wunsch mit einem kurzen Kommentar.
+
+62
+00:05:01,992 --> 00:05:07,628
+In Ausnahmefällen kann ein Admin auch ohne grüne Prüfung freigeben; das wird festgehalten.
+
+63
+00:05:08,378 --> 00:05:12,106
+Danach sehen die Verlage die Anzeigen in ihrem Kundenportal.
+
+64
+00:05:12,106 --> 00:05:17,574
+Druckfertige PDFs aller Zeitungen erzeugst du als ZIP oder lädst sie direkt nach monday.
+
+65
+00:05:20,924 --> 00:05:25,822
+Unter „Kundenportal“ bekommt jede Verlagsgruppe ihren eigenen, festen Link.
+
+66
+00:05:25,822 --> 00:05:30,197
+Du kopierst ihn, zeigst ihn als QR-Code oder sperrst ihn jederzeit.
+
+67
+00:05:30,197 --> 00:05:32,809
+Ein neuer Link macht den alten ungültig.
+
+68
+00:05:33,559 --> 00:05:42,284
+Trägst du hier eine E-Mail-Adresse des Verlags ein, bekommt er Bescheid, sobald neue Anzeigen bereitliegen – vorausgesetzt, der Mailversand ist eingerichtet.
+
+69
+00:05:45,634 --> 00:05:48,259
+Der Verlag öffnet seinen Link ohne Anmeldung.
+
+70
+00:05:48,259 --> 00:05:55,143
+Er sieht nur seine eigenen Zeitungen und nur freigegebene Spieltage – zusammen mit der Frist, bis wann er prüfen soll.
+
+71
+00:05:55,893 --> 00:06:01,561
+Fällt ihm etwas auf, klickt er direkt an die Stelle in der Anzeige und schreibt dazu, was geändert werden soll.
+
+72
+00:06:02,311 --> 00:06:05,699
+Dann meldet er „Korrektur nötig“ – oder gibt frei.
+
+73
+00:06:05,699 --> 00:06:08,816
+Das Druck-PDF kann er jederzeit herunterladen.
+
+74
+00:06:09,566 --> 00:06:13,406
+Bei Telemedia ist der Spieltag auf der Startseite jetzt rot markiert …
+
+75
+00:06:14,156 --> 00:06:14,210
+…
+
+76
+00:06:14,210 --> 00:06:17,160
+und die Glocke zeigt, welcher Verlag was gemeldet hat.
+
+77
+00:06:17,910 --> 00:06:22,259
+Im Kundenportal siehst du für jeden Spieltag und jede Verlagsgruppe den Stand.
+
+78
+00:06:22,259 --> 00:06:25,381
+Ein Klick öffnet die Hinweise mit der markierten Stelle.
+
+79
+00:06:26,131 --> 00:06:29,318
+Du korrigierst den Text, prüfst neu und gibst wieder frei.
+
+80
+00:06:30,068 --> 00:06:34,378
+Die Hinweise hakst du als erledigt ab und kannst dem Verlag kurz antworten.
+
+81
+00:06:35,128 --> 00:06:40,091
+Der Verlag sieht dann genau, was sich geändert hat, und kann zwischen vorher und nachher umschalten.
+
+82
+00:06:40,841 --> 00:06:45,544
+Ein Klick auf „Alles in Ordnung“, und der Spieltag ist auch vom Verlag freigegeben.
+
+83
+00:06:45,544 --> 00:06:49,227
+Sind mehrere Tage offen, geht das auf Wunsch für die ganze Woche.
+
+84
+00:06:52,577 --> 00:06:59,682
+Der Kalender zeigt alle Spieltage eines Monats auf einen Blick: Grün ist fertig, Gelb in Arbeit, Rot hat ein Problem.
+
+85
+00:07:00,432 --> 00:07:06,201
+Unter „Auszahlungen“ stehen alle Gewinner mit ihrem Status – von „Daten fehlen“ bis „überwiesen“.
+
+86
+00:07:06,201 --> 00:07:08,817
+Bankdaten gehören bewusst nicht ins Cockpit.
+
+87
+00:07:09,567 --> 00:07:14,348
+Oben siehst du die Summen, und mit einem Klick erzeugst du die CSV-Datei für die Buchhaltung.
+
+88
+00:07:17,698 --> 00:07:19,542
+monday läuft im Hintergrund mit.
+
+89
+00:07:19,542 --> 00:07:25,534
+Einmal pro Kampagne verbindet ein Admin den passenden monday-Ordner; die Boards werden am Namen erkannt.
+
+90
+00:07:26,284 --> 00:07:37,263
+„Alles abgleichen“ schreibt Spieltage, Fragen, Status und Gewinner nach monday und holt Änderungen zurück – zum Beispiel „Gewinn überwiesen“ oder eine neue Deadline.
+
+91
+00:07:37,263 --> 00:07:40,391
+Mit „Nur lesen“ probierst du das gefahrlos aus.
+
+92
+00:07:43,741 --> 00:07:50,872
+Unter „Team und Einstellungen“ vergibt ein Admin die Rollen: Admin, Redaktion, Grafik, Prüfer oder nur lesen.
+
+93
+00:07:51,622 --> 00:07:58,126
+Hier pflegst du auch den Einwilligungstext für den Foto-Link und legst fest, wer bei Korrekturen eine E-Mail bekommt.
+
+94
+00:07:58,876 --> 00:08:04,989
+Das Protokoll hält fest, wer wann was geändert, freigegeben oder gemeldet hat – praktisch bei Rückfragen.
+
+95
+00:08:05,739 --> 00:08:11,408
+Arbeiten zwei Personen gleichzeitig am selben Spieltag, warnt das Cockpit, statt still zu überschreiben.
+
+96
+00:08:12,158 --> 00:08:17,121
+Und wenn du einmal nicht weiterweißt: Das Fragezeichen oben startet eine kurze Einführung …
+
+97
+00:08:17,871 --> 00:08:17,929
+…
+
+98
+00:08:17,929 --> 00:08:20,797
+und das Handbuch erklärt jeden Bereich im Detail.
+
+99
+00:08:21,547 --> 00:08:23,552
+Das war das Cockpit 2027.
+
+100
+00:08:23,552 --> 00:08:26,040
+Viel Erfolg mit den Spieltagen!
+

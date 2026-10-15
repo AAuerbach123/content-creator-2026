@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
 import type { CockpitVorlage } from '@/lib/cockpit/typen'
 import { assetSpeichern, cockpitVorlageSpeichern } from '@/lib/cockpit/daten-client'
@@ -13,16 +13,24 @@ import StatusChip from './StatusChip'
 type Props = {
   vorlage?: CockpitVorlage
   onGespeichert: (v: CockpitVorlage) => void
+  /** Vergleich A/B/C als echte Anzeigen (nur wenn eine Kampagne existiert) – ersetzt die einfache Auswahlliste */
+  abcWahl?: ReactNode
+  /** Kampagne nutzt bereits einen Vorschlag A/B/C → direkt den Vergleich zeigen */
+  startAbc?: boolean
 }
 
-export default function VorlagePanel({ vorlage, onGespeichert }: Props) {
+export default function VorlagePanel({ vorlage, onGespeichert, abcWahl, startAbc }: Props) {
   const { T, sprache } = useSprache()
-  const [weg, setWeg] = useState<'abc' | 'importiert' | undefined>(vorlage?.quelle)
+  const [weg, setWeg] = useState<'abc' | 'importiert' | undefined>(vorlage?.quelle ?? (startAbc ? 'abc' : undefined))
   const [abc, setAbc] = useState<'A' | 'B' | 'C'>(vorlage?.abc ?? 'A')
   const [name, setName] = useState(vorlage?.name ?? '')
   const [analyse, setAnalyse] = useState<{ farben?: string[]; schriften?: string[]; textgefaesse?: Array<{ art: string; textProbe: string }> } | null>(null)
   const [laedt, setLaedt] = useState(false)
   const [fehler, setFehler] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (startAbc) setWeg((w) => w ?? 'abc')
+  }, [startAbc])
 
   useEffect(() => {
     if (vorlage) {
@@ -146,7 +154,8 @@ export default function VorlagePanel({ vorlage, onGespeichert }: Props) {
         </>
       )}
 
-      {weg === 'abc' && (
+      {weg === 'abc' && abcWahl}
+      {weg === 'abc' && !abcWahl && (
         <>
           <Feld
             art="select"
@@ -169,10 +178,11 @@ export default function VorlagePanel({ vorlage, onGespeichert }: Props) {
           <button type="button" className="cockpit-knopf primaer" onClick={abcSpeichern}>
             {sprache === 'de' ? 'Vorlage übernehmen' : 'Use template'}
           </button>
+          <Hinweis art="gold">{sprache === 'de' ? 'Den Vergleich der drei Vorschläge als echte Anzeigen gibt es, sobald in Schritt 2 eine Kampagne angelegt ist. Die Wahl hier wird dann übernommen.' : 'The side-by-side comparison appears once a campaign exists (step 2).'}</Hinweis>
         </>
       )}
 
-      {weg && (
+      {weg && !(weg === 'abc' && abcWahl) && (
         <section style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--tm-linie)' }}>
           <strong>{T('cockpitVorlageMusterdaten')}</strong>
           <p style={{ fontSize: 13, color: 'var(--tm-grau)', margin: '4px 0 10px' }}>
