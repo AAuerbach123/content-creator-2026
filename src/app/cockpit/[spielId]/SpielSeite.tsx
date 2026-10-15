@@ -1,10 +1,15 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSprache } from '@/components/SpracheProvider'
 import { GELDREGEN_EINTRAG, SPIELE } from '@/lib/serie/spiele'
-import { cockpitVorlageLaden, cockpitVorlagenLaden, kampagneFuerSpiel, spieltageLaden } from '@/lib/db'
+import { cockpitVorlageLaden, cockpitVorlagenLaden, kampagneFuerSpiel, spieltageLaden, spieltagSpeichern } from '@/lib/cockpit/daten-client'
+import { gewinnerNachSerie } from '@/lib/cockpit/zu-serie'
+import { heuteZuTun } from '@/lib/cockpit/tagesstatus'
+import SpieltagLeiste from '@/components/cockpit/SpieltagLeiste'
+import { geldregenNovDezSicherstellen } from '@/lib/cockpit/import'
+import VorschauSpalte from '@/components/cockpit/VorschauSpalte'
 import type { CockpitVorlage, Kampagne, Spieltag } from '@/lib/cockpit/typen'
 import Schrittleiste from '@/components/cockpit/Schrittleiste'
 import StatusChip from '@/components/cockpit/StatusChip'
@@ -25,6 +30,26 @@ export default function SpielSeite({ spielId }: Props) {
   const [vorlage, setVorlage] = useState<CockpitVorlage | undefined>(undefined)
   const [spieltage, setSpieltage] = useState<Spieltag[]>([])
   const [aktiverSpieltag, setAktiverSpieltag] = useState<string | undefined>(undefined)
+  const sprung = useRef<{ tag?: string; phase?: number }>({})
+  const syncTimer = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
+
+  // Direkter Sprung aus „Heute zu tun“ / Kalender: ?tag=<spieltagId>&phase=<0..4>
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const ph = Number(p.get('phase'))
+    sprung.current = { tag: p.get('tag') ?? undefined, phase: Number.isFinite(ph) && ph >= 0 && ph <= 4 ? ph : undefined }
+    if (sprung.current.phase !== undefined) setPhase(sprung.current.phase)
+  }, [])
+
+  /** Änderung sofort anzeigen, im Hintergrund speichern; Gewinner verzögert in die Anzeigen spiegeln. */
+  const spieltagAktualisieren = useCallback((neu: Spieltag) => {
+    setSpieltage((alt) => alt.map((x) => (x.id === neu.id ? neu : x)))
+    void spieltagSpeichern(neu).catch(() => undefined)
+    if (kampagne) {
+      clearTimeout(syncTimer.current[neu.id])
+      syncTimer.current[neu.id] = setTimeout(() => { void gewinnerNachSerie(kampagne, neu).catch(() => undefined) }, 1200)
+    }
+  }, [kampagne])
 
   const meta = useMemo(() => {
     if (spielId === 'geldregen') return { name: GELDREGEN_EINTRAG.name, monate: GELDREGEN_EINTRAG.monate, modell: GELDREGEN_EINTRAG.modell as 'RSP' | 'AZS oder RSP', beschreibung: GELDREGEN_EINTRAG.beschreibung, istGeldregen: true }
@@ -34,13 +59,16 @@ export default function SpielSeite({ spielId }: Props) {
   }, [spielId])
 
   useEffect(() => {
-    void kampagneFuerSpiel(spielId).then(async (ks) => {
+    void (spielId === 'geldregen' ? geldregenNovDezSicherstellen().catch(() => false) : Promise.resolve(false)).then(() => kampagneFuerSpiel(spielId)).then(async (ks) => {
       const aktuell = ks[0]
       setKampagne(aktuell)
       if (aktuell) {
         const st = await spieltageLaden(aktuell.id)
         setSpieltage(st)
-        if (st.length) setAktiverSpieltag(st[0].id)
+        const gewuenscht = sprung.current.tag && st.find((x) => x.id === sprung.current.tag)
+        const { ueberfaellig, naechster } = heuteZuTun(st)
+        const start = gewuenscht || ueberfaellig[0] || naechster || st[0]
+        if (start) setAktiverSpieltag(start.id)
         if (aktuell.vorlageId) {
           const v = await cockpitVorlageLaden(aktuell.vorlageId)
           setVorlage(v)
@@ -67,7 +95,7 @@ export default function SpielSeite({ spielId }: Props) {
   return (
     <>
       <header style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <Link href="/cockpit" className="cockpit-knopf text" aria-label={T('cockpitZurueck')}>←</Link>
           <h2 style={{ margin: 0, fontSize: 22 }}>{meta.name}</h2>
           <StatusChip status={kampagne ? 'vorbereitet' : 'raetsel-fehlt'} sprache={sprache} />
@@ -75,7 +103,7 @@ export default function SpielSeite({ spielId }: Props) {
             {sprache === 'de' ? 'Zeitungen & Rufnummern' : 'Newspapers & numbers'}
           </Link>
         </div>
-        <p style={{ color: 'var(--tm-grau)', margin: '4px 0 0 32px' }}>{meta.beschreibung}</p>
+        <p style={{ color: 'var(--tm-grau)', margin: '4px 0 0 0' }}>{meta.beschreibung}</p>
       </header>
 
       <Schrittleiste
@@ -113,6 +141,12 @@ export default function SpielSeite({ spielId }: Props) {
         />
       )}
 
+      {phase >= 2 && spieltage.length > 0 && kampagne && (
+        <SpieltagLeiste kampagne={kampagne} spieltage={spieltage} aktiv={spieltag?.id} onWahl={setAktiverSpieltag} />
+      )}
+
+      <div className={phase >= 2 && kampagne && spieltag ? 'cockpit-mit-vorschau' : ''}>
+      <div className="formular">
       {phase === 2 && (
         <RaetselPanel
           spielId={spielId}
@@ -123,6 +157,7 @@ export default function SpielSeite({ spielId }: Props) {
             setAktiverSpieltag(id)
             if (kampagne) setSpieltage(await spieltageLaden(kampagne.id))
           }}
+          onSpeichern={spieltagAktualisieren}
         />
       )}
 
@@ -134,6 +169,7 @@ export default function SpielSeite({ spielId }: Props) {
           onAendern={async () => {
             if (kampagne) setSpieltage(await spieltageLaden(kampagne.id))
           }}
+          onSpeichern={spieltagAktualisieren}
         />
       )}
 
@@ -145,8 +181,12 @@ export default function SpielSeite({ spielId }: Props) {
           onAendern={async () => {
             if (kampagne) setSpieltage(await spieltageLaden(kampagne.id))
           }}
+          onSpeichern={spieltagAktualisieren}
         />
       )}
+      </div>
+      {phase >= 2 && kampagne && spieltag && <VorschauSpalte kampagne={kampagne} spieltag={spieltag} />}
+      </div>
 
       <div style={{ marginTop: 24, display: 'flex', gap: 8 }}>
         {phase > 0 && (

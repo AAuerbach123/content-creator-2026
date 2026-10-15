@@ -8,7 +8,11 @@ export default function TabGuardBanner() {
   const { T } = useSprache()
   const [fremderTab, setFremderTab] = useState(false)
 
-  useEffect(() => tabGuardStarten(setFremderTab), [])
+  useEffect(() => {
+    // Cockpit (zentraler Speicher mit Konfliktschutz) und Kundenportale brauchen den Ein-Tab-Wächter nicht
+    if (/^\/(cockpit|portal|review)(\/|$)/.test(window.location.pathname)) return
+    return tabGuardStarten(setFremderTab)
+  }, [])
 
   if (!fremderTab) return null
 

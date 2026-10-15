@@ -39,3 +39,6 @@ _quellen_cockpit/
 
 # Lokale Claude-Einstellungen (nicht ins Repo)
 .claude/settings.local.json
+
+# Cockpit: lokaler Server-Speicher (npm run dev)
+/.cockpit-daten/

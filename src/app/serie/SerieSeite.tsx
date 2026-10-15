@@ -9,7 +9,9 @@ import SpracheUmschalter from '@/components/SpracheUmschalter'
 import { useSprache } from '@/components/SpracheProvider'
 import { pad2 } from '@/lib/serie/generator'
 import type { MondaySpieltag } from '@/lib/serie/monday-typen'
-import { serienGewinnerLaden, type SerienGewinner } from '@/lib/db'
+import type { SerienGewinner } from '@/lib/db'
+import { serienGewinnerLaden } from '@/lib/cockpit/daten-client'
+import { standardTeilnehmer } from '@/lib/serie/zeitungs-pool'
 import { datenMitStamm, einfuehrungLaden, stammLaden, type EinfuehrungEintrag, type ZeitungenStamm } from '@/lib/cockpit/zeitungen-stamm'
 import { htmlMaskieren, sichtbar, spielMitText, type SerieFrage, type TextOverride } from '@/lib/serie/serie-ki'
 import {
@@ -159,8 +161,8 @@ export default function SerieSeite() {
   // Teilnehmende Zeitungen des Spiels vorauswählen (aus der hochgeladenen Liste; sonst alle)
   useEffect(() => {
     if (!basisRoh) return
-    setGewaehlt(stamm?.teilnehmer?.length ? stamm.teilnehmer : basisRoh.daten.zeitungen.map((x) => x.id))
-  }, [basisRoh, stamm])
+    setGewaehlt(stamm?.teilnehmer?.length ? stamm.teilnehmer : basisRoh.standard ? standardTeilnehmer(spielId, basisRoh.standard) : basisRoh.daten.zeitungen.map((x) => x.id))
+  }, [basisRoh, stamm]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const zeitungen = basis?.daten.zeitungen ?? []
   const gewaehlteZeitungen = zeitungen.filter((z) => gewaehlt.includes(z.id))

@@ -365,12 +365,48 @@ export const HANDBUCH_ABSCHNITTE: HandbuchAbschnitt[] = [
   },
   {
     anker: 'cockpit',
-    titelDe: 'Cockpit 2027 (einfache Bedienung je Spielkonzept)',
-    titelEn: 'Cockpit 2027 (simple operation per game concept)',
+    titelDe: 'Cockpit 2027 – der tägliche Arbeitsplatz',
+    titelEn: 'Cockpit 2027 – the daily workspace',
     koerperDe:
-      'Über die Startkarte „Cockpit 2027 (einfach)" oder direkt /cockpit. Jeder Monat hat sein eigenes Spielkonzept mit nur fünf Phasen: 1 Vorlage (einmal, Grafiker), 2 Kampagne einstellen (einmal), 3 Rätsel erstellen (für jeden Spieltag), 4 Gewinner vom Vortag (täglich, inkl. Gewinnertext), 5 Prüfen und freigeben (täglich). Drei gemeinsame Bausteine sind in allen Spielen gleich: V (Vorlage importieren), G (Gewinner erfassen), F (Prüfen und freigeben). Ziel: ein ganzer Spieltag inkl. Gewinner in unter fünf Minuten – ohne Anleitung. Oben rechts wechselt der Rollen-Umschalter zwischen Grafiker, Redaktion und Prüfer; jede Rolle sieht zuerst ihre Aufgaben. Die bisherige Oberfläche (JobEditor, Serien-Modus, Präsentationen) bleibt über „Erweitert ↗" erreichbar.',
+      'Das Cockpit ist die Startseite. Oben steht „Heute zu tun“: je laufendem Spiel der nächste offene Spieltag mit Ampel (Rätsel, Gewinner, Fotos, Einwilligung, Prüfung, Freigabe, Verlage) und Countdown für die Tagesfristen (Anruf 11:00, Foto 14:00, Deadline aus monday). Ein Klick auf einen offenen Punkt springt direkt an die Stelle. Jedes Spiel hat fünf Schritte: 1 Vorlage, 2 Kampagne einstellen (inkl. Fristen und Zeitungsliste), 3 Rätsel, 4 Gewinner vom Vortag (am 1. Spieltag Einführungstext), 5 Prüfen und freigeben. Ab Schritt 3 zeigt rechts die Live-Vorschau die echte Anzeige je Zeitung. Vor der Freigabe prüft „Alle Zeitungen prüfen“ jede Anzeige. Alle Eingaben werden sofort zentral gespeichert – jede angemeldete Person sieht denselben Stand. Die Glocke oben meldet Kundenkorrekturen und eingegangene Gewinnerfotos; „?“ startet die Einführung.',
     koerperEn:
-      'Via the start card "Cockpit 2027 (simple)" or /cockpit directly. Every month has its own game concept with just five phases: 1 Template (once, designer), 2 Set up campaign (once), 3 Create puzzles (per game day), 4 Winners of previous day (daily, incl. winner text), 5 Check and approve (daily). Three shared blocks are the same in every game: V (import template), G (enter winners), F (check and approve). Goal: a complete game day incl. winners in under five minutes – without instructions. The role switch in the top right toggles Designer, Editorial and Reviewer; each role sees its own tasks first. The previous interface (JobEditor, series mode, presentations) remains reachable via "Advanced ↗".',
+      'The cockpit is the start page. “To do today” lists, per running game, the next open game day with a traffic light and countdowns for the daily deadlines. Clicking an open item jumps right there. Every game has five steps: template, campaign, puzzles, winners, check and approve. From step 3 the live preview shows the real ad per newspaper. “Check all newspapers” checks every ad before approval. All input is saved centrally – everyone signed in sees the same state. The bell reports client corrections and incoming winner photos; “?” starts the tour.',
+  },
+  {
+    anker: 'cockpit-team',
+    titelDe: 'Anmeldung, Rollen und Protokoll',
+    titelEn: 'Sign-in, roles and log',
+    koerperDe:
+      'Angemeldet wird über Cloudflare Access mit E-Mail und Einmal-Code – kein Passwort. Unter „Mehr → Team“ (nur Admin) bekommt jede Person eine Rolle: Admin (alles), Redaktion (Rätsel, Gewinner, Freigabe), Grafik (Vorlagen, Inhalte), Prüfer (freigeben), Nur lesen. Wer keinen Eintrag hat, ist Redaktion. Das Protokoll zeigt, wer wann was geändert, freigegeben oder als Kunde gemeldet hat. Speichern zwei Personen gleichzeitig dasselbe, erscheint ein Hinweis „gerade geändert – neu laden“; es geht nichts unbemerkt verloren.',
+    koerperEn:
+      'Sign-in via Cloudflare Access (email + one-time code). Under “More → Team” (admin only) each person gets a role. The log shows who changed, approved or reported what and when. If two people save the same thing at once, a “just changed – reload” notice appears.',
+  },
+  {
+    anker: 'cockpit-kundenportal',
+    titelDe: 'Kundenportal für die Verlage',
+    titelEn: 'Client portal for publishers',
+    koerperDe:
+      'Unter „Kundenportal“ bekommt jede Verlagsgruppe einen eigenen Link (kopieren, QR, sperren, neu erzeugen) und optional E-Mail-Empfänger. Der Verlag sieht nur die freigegebenen Spieltage seiner eigenen Zeitungen, klickt in die Anzeige, um Stellen zu markieren und zu kommentieren, lädt das Druck-PDF herunter und gibt frei oder meldet „Korrektur nötig“ – auf Wunsch eine ganze Woche auf einmal. Nach einer Korrektur sieht er „vorher / nachher“ und eine Liste der Änderungen. Telemedia sieht pro Spieltag und Verlagsgruppe den Status, hakt Hinweise als erledigt ab und kann kurz antworten.',
+    koerperEn:
+      'Each publisher group gets its own link. Publishers only see approved game days of their own newspapers, mark spots in the ad, download the print PDF and approve or request corrections – optionally for a whole week. After a correction they see before/after and a change list.',
+  },
+  {
+    anker: 'cockpit-monday',
+    titelDe: 'monday-Abgleich und Anzeigen-PDFs',
+    titelEn: 'monday sync and ad PDFs',
+    koerperDe:
+      'Unter „Mehr → monday“ verbindet ein Admin einmal pro Kampagne den monday-Ordner; die Boards a) bis d) werden am Namen erkannt. „Alles abgleichen“ schreibt Spieltage, Fragen, Status je Verlagsgruppe und Gewinner nach monday und holt Änderungen zurück (z. B. „Verlag: OK“, „Gewinn überwiesen“, Deadline). Bei gleichzeitigen Änderungen gewinnt, wer seit dem letzten Abgleich geändert hat. „Nur lesen“ probiert den Abgleich aus, ohne etwas zu schreiben. Solange MONDAY_LIVE nicht gesetzt ist, wird nur in private oder „TEST“-Boards geschrieben. Unter „Anzeigen-PDFs“ entstehen druckfertige PDFs aller Zeitungen – als ZIP oder direkt in die Datei-Spalten von monday.',
+    koerperEn:
+      'Under “More → monday” an admin connects the campaign folder once. “Sync all” writes game days, questions, status per group and winners to monday and pulls changes back. Until MONDAY_LIVE is set, only private or TEST boards are written. “Ad PDFs” creates print-ready PDFs as ZIP or uploads them to monday.',
+  },
+  {
+    anker: 'cockpit-gewinner',
+    titelDe: 'Gewinner, Foto-Link und Auszahlungen',
+    titelEn: 'Winners, photo link and payouts',
+    koerperDe:
+      'Im Schritt „Gewinner“ werden Name, Ort, Betrag, Zeitung (Auswahlliste), Zusatztext, Foto und Einwilligung erfasst. Mit „Foto-Link für den Gewinner“ entsteht ein persönlicher Link (7 Tage gültig), den Telemedia per SMS oder E-Mail weitergibt; der Gewinner lädt sein Foto selbst hoch und bestätigt die Einwilligung – die Glocke meldet den Eingang. „Zuschneiden“ legt den runden Ausschnitt fest. Die Gewinnsumme wird gegen den Gewinnplan geprüft. Unter „Auszahlungen“ stehen alle Gewinner mit Auszahlungs-Status, Alter in Tagen und CSV-Export für die Buchhaltung – ohne Bankdaten.',
+    koerperEn:
+      'In the winners step: name, town, amount, newspaper (list), extra text, photo and consent. “Photo link for winner” creates a personal link (valid 7 days) the winner uses to upload the photo and confirm consent. The prize total is checked against the prize plan. “Payouts” lists all winners with status and a CSV for accounting – without bank data.',
   },
   {
     anker: 'grenzen',

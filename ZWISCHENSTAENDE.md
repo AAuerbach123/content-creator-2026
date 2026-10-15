@@ -378,3 +378,15 @@
 - **monday-Upload direkt aus Phase 5.** Grund: `/api/monday` ist Testmodus auf TEST-Boards; produktive Übertragung verlangt Secret-Rotation. Übergabe läuft weiterhin über den Serien-Modus (Phase 5 verweist darauf).
 - **Foto-Zuschnitt automatisch** (Gesicht mittig). Grund: braucht Face-Detection-Paket (nur Mac-npm) – mittlerer Zuschnitt + manuell nachjustieren im Vorschau-Rahmen reicht erstmal.
 - **Shortcut-Übersicht** (`N` nächster Tag, `G` Gewinner, `?` Hilfe). Grund: nur Cmd/Ctrl+Enter ist belegt – der Rest wird mit mehr Nutzung priorisiert.
+
+
+## 14.10.2026 · Cockpit „Team, Kunden, monday“ (LOOP-Cockpit-Ausbau-Team.md)
+
+- Zentraler Speicher (alle Eingeloggten sehen denselben Stand), Konflikthinweis, Protokoll, Rollen, Cloudflare-Access-Login.
+- Startseite „Heute zu tun“ mit Ampel und Fristen-Countdown, Kalender, Spieltag-Leiste, Live-Vorschau neben dem Formular, „Alle Zeitungen prüfen“ vor der Freigabe, Foto zuschneiden, Gewinnplan-Prüfung, Zeitungsauswahl beim Gewinner, Auszahlungsliste mit CSV.
+- Kundenportal je Verlagsgruppe: Markierungen in der Anzeige, Freigabe/Korrektur, ganze Woche freigeben, vorher/nachher, Frist, Druck-PDF. Verwaltung mit Links, QR, Sperren, Antworten.
+- monday: Boards verbinden, Abgleich je Bereich (Dreiwege-Vergleich für Status), Deadline zurück ins Cockpit, Rufnummern aus „Projektdetails“, PDFs als ZIP oder in die Datei-Spalten.
+- Foto-Link für Gewinner, Glocke + E-Mail/Teams-Benachrichtigungen (Versand nach Einrichtung), Einführungstour, Handbuch-Abschnitte, Handy-Menü.
+- Zeitungs-Pool um 29 Wissensquiz-Juli-Titel erweitert; Geldregen Nov+Dez als eine Kampagne (53 Spieltage).
+- Prüfungen: tsc 0 Fehler · check-i18n · check-umlaute · check-hilfe · check-kontrast · check-spielauswahl · check-rufnummern · check-musternummer · check-export-masse grün · check-serie 2027-11 3213/3213 und 2027-12 3402/3402 bytegleich.
+- Getestet im Browser (lokal): Speichern/Konflikt, Zuschneiden, Live-Vorschau, Gesamtprüfung (21 Anzeigen), Portal mit Markierung + Korrektur + PDF, monday-Abgleich nur lesend gegen TEST-Boards, Projektdetails-Import, Tour, Handy-Ansicht.

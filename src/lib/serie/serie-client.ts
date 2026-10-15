@@ -6,6 +6,8 @@
 //  • KI-/monday-Aufrufe inkl. Eintrag in den KI-Verlauf (Regel 8)
 
 import { aktionSpeichern } from '../db'
+import { poolBilden, type Standards } from './zeitungs-pool'
+import { anzeigeBauen } from './anzeige-bauen'
 import { W, dateiname as grDateiname, pyRound, seite, tagesdaten } from './generator'
 import type { MondayAntwort, MondaySpieltag } from './monday-typen'
 import { pruefeInhalt } from './pruefen'
@@ -18,7 +20,7 @@ import type { GewinnerAnzahl, Pruefergebnis, SerienDaten, Spieltag, TnbReferenz,
 export const ASSET_BASIS = '/serie/assets/'
 export const pfadBrowser = (n: string) => ASSET_BASIS + n
 
-export type SerienBasis = { daten: SerienDaten; fragen: Record<string, Spieltag[] | string>; tnbRef: TnbReferenz }
+export type SerienBasis = { daten: SerienDaten; fragen: Record<string, Spieltag[] | string>; tnbRef: TnbReferenz; standard?: Standards }
 
 export async function serienDatenLaden(): Promise<SerienBasis> {
   const lade = async (n: string) => {
@@ -26,8 +28,13 @@ export async function serienDatenLaden(): Promise<SerienBasis> {
     if (!r.ok) throw new Error(`${n}: HTTP ${r.status}`)
     return r.json()
   }
-  const [daten, fragen, tnbRef] = await Promise.all([lade('zeitungen.json'), lade('fragen_2027.json'), lade('tnb_referenz.json')])
-  return { daten, fragen, tnbRef }
+  const [roh, fragen, tnbRef, weitere] = await Promise.all([
+    lade('zeitungen.json'), lade('fragen_2027.json'), lade('tnb_referenz.json'),
+    lade('zeitungen-weitere.json').catch(() => null),
+  ])
+  // Pool: Geldregen-Referenz + weitere Zeitungen (Wissensquiz Juli 2026); zeitungen.json selbst bleibt unverändert
+  const { daten, standard } = poolBilden(roh, weitere)
+  return { daten, fragen, tnbRef, standard }
 }
 
 /** Spieltage eines Monats für Geldregen: aus fragen_2027.json – fehlt der Monat, Kalender mit leeren Fragen. */
@@ -73,11 +80,7 @@ function alsSpieltag(inh: Inhalt, maskieren: boolean): Spieltag {
 }
 
 export function anzeigeHtml(a: VorschauArgs): string {
-  if (!a.spiel) {
-    const t = alsSpieltag(a.inhalt, !!a.kiText)
-    return seite(a.basis.daten, a.z, tagesdaten(a.z, t, a.inhalt.gewinner, a.inhalt.einfuehrung), a.vorschlag, a.gewinner, a.monat, pfadBrowser)
-  }
-  return spielSeite({ spiel: a.spiel, daten: a.basis.daten, z: a.z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: pfadBrowser })
+  return anzeigeBauen({ daten: a.basis.daten, spiel: a.spiel, z: a.z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: pfadBrowser, kiText: a.kiText })
 }
 
 /** Inhaltliche Prüfung ohne Browser (nur Geldregen: pruefen.ts). */

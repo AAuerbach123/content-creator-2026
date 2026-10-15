@@ -1,9 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
-import type { Kampagne, Preisstufe, Spieltag, SpieltagGewinner } from '@/lib/cockpit/typen'
-import { assetSpeichern, spieltagSpeichern } from '@/lib/db'
+import { AUSZAHLUNG_TEXT, type Auszahlung, type Kampagne, type Preisstufe, type Spieltag, type SpieltagGewinner } from '@/lib/cockpit/typen'
+import { assetSpeichern, assetUrl, spieltagSpeichern } from '@/lib/cockpit/daten-client'
+import FotoZuschneider from './FotoZuschneider'
+import FotoLinkKnopf from './FotoLinkKnopf'
+import { kontextLaden } from '@/lib/cockpit/anzeigen'
+import { gewinnplanPruefen } from '@/lib/cockpit/tagesstatus'
 import Feld from './Feld'
 import Hinweis from './Hinweis'
 import Karte from './Karte'
@@ -20,6 +24,8 @@ type Props = {
   kampagne?: Kampagne
   spieltag?: Spieltag
   onAendern: () => void
+  /** Sofort im Zustand übernehmen + im Hintergrund speichern (Spielseite) */
+  onSpeichern?: (s: Spieltag) => void
 }
 
 function preisstufen(k: Kampagne): Preisstufe[] {
@@ -37,13 +43,20 @@ function preisstufen(k: Kampagne): Preisstufe[] {
   })
 }
 
-export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }: Props) {
+export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern, onSpeichern }: Props) {
   const { sprache } = useSprache()
   const [laedt, setLaedt] = useState(false)
   const [vorschlagLaedt, setVorschlagLaedt] = useState<string | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
+  const [zuschnitt, setZuschnitt] = useState<{ gewinnerId: string; url: string; original?: File } | null>(null)
 
   const stufen = useMemo(() => (kampagne ? preisstufen(kampagne) : []), [kampagne])
+  const [zeitungsNamen, setZeitungsNamen] = useState<string[]>([])
+  const monat = spieltag?.datum.slice(0, 7)
+  useEffect(() => {
+    if (!kampagne || !monat) return
+    kontextLaden(kampagne, monat).then((k) => setZeitungsNamen(k.zeitungen.map((z) => z.name))).catch(() => setZeitungsNamen([]))
+  }, [kampagne, monat])
 
   if (!kampagne || !spieltag) {
     return (
@@ -63,6 +76,7 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
   const gewinnerSetzen = async (next: SpieltagGewinner[]) => {
     setLaedt(true)
     const neu: Spieltag = { ...spieltag, gewinner: next, aktualisiertAm: Date.now() }
+    if (onSpeichern) { onSpeichern(neu); setLaedt(false); return }
     await spieltagSpeichern(neu)
     // Gewinner (inkl. Zusatztext) in die Anzeigen übernehmen – Serien-Modus liest sie von dort
     await gewinnerNachSerie(kampagne, neu).catch(() => 0)
@@ -91,9 +105,27 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
     await gewinnerSetzen(spieltag.gewinner.filter((g) => g.id !== id))
   }
 
-  const foto = async (id: string, f: File) => {
-    const hash = await assetSpeichern(f)
-    await aendern(id, { fotoHash: hash })
+  /** Neues Foto: erst zuschneiden lassen (Original wird zusätzlich gespeichert). */
+  const foto = (id: string, f: File) => {
+    setZuschnitt({ gewinnerId: id, url: URL.createObjectURL(f), original: f })
+  }
+
+  const zuschnittFertig = async (blob: Blob) => {
+    if (!zuschnitt) return
+    const z = zuschnitt
+    setZuschnitt(null)
+    try {
+      setLaedt(true)
+      const originalHash = z.original ? await assetSpeichern(z.original) : undefined
+      const hash = await assetSpeichern(blob)
+      const g = spieltag.gewinner.find((x) => x.id === z.gewinnerId)
+      await aendern(z.gewinnerId, { fotoHash: hash, fotoOriginalHash: originalHash ?? g?.fotoOriginalHash ?? g?.fotoHash })
+    } catch (e) {
+      setFehler((sprache === 'de' ? 'Foto konnte nicht gespeichert werden: ' : 'Photo could not be saved: ') + (e instanceof Error ? e.message : String(e)))
+    } finally {
+      if (z.original) URL.revokeObjectURL(z.url)
+      setLaedt(false)
+    }
   }
 
   const vorschlag = async (id: string, stichworte: string) => {
@@ -157,19 +189,50 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
               pflicht
             />
             <Feld
+              art="select"
+              label={sprache === 'de' ? 'Gewonnen über Zeitung' : 'Won via newspaper'}
+              wert={g.verlagTitel ?? ''}
+              onAendern={(w) => aendern(g.id, { verlagTitel: w })}
+              optionen={[
+                { wert: '', name: sprache === 'de' ? '– bitte wählen –' : '– please choose –' },
+                ...(g.verlagTitel && !zeitungsNamen.includes(g.verlagTitel) ? [{ wert: g.verlagTitel, name: g.verlagTitel }] : []),
+                ...zeitungsNamen.map((n) => ({ wert: n, name: n })),
+              ]}
+              hilfe={sprache === 'de' ? 'Auswahlliste statt Freitext – so bleiben die Daten auswertbar (monday: „Gewinner von Verlag/Titel“).' : 'Pick from the list.'}
+            />
+            <Feld
               art="eigen"
               label={sprache === 'de' ? 'Foto' : 'Photo'}
-              hilfe={g.fotoHash ? (sprache === 'de' ? 'Foto gespeichert.' : 'Photo saved.') : (sprache === 'de' ? 'Noch kein Foto – optional.' : 'No photo yet – optional.')}
+              hilfe={g.fotoHash ? (sprache === 'de' ? 'Foto gespeichert. „Zuschneiden“ ändert den runden Ausschnitt.' : 'Photo saved.') : (sprache === 'de' ? 'Noch kein Foto – optional. Nach der Auswahl kannst du den Ausschnitt festlegen.' : 'No photo yet – optional.')}
             >
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const f = e.target.files?.[0]
-                  if (f) void foto(g.id, f)
-                }}
-              />
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                {g.fotoHash && <img src={assetUrl(g.fotoHash)} alt={sprache === 'de' ? `Foto von ${g.name || 'Gewinner'}` : `Photo of ${g.name || 'winner'}`} className="cockpit-foto-rund" />}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  aria-label={sprache === 'de' ? 'Foto auswählen' : 'Choose photo'}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0]
+                    if (f) foto(g.id, f)
+                    e.target.value = ''
+                  }}
+                />
+                {g.fotoHash && (
+                  <button type="button" className="cockpit-knopf sekundaer" onClick={() => setZuschnitt({ gewinnerId: g.id, url: assetUrl(g.fotoOriginalHash ?? g.fotoHash!) })}>
+                    {sprache === 'de' ? 'Zuschneiden' : 'Crop'}
+                  </button>
+                )}
+              </div>
+              <FotoLinkKnopf spieltagId={spieltag.id} gewinner={g} />
             </Feld>
+            <Feld
+              art="select"
+              label={sprache === 'de' ? 'Gewinnauszahlung (Status)' : 'Prize payout (status)'}
+              wert={g.auszahlung ?? 'daten-fehlen'}
+              onAendern={(w) => aendern(g.id, { auszahlung: w as Auszahlung })}
+              optionen={(Object.keys(AUSZAHLUNG_TEXT) as Auszahlung[]).map((k) => ({ wert: k, name: AUSZAHLUNG_TEXT[k][sprache === 'de' ? 'de' : 'en'] }))}
+              hilfe={sprache === 'de' ? 'Nur der Status – Bankdaten gehören nicht ins Cockpit. Wird mit monday abgeglichen.' : 'Status only – no bank data. Synced with monday.'}
+            />
             <Feld
               art="eigen"
               label={sprache === 'de' ? 'Einwilligung' : 'Consent'}
@@ -178,7 +241,7 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
                 <input
                   type="checkbox"
                   checked={g.einwilligung}
-                  onChange={(e) => aendern(g.id, { einwilligung: e.target.checked })}
+                  onChange={(e) => aendern(g.id, { einwilligung: e.target.checked, einwilligungQuelle: e.target.checked ? (g.einwilligungQuelle ?? 'telefon') : undefined, einwilligungAm: e.target.checked ? Date.now() : undefined })}
                 />
                 {sprache === 'de' ? 'Gewinner einverstanden' : 'Winner consents'}
               </label>
@@ -227,6 +290,17 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
         )
       })}
 
+      {spieltag.gewinner.length > 0 && (() => {
+        const gp = gewinnplanPruefen(kampagne, spieltag)
+        return (
+          <div className={`cockpit-hinweis${gp.fehler.length ? '' : ' gold'}`} style={{ marginTop: 16 }} role="status">
+            <b>{sprache === 'de' ? 'Gewinnsumme dieses Spieltags' : 'Prize total of this day'}: {gp.summe.toLocaleString('de-DE')} €</b>
+            {gp.maxSumme !== null && <span> · {sprache === 'de' ? 'Gewinnplan max.' : 'plan max.'} {gp.maxSumme.toLocaleString('de-DE')} €</span>}
+            {gp.fehler.map((f, i) => <div key={i}>⚠ {f}</div>)}
+          </div>
+        )
+      })()}
+
       {spieltag.gewinner.length > 0 && (
         <div style={{ marginTop: 16 }}>
           <button type="button" className="cockpit-knopf primaer" onClick={hinzu}>
@@ -236,6 +310,13 @@ export default function GewinnerPanel({ spielId, kampagne, spieltag, onAendern }
       )}
 
       {fehler && <div style={{ marginTop: 10 }}><Hinweis art="rot">{fehler}</Hinweis></div>}
+      {zuschnitt && (
+        <FotoZuschneider
+          quelle={zuschnitt.url}
+          onFertig={(b) => void zuschnittFertig(b)}
+          onAbbrechen={() => { if (zuschnitt.original) URL.revokeObjectURL(zuschnitt.url); setZuschnitt(null) }}
+        />
+      )}
       {laedt && <span className="cockpit-speicherstand aktiv" aria-live="polite">{sprache === 'de' ? 'speichert …' : 'saving …'}</span>}
     </Karte>
   )

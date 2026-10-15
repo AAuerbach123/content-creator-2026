@@ -234,3 +234,15 @@ node scripts/check-kontrast.mjs && node scripts/check-i18n.mjs && node scripts/c
 ```
 
 Alle müssen grün melden; `check-serie 2027-11/12` muss weiterhin **3213 identisch** (Nov) bzw. die Dez-Anzahl zeigen, damit Regel 5 (Geldregen Nov/Dez bytegleich) eingehalten ist.
+
+
+## Cockpit-Ausbau „Team, Kunden, monday“ (14.10.2026) – offen
+
+1. **Einrichtung durch Andreas** (Anleitung `docs/einrichtung-login-und-kunden.md`): „Cockpit-Server einrichten.command“, Cloudflare Access + öffentliche Ausnahmen, Secrets (`CF_ACCESS_*`, `COCKPIT_ADMINS`, `CF_ACCOUNT_ID`, `CF_BROWSER_TOKEN`, optional `RESEND_API_KEY`/`MAIL_ABSENDER`/`TEAMS_WEBHOOK_URL`), danach online stellen.
+2. **Telemedia liefert:** TNB-/Hotline-/Datenschutz-Texte für IPPEN, Augsburger Allgemeine, ZVNW, Rhein-Zeitung; Format/Logo/Farbe Rhein-Zeitung; richtige Logos „Karl Sasse“ und „Kreiszeitung“; geprüfter Einwilligungstext Foto-Link.
+3. **TNB-Verlagsliste je Spiel:** Die Teilnahmebedingungen nennen heute alle Geldregen-Verlagsgruppen (`_reihenfolge`). Für andere Spiele sollte die Liste aus den tatsächlichen Teilnehmern entstehen – Wortlaut von Telemedia bestätigen lassen.
+4. **monday LIVE:** erst nach Test mit TEST-Boards `MONDAY_LIVE=1` setzen. Zeitzone der monday-Deadline prüfen (TEST-Board zeigt 13:00/12:00, Live-Board 09:00).
+5. **Statische Datei `fragen_2027.json` online:** prüfen, ob sie ohne Passwort abrufbar ist (siehe Anleitung) – mit Access geschützt.
+6. **Tägliche Sammel-Mail an Verlage** (statt je Freigabe) bräuchte einen zeitgesteuerten Worker (Cron) – noch nicht gebaut.
+7. **Felder per Klick zuordnen** beim Vorlagen-Import (Grafiker) und **KI-Stapel für Rätsel** – weiterhin offen aus dem ersten Cockpit-Loop.
+8. **Local vs. online:** Lokal speichert das Cockpit in `.cockpit-daten/` auf dem Mac, online in Cloudflare D1 – zwei getrennte Bestände (gewollt).

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSprache } from '@/components/SpracheProvider'
-import { alleKampagnen, spieltageLaden } from '@/lib/db'
+import { alleKampagnen, spieltageLaden } from '@/lib/cockpit/daten-client'
 import type { Kampagne, Spieltag } from '@/lib/cockpit/typen'
 import FreigabePanel from '@/components/cockpit/FreigabePanel'
 import LeererZustand from '@/components/cockpit/LeererZustand'

@@ -3,6 +3,13 @@
 # Danach werden die geänderten Dateien auf GitHub gesichert.
 cd "$(dirname "$0")" || exit 1
 
+if ! grep -q "COCKPIT_DB" wrangler.jsonc; then
+  echo "HINWEIS: Der zentrale Cockpit-Speicher ist noch nicht eingerichtet."
+  echo "         Bitte zuerst „Cockpit-Server einrichten.command“ ausführen – sonst kann das Cockpit online nichts speichern."
+  read -p "Trotzdem online stellen? [j/N] " a
+  [[ "$a" =~ ^[jJyY]$ ]] || exit 0
+fi
+
 echo "1/3  Baue die App für Cloudflare (dauert 1–3 Minuten) …"
 if ! npm run build:vinext; then
   echo ""; echo "FEHLER beim Bauen – bitte dieses Fenster als Screenshot an Claude schicken."

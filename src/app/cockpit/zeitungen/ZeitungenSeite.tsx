@@ -17,6 +17,8 @@ import Hinweis from '@/components/cockpit/Hinweis'
 import Aktionsleiste from '@/components/cockpit/Aktionsleiste'
 import { katalog } from '@/lib/serie/spiele'
 import type { SerienDaten, Zeitung } from '@/lib/serie/types'
+import { serienDatenLaden } from '@/lib/serie/serie-client'
+import { standardTeilnehmer, type Standards } from '@/lib/serie/zeitungs-pool'
 import {
   aenderungenAus,
   alsCsv,
@@ -61,6 +63,7 @@ export default function ZeitungenSeite() {
 
   const [spielId, setSpielId] = useState<string>('')
   const [original, setOriginal] = useState<SerienDaten | null>(null)
+  const [standards, setStandards] = useState<Standards | null>(null)
   const [stamm, setStamm] = useState<ZeitungenStamm | undefined>(undefined)
   const [ladeFehler, setLadeFehler] = useState<string | null>(null)
 
@@ -84,9 +87,8 @@ export default function ZeitungenSeite() {
   }, [])
 
   useEffect(() => {
-    fetch('/serie/zeitungen.json')
-      .then((r) => r.json() as Promise<SerienDaten>)
-      .then(setOriginal)
+    serienDatenLaden()
+      .then((b) => { setOriginal(b.daten); setStandards(b.standard ?? null) })
       .catch((e) => setLadeFehler(e instanceof Error ? e.message : String(e)))
   }, [])
 
@@ -109,7 +111,8 @@ export default function ZeitungenSeite() {
 
   const alle = useMemo(() => (original ? datenMitStamm(original, stamm).zeitungen : []), [original, stamm])
   const teilnehmer = stamm?.teilnehmer
-  const machtMit = (id: string) => !teilnehmer || teilnehmer.length === 0 || teilnehmer.includes(id)
+  const standardListe = standards ? standardTeilnehmer(spielId, standards) : null
+  const machtMit = (id: string) => (teilnehmer?.length ? teilnehmer.includes(id) : standardListe ? standardListe.includes(id) : true)
 
   // ---------------------------------------------------------------- Import
   const tabelleSetzen = useCallback((tab: Tabelle, name: string) => {
@@ -138,7 +141,7 @@ export default function ZeitungenSeite() {
   const anzahlAenderungen = Object.values(neu).reduce((s, a) => s + Object.keys(a).length, 0)
   const neueTeilnehmer = useMemo(() => Array.from(new Set(vorschau.map((z) => z.zeitungId).filter((x): x is string => Boolean(x)))), [vorschau])
   const teilnehmerAendern = nurListe && neueTeilnehmer.length > 0 &&
-    (neueTeilnehmer.length !== (teilnehmer?.length ?? alle.length) || neueTeilnehmer.some((id) => !machtMit(id)))
+    (neueTeilnehmer.length !== alle.filter((z) => machtMit(z.id)).length || neueTeilnehmer.some((id) => !machtMit(id)))
   const ohneZuordnung = vorschau.filter((z) => !z.zeitungId).length
   const mitFehler = vorschau.filter((z) => Object.keys(z.fehler).length > 0).length
   const fehlendeRollen = !rollen.includes('zeitung')
@@ -218,9 +221,9 @@ export default function ZeitungenSeite() {
     setMeldung({ text: t(`${z.name}: Nummer gespeichert.`, `${z.name}: number saved.`), rueckgaengig: true })
   }
   const mitmachenUmschalten = async (id: string, an: boolean) => {
-    const basis = teilnehmer?.length ? teilnehmer : alle.map((z) => z.id)
+    const basis = teilnehmer?.length ? teilnehmer : alle.filter((z) => machtMit(z.id)).map((z) => z.id)
     const tn = an ? Array.from(new Set([...basis, id])) : basis.filter((x) => x !== id)
-    await speichern(stamm?.aenderungen ?? {}, tn.length === alle.length ? undefined : tn, t('von Hand', 'manual'))
+    await speichern(stamm?.aenderungen ?? {}, tn, t('von Hand', 'manual'))
   }
 
   const csvHerunterladen = () => {
@@ -307,6 +310,24 @@ export default function ZeitungenSeite() {
               {t('Benötigt: eine Spalte mit dem Zeitungsnamen und eine mit der Telefonnummer. Reihenfolge und weitere Spalten sind egal.', 'Needed: one column with the newspaper name and one with the phone number. Order and extra columns do not matter.')}
             </p>
           </div>
+
+          {feld === 'nummer' && (
+            <div style={{ marginTop: 14, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button type="button" className="cockpit-knopf sekundaer" onClick={async () => {
+                setLeseFehler(null)
+                try {
+                  const r = await fetch('/api/cockpit/monday', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ aktion: 'projektdetails' }) })
+                  const j = (await r.json()) as { zeilen?: Array<{ name: string; mwnPrint: string }>; board?: string; fehler?: string }
+                  if (!r.ok || !j.zeilen) throw new Error(j.fehler ?? 'HTTP ' + r.status)
+                  const tab: Tabelle = [['Zeitung', 'Geldregen-Nummer'], ...j.zeilen.filter((x) => x.mwnPrint.trim()).map((x) => [x.name, x.mwnPrint.replace(/\s*x{1,2}\s*$/i, '').trim()])]
+                  tabelleSetzen(tab, `monday · ${j.board ?? 'Projektdetails'}`)
+                } catch (e) { setLeseFehler(t('monday: ', 'monday: ') + (e instanceof Error ? e.message : String(e))) }
+              }}>
+                {t('Aus monday „Projektdetails“ übernehmen', 'Import from monday “Projektdetails”')}
+              </button>
+              <span style={{ fontSize: 13 }}>{t('Liest die Spalte „MWN Print“ – danach wie gewohnt prüfen und übernehmen.', 'Reads column “MWN Print”.')}</span>
+            </div>
+          )}
 
           <details style={{ marginTop: 14 }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600 }}>{t('Oder: Zellen aus Excel kopieren und hier einfügen', 'Or: copy cells from Excel and paste here')}</summary>

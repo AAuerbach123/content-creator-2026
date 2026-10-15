@@ -69,3 +69,30 @@ export function geldregenImportieren(quellen: ImportQuellen, monat: string, verl
 function raetselVollstaendig(t: SerieSpieltag): boolean {
   return Boolean(t.frage && t.a1 && t.a2 && (t.richtig === 1 || t.richtig === 2))
 }
+
+// ------------------------------------------------------------------ Geldregen November + Dezember 2027 (durchgehend)
+
+export const GELDREGEN_NOV_DEZ_ID = 'geldregen-2027-11-12'
+
+/**
+ * Stellt sicher, dass die durchgehende Geldregen-Kampagne Nov+Dez 2027 im Cockpit existiert
+ * (53 Spieltage aus fragen_2027.json, Fragen inkl. Antworten). Feste IDs → kein Doppel-Anlegen.
+ * Liefert true, wenn sie neu angelegt wurde.
+ */
+export async function geldregenNovDezSicherstellen(): Promise<boolean> {
+  const dc = await import('./daten-client')
+  if (await dc.kampagneLaden(GELDREGEN_NOV_DEZ_ID).catch(() => undefined)) return false
+  const vorhanden = await dc.kampagneFuerSpiel('geldregen').catch(() => [])
+  if (vorhanden.some((k) => k.monat.startsWith('2027-11') || k.monatBis === '2027-12')) return false
+  const q = await quellenLaden()
+  const nov = geldregenImportieren(q, '2027-11', [])
+  const dez = geldregenImportieren(q, '2027-12', [])
+  if (!nov || !dez) return false
+  const now = Date.now()
+  const kampagne: Kampagne = { ...nov.kampagne, id: GELDREGEN_NOV_DEZ_ID, monat: '2027-11', monatBis: '2027-12', erstelltAm: now, aktualisiertAm: now }
+  await dc.kampagneSpeichern(kampagne)
+  for (const s of [...nov.spieltage, ...dez.spieltage]) {
+    await dc.spieltagSpeichern({ ...s, id: `${GELDREGEN_NOV_DEZ_ID}-t${String(s.nr).padStart(2, '0')}`, kampagneId: GELDREGEN_NOV_DEZ_ID })
+  }
+  return true
+}

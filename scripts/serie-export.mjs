@@ -41,6 +41,17 @@ const K = tsLaden(path.join(wurzel, 'src/lib/serie/spiele/index.ts'))
 const R = tsLaden(path.join(wurzel, 'src/lib/serie/spiele/rahmen.ts'))
 const lies = (n) => JSON.parse(fs.readFileSync(path.join(wurzel, 'public/serie', n), 'utf8'))
 const daten = lies('zeitungen.json')
+// Weitere Zeitungen (Wissensquiz Juli 2026) – nur, wenn der Auftrag sie anfordert; zeitungen.json bleibt unverändert
+try {
+  const weitere = lies('zeitungen-weitere.json')
+  const ids = new Set(daten.zeitungen.map((z) => z.id))
+  const gewuenscht = String(auftrag.zeitungen ?? '').split(',')
+  for (const z of weitere.zeitungen ?? []) {
+    if (ids.has(z.id) || !gewuenscht.includes(z.id)) continue
+    daten.zeitungen.push(z)
+    if (!(z.tnb_gruppe in daten.tnb_gruppen)) daten.tnb_gruppen[z.tnb_gruppe] = '<span class="fehlt">[Verlagsangabe ' + (weitere.tnb_gruppen_namen?.[z.tnb_gruppe] ?? z.tnb_gruppe) + ' folgt]</span>'
+  }
+} catch { /* keine weiteren Zeitungen */ }
 // Im Cockpit hochgeladene Rufnummern dieses Spiels (kommen im Auftrag mit; ohne Upload unverändert)
 if (auftrag.nummern && typeof auftrag.nummern === 'object') {
   for (const z of daten.zeitungen) if (auftrag.nummern[z.id]) Object.assign(z, auftrag.nummern[z.id])

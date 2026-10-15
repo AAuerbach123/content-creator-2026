@@ -60,9 +60,9 @@ export type ImportZeile = {
 
 // ------------------------------------------------------------------ Speicher
 
-async function db() {
-  const { getDb } = await import('../db')
-  return getDb()
+// Zentral auf dem Server (Typ „stamm“) – alle Eingeloggten sehen dieselben Listen.
+async function dc() {
+  return import('./daten-client')
 }
 
 export const stammId = (spielId: string) => `zeitungen:${spielId}`
@@ -70,7 +70,7 @@ export const stammId = (spielId: string) => `zeitungen:${spielId}`
 export async function stammLaden(spielId: string): Promise<ZeitungenStamm | undefined> {
   if (typeof window === 'undefined') return undefined
   try {
-    const e = await (await db()).stammdaten.get(stammId(spielId))
+    const e = await (await dc()).dokLaden<StammEintrag>('stamm', stammId(spielId))
     return e && e.art === 'zeitungen' ? e : undefined
   } catch {
     return undefined
@@ -78,7 +78,7 @@ export async function stammLaden(spielId: string): Promise<ZeitungenStamm | unde
 }
 
 export async function stammSpeichern(s: ZeitungenStamm): Promise<void> {
-  await (await db()).stammdaten.put(s)
+  await (await dc()).dokSpeichern('stamm', s.id, s)
 }
 
 /** Legt die Nummern-Änderungen eines Spiels über die Original-Daten. Ohne Änderungen: gleiches Objekt zurück. */
@@ -111,7 +111,7 @@ export const einfuehrungId = (spielId: string, monat: string) => `einfuehrung:${
 export async function einfuehrungLaden(spielId: string, monat: string): Promise<EinfuehrungEintrag | undefined> {
   if (typeof window === 'undefined') return undefined
   try {
-    const e = await (await db()).stammdaten.get(einfuehrungId(spielId, monat))
+    const e = await (await dc()).dokLaden<StammEintrag>('stamm', einfuehrungId(spielId, monat))
     return e && e.art === 'einfuehrung' ? e : undefined
   } catch {
     return undefined
@@ -119,10 +119,10 @@ export async function einfuehrungLaden(spielId: string, monat: string): Promise<
 }
 
 export async function einfuehrungSpeichern(spielId: string, monat: string, titel: string, text: string): Promise<void> {
-  const d = await db()
+  const d = await dc()
   const id = einfuehrungId(spielId, monat)
-  if (!titel.trim() && !text.trim()) { await d.stammdaten.delete(id); return }
-  await d.stammdaten.put({ id, art: 'einfuehrung', titel, text, aktualisiertAm: Date.now() })
+  if (!titel.trim() && !text.trim()) { await d.dokLoeschen('stamm', id).catch(() => undefined); return }
+  await d.dokSpeichern('stamm', id, { id, art: 'einfuehrung', titel, text, aktualisiertAm: Date.now() })
 }
 
 // ------------------------------------------------------------------ Datei lesen

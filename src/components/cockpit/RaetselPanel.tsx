@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
 import type { Kampagne, Spieltag } from '@/lib/cockpit/typen'
-import { spieltagSpeichern } from '@/lib/db'
+import { spieltagSpeichern } from '@/lib/cockpit/daten-client'
 import Feld from './Feld'
 import Hinweis from './Hinweis'
 import Karte from './Karte'
@@ -17,12 +17,13 @@ type Props = {
   spieltage: Spieltag[]
   aktiverSpieltag?: string
   onAendern: (spieltagId: string) => void
+  /** Sofort im Zustand übernehmen + im Hintergrund speichern (Spielseite) */
+  onSpeichern?: (s: Spieltag) => void
 }
 
-export default function RaetselPanel({ spielId, kampagne, spieltage, aktiverSpieltag, onAendern }: Props) {
+export default function RaetselPanel({ spielId, kampagne, spieltage, aktiverSpieltag, onAendern, onSpeichern }: Props) {
   const { sprache } = useSprache()
   const [modus, setModus] = useState<'stapel' | 'tag'>('tag')
-  const [quelle, setQuelle] = useState('')
   const [laedt, setLaedt] = useState(false)
 
   const aktiv = useMemo(() => spieltage.find((s) => s.id === aktiverSpieltag) ?? spieltage[0], [spieltage, aktiverSpieltag])
@@ -49,11 +50,13 @@ export default function RaetselPanel({ spielId, kampagne, spieltage, aktiverSpie
     if (!aktiv) return
     setLaedt(true)
     const neu: Spieltag = { ...aktiv, raetsel: { ...aktiv.raetsel, [feld]: wert }, aktualisiertAm: Date.now() }
+    if (onSpeichern) { onSpeichern(neu); setLaedt(false); return }
     await spieltagSpeichern(neu)
     onAendern(neu.id)
     setLaedt(false)
   }
 
+  const quelle = aktiv?.raetsel.quelle ?? ''
   const regelFehler = regeln.pruefe(aktiv, spieltage, kampagne, { quelle })
 
   return (
@@ -124,7 +127,7 @@ export default function RaetselPanel({ spielId, kampagne, spieltage, aktiverSpie
                     art="text"
                     label={sprache === 'de' ? 'Quelle (Faktencheck – Pflicht)' : 'Source (fact check – required)'}
                     wert={quelle}
-                    onAendern={setQuelle}
+                    onAendern={(w) => feldSetzen('quelle', w)}
                     pflicht
                     hilfe={sprache === 'de'
                       ? 'Flowchart Seite 4: Fakt geprüft (Quelle)? Pflichtfeld, bevor der Spieltag freigegeben werden darf.'

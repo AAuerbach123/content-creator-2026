@@ -54,7 +54,7 @@ function dateLabel(datum: string): string {
  *  Ort, Betrag, Foto und Zusatztext in den Anzeigen erscheinen. Nur Gewinner mit Name UND Einwilligung.
  *  Einträge tragen die ID `cockpit:<spieltagId>:<gewinnerId>` und werden bei jeder Änderung ersetzt. */
 export async function gewinnerNachSerie(kampagne: Kampagne, spieltag: Spieltag): Promise<number> {
-  const { serienGewinnerLaden, serienGewinnerLoeschen, serienGewinnerSpeichern } = await import('../db')
+  const { serienGewinnerLaden, serienGewinnerLoeschen, serienGewinnerSpeichern } = await import('./daten-client')
   const monat = spieltag.datum.slice(0, 7)
   const praefix = `cockpit:${spieltag.id}:`
   for (const alt of await serienGewinnerLaden(kampagne.spielId, monat)) {

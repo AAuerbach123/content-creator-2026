@@ -8,23 +8,17 @@
 import { useEffect, useState } from 'react'
 import HilfePopover from '@/components/HilfePopover'
 import { useSprache } from '@/components/SpracheProvider'
-import { assetLaden, assetSpeichern, serienGewinnerLoeschen, serienGewinnerSpeichern, type SerienGewinner } from '@/lib/db'
+import type { SerienGewinner } from '@/lib/db'
+import { assetAlsDataUrl, assetSpeichern, serienGewinnerLoeschen, serienGewinnerSpeichern } from '@/lib/cockpit/daten-client'
 import type { Inhalt } from '@/lib/serie/spiele/typen'
 import type { Zeitung } from '@/lib/serie/types'
 import { GRAU_TEXT, HELLGRAU, eingabe, hinweisRot, karte, kartenTitel, knopf, knopfKlein, knopfPrimaer, label } from './stil'
 
 export const GEWINNER_TEXT_MAX = 110
 
-/** Foto-Hash → data:-URL (für die Vorschau im iframe und den Export) */
+/** Foto-Hash → data:-URL (für die Vorschau im iframe und den Export) – zentral gespeichert, Altdaten aus dem Browser als Rückfall */
 export async function fotoUrl(hash: string): Promise<string | undefined> {
-  const a = await assetLaden(hash)
-  if (!a) return undefined
-  return await new Promise<string>((ok, err) => {
-    const r = new FileReader()
-    r.onload = () => ok(String(r.result))
-    r.onerror = () => err(r.error)
-    r.readAsDataURL(a.blob)
-  })
+  return assetAlsDataUrl(hash)
 }
 
 const HILFE_DE =

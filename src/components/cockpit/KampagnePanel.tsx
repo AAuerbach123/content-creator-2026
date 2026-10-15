@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
-import type { Kampagne, Modell, Antwortformat, Preise, Preisstufe } from '@/lib/cockpit/typen'
-import { kampagneSpeichern, spieltagSpeichern, kampagneFuerSpiel, spieltageLaden } from '@/lib/db'
+import { STANDARD_FRISTEN, type Kampagne, type Modell, type Antwortformat, type Preise, type Preisstufe, type Spieltag } from '@/lib/cockpit/typen'
+import { kampagneSpeichern, spieltagSpeichern, kampagneFuerSpiel, spieltageLaden } from '@/lib/cockpit/daten-client'
+import { spieltage as kalenderTage } from '@/lib/serie/spiele/kalender'
 import { geldregenImportieren, quellenLaden } from '@/lib/cockpit/import'
 import Feld from './Feld'
 import Hinweis from './Hinweis'
@@ -29,6 +30,7 @@ export default function KampagnePanel({ spielId, spielName, spielMonate, modellW
   const [supermittwoch, setSupermittwoch] = useState<number>(1000)
   const [laedt, setLaedt] = useState(false)
   const [meldung, setMeldung] = useState<string | null>(null)
+  const [fristen, setFristen] = useState<{ anruf: string; foto: string; deadline: string }>({ anruf: STANDARD_FRISTEN.anruf, foto: STANDARD_FRISTEN.foto, deadline: '' })
 
   useEffect(() => {
     void kampagneFuerSpiel(spielId).then(setBestehend).catch(() => undefined)
@@ -58,13 +60,31 @@ export default function KampagnePanel({ spielId, spielName, spielMonate, modellW
       preise,
       antwortformat,
       spielSpezifisch: {},
+      fristen: { anruf: fristen.anruf, foto: fristen.foto, deadline: fristen.deadline || undefined },
       erstelltAm: now,
       aktualisiertAm: now,
     }
     await kampagneSpeichern(k)
+    // Alle Spieltage automatisch anlegen (Flowchart Ablauf 1 „Abschluss“): Mo–Fr je ein Tag, Sa+So zusammen
+    const tage = kalenderTage(monat)
+    for (const t of tage) {
+      const st: Spieltag = {
+        id: crypto.randomUUID(),
+        kampagneId: k.id,
+        nr: t.tag,
+        datum: t.datum,
+        istSupermittwoch: preise.art === 'tagespreis' && Boolean(preise.supermittwoch) && t.mittwoch ? true : undefined,
+        raetsel: {},
+        gewinner: [],
+        status: 'raetsel-fehlt',
+        erstelltAm: now,
+        aktualisiertAm: now,
+      }
+      await spieltagSpeichern(st)
+    }
     setBestehend((v) => [k, ...v])
     onFertig(k)
-    setMeldung(sprache === 'de' ? 'Kampagne angelegt – jetzt Spieltage anlegen oder Rätsel.' : 'Campaign created – create game days or puzzles now.')
+    setMeldung(sprache === 'de' ? `Kampagne mit ${tage.length} Spieltagen angelegt – weiter mit den Rätseln.` : `Campaign with ${tage.length} game days created – continue with the puzzles.`)
   }
 
   const uebernehmen = async () => {
@@ -148,6 +168,22 @@ export default function KampagnePanel({ spielId, spielName, spielMonate, modellW
           />
         </>
       )}
+
+      <fieldset className="cockpit-fristen">
+        <legend>{sprache === 'de' ? 'Tagesfristen (für den Countdown auf der Startseite)' : 'Daily deadlines (countdown on the start page)'}</legend>
+        <Feld art="text" label={sprache === 'de' ? 'Gewinner anrufen bis' : 'Call winners by'} wert={fristen.anruf} onAendern={(w) => setFristen({ ...fristen, anruf: w })} platzhalter="11:00" />
+        <Feld art="text" label={sprache === 'de' ? 'Fotos da bis' : 'Photos in by'} wert={fristen.foto} onAendern={(w) => setFristen({ ...fristen, foto: w })} platzhalter="14:00" />
+        <Feld art="text" label={sprache === 'de' ? 'Freigabe bis (freiwillig)' : 'Approval by (optional)'} wert={fristen.deadline} onAendern={(w) => setFristen({ ...fristen, deadline: w })} platzhalter="HH:MM"
+          fehler={fristen.deadline && !/^([01]\d|2[0-3]):[0-5]\d$/.test(fristen.deadline) ? (sprache === 'de' ? 'Format HH:MM, z. B. 16:30' : 'Format HH:MM') : undefined} />
+        {offene.length > 0 && (
+          <button type="button" className="cockpit-knopf sekundaer" onClick={async () => {
+            for (const k of offene) await kampagneSpeichern({ ...k, fristen: { anruf: fristen.anruf, foto: fristen.foto, deadline: fristen.deadline || undefined } })
+            setMeldung(sprache === 'de' ? 'Fristen gespeichert.' : 'Deadlines saved.')
+          }}>
+            {sprache === 'de' ? 'Fristen für bestehende Kampagne speichern' : 'Save deadlines for existing campaign'}
+          </button>
+        )}
+      </fieldset>
 
       {istGeldregen && (
         <Hinweis>

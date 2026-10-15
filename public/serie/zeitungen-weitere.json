@@ -1,0 +1,827 @@
+{
+ "_hinweis": "Weitere Zeitungen (Wissensquiz Juli 2026), ergänzend zu zeitungen.json. zeitungen.json bleibt unverändert (Geldregen-Referenz). Fehlende Texte erscheinen in den Anzeigen als gelbe Platzhalter.",
+ "stand": "2026-10-14",
+ "quellen": {
+  "teilnehmer": "monday d) Gewinner 07_26 WQh5 (Spalte „Gewinner von Verlag/Titel“) + Ad-Creator verlage-presets.json",
+  "daten": "Ad-Creator verlage-presets.json, public/rufnummern.json"
+ },
+ "tnb_gruppen_namen": {
+  "IPPEN": "IPPEN",
+  "AUGSBURGER": "Augsburger Allgemeine",
+  "ZVNW": "Neue Westfälische (ZVNW)",
+  "RHZ": "Rhein-Zeitung"
+ },
+ "wissensquiz_2026_07": [
+  "wq-augsburger-allgemeinen",
+  "otz",
+  "ta",
+  "tlz",
+  "wq-allgemeine-zeitung-der-lueneburger-heide",
+  "wq-altmarkzeitung",
+  "wq-frankfurter-neue-presse",
+  "wq-frankfurter-rundschau",
+  "wq-giessener-alsfelder",
+  "wq-giessener-anzeiger",
+  "wq-hna",
+  "wq-hanauer-anzeiger",
+  "wq-hersfelder-zeitung",
+  "wq-isenhagener-kreisblatt",
+  "wq-karl-sasse-verlage",
+  "wq-kreiszeitung-verlag",
+  "wq-leine-deister-zeitung",
+  "wq-maerkische-z",
+  "wq-muenchner-merkur",
+  "wq-oberhessische-lauterbacher",
+  "wq-offenbach-post",
+  "wq-soester-anzeiger",
+  "wq-tz",
+  "wq-usinger-kreis",
+  "wq-waldeckische-landeszeitung",
+  "wq-werra-rundschau",
+  "wq-westfaelischer-anz",
+  "wq-wetterauer-butzbacher",
+  "wq-wildeshauser-zeitung",
+  "wq-neue-westfaeische",
+  "wq-haller-kreisblatt",
+  "nuernberg",
+  "pm",
+  "sz",
+  "tv",
+  "beige",
+  "noz",
+  "shz",
+  "oberbadische",
+  "frankenpost",
+  "neuepresse",
+  "kurier",
+  "schwabo",
+  "suhl",
+  "swp",
+  "wq-rhein-zeitung"
+ ],
+ "zeitungen": [
+  {
+   "id": "wq-augsburger-allgemeinen",
+   "name": "Augsburger Allgemeine",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "raetsel_nummer": null,
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "wq-augsburger-allgemeinen"
+   ],
+   "farbe": "#205077",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "AUGSBURGER",
+   "hotline": "AUGSBURGER",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Geldregen-Nummer fehlt"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Augsburger Allgemeinen__n/a"
+  },
+  {
+   "id": "wq-allgemeine-zeitung-der-lueneburger-heide",
+   "name": "Allgemeine Zeitung der Lüneburger Heide",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 37",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-allgemeine-zeitung-der-lueneburger-heide"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Allgemeine Zeitung der Lüneburger Heide"
+  },
+  {
+   "id": "wq-altmarkzeitung",
+   "name": "Altmark Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 37",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-altmarkzeitung"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__AltmarkZeitung"
+  },
+  {
+   "id": "wq-frankfurter-neue-presse",
+   "name": "Frankfurter Neue Presse",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 52",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-frankfurter-neue-presse"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Frankfurter-Neue-Presse"
+  },
+  {
+   "id": "wq-frankfurter-rundschau",
+   "name": "Frankfurter Rundschau",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 56",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-frankfurter-rundschau"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Frankfurter-Rundschau"
+  },
+  {
+   "id": "wq-giessener-alsfelder",
+   "name": "Gießener Allgemeine / Alsfelder Allgemeine",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 57",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-giessener-alsfelder"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Giessener-Alsfelder"
+  },
+  {
+   "id": "wq-giessener-anzeiger",
+   "name": "Gießener Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-giessener-anzeiger"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Rufnummern-Hinweis: Cash Call: nur Platzhalter",
+    "Geldregen-Nummer fehlt"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Giessener-Anzeiger"
+  },
+  {
+   "id": "wq-hna",
+   "name": "HNA",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 58",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-hna"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__HNA"
+  },
+  {
+   "id": "wq-hanauer-anzeiger",
+   "name": "Hanauer Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 43",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-hanauer-anzeiger"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Hanauer-Anzeiger"
+  },
+  {
+   "id": "wq-hersfelder-zeitung",
+   "name": "Hersfelder Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 62",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-hersfelder-zeitung"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Hersfelder-Zeitung"
+  },
+  {
+   "id": "wq-isenhagener-kreisblatt",
+   "name": "Isenhagener Kreisblatt",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 37",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-isenhagener-kreisblatt"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Isenhagener Kreisblatt"
+  },
+  {
+   "id": "wq-karl-sasse-verlage",
+   "name": "Karl Sasse (Rotenburg)",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 49",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-karl-sasse-verlage"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Logo aus der Ad-Creator-Vorlage ist das der Wildeshauser Zeitung – bitte richtiges Logo nachreichen"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Karl-Sasse-Verlage"
+  },
+  {
+   "id": "wq-kreiszeitung-verlag",
+   "name": "Kreiszeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 48",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-kreiszeitung-verlag"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Logo aus der Ad-Creator-Vorlage ist das der Wildeshauser Zeitung – bitte richtiges Logo nachreichen"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Kreiszeitung-Verlag"
+  },
+  {
+   "id": "wq-leine-deister-zeitung",
+   "name": "Leine-Deister-Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 63",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-leine-deister-zeitung"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Leine-Deister-Zeitung"
+  },
+  {
+   "id": "wq-maerkische-z",
+   "name": "Märkischer Zeitungsverlag",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 68",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-maerkische-z"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Maerkische-Z"
+  },
+  {
+   "id": "wq-muenchner-merkur",
+   "name": "Münchner Merkur",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 38",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-muenchner-merkur"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Rufnummern-Hinweis: Cash Call: gleiche Nummer wie tz"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Muenchner-Merkur"
+  },
+  {
+   "id": "wq-oberhessische-lauterbacher",
+   "name": "Oberhessische Zeitung / Lauterbacher Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 57",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-oberhessische-lauterbacher"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Oberhessische-Lauterbacher"
+  },
+  {
+   "id": "wq-offenbach-post",
+   "name": "Offenbach-Post",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 42",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-offenbach-post"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Offenbach-Post"
+  },
+  {
+   "id": "wq-soester-anzeiger",
+   "name": "Soester Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 67",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-soester-anzeiger"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Soester-Anzeiger"
+  },
+  {
+   "id": "wq-tz",
+   "name": "tz",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 38",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-tz"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Rufnummern-Hinweis: Cash Call: gleiche Nummer wie Münchner Merkur"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__TZ"
+  },
+  {
+   "id": "wq-usinger-kreis",
+   "name": "Usinger Anzeiger / Kreis-Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 57",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-usinger-kreis"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Usinger-Kreis"
+  },
+  {
+   "id": "wq-waldeckische-landeszeitung",
+   "name": "Waldeckische Landeszeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 59",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-waldeckische-landeszeitung"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Waldeckische-Landeszeitung"
+  },
+  {
+   "id": "wq-werra-rundschau",
+   "name": "Werra-Rundschau",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 61",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-werra-rundschau"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Werra-Rundschau"
+  },
+  {
+   "id": "wq-westfaelischer-anz",
+   "name": "Westfälischer Anzeiger",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 65",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-westfaelischer-anz"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Westfaelischer-Anz"
+  },
+  {
+   "id": "wq-wetterauer-butzbacher",
+   "name": "Wetterauer Zeitung / Butzbacher Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 57",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-wetterauer-butzbacher"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Wetterauer-Butzbacher"
+  },
+  {
+   "id": "wq-wildeshauser-zeitung",
+   "name": "Wildeshauser Zeitung",
+   "kicker": "GELDREGEN",
+   "nummer": "01378 40 51",
+   "raetsel_nummer": null,
+   "format": [
+    282.5,
+    215
+   ],
+   "logos": [
+    "wq-wildeshauser-zeitung"
+   ],
+   "farbe": "#00238C",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "IPPEN",
+   "hotline": "IPPEN",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Ippen__Wildeshauser-Zeitung"
+  },
+  {
+   "id": "wq-neue-westfaeische",
+   "name": "Neue Westfälische",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "raetsel_nummer": null,
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "wq-neue-westfaeische"
+   ],
+   "farbe": "#000000",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "ZVNW",
+   "hotline": "ZVNW",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Geldregen-Nummer fehlt"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Neue-Westfaeische__n/a"
+  },
+  {
+   "id": "wq-haller-kreisblatt",
+   "name": "Haller Kreisblatt",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "raetsel_nummer": null,
+   "format": [
+    315,
+    220
+   ],
+   "logos": [
+    "wq-haller-kreisblatt"
+   ],
+   "farbe": "#000000",
+   "farbe_quelle": "Ad-Creator-Vorlage (Farbe Gewinnbetrag)",
+   "tnb_gruppe": "ZVNW",
+   "hotline": "ZVNW",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text für diese Verlagsgruppe fehlen (von Telemedia liefern lassen)",
+    "Geldregen-Nummer fehlt"
+   ],
+   "quelle": "Ad-Creator verlage-presets.json · Neue-Westfaeische__Haller Kreisblatt"
+  },
+  {
+   "id": "wq-rhein-zeitung",
+   "name": "Rhein-Zeitung (Mittelrhein)",
+   "kicker": "GELDREGEN",
+   "nummer": null,
+   "raetsel_nummer": null,
+   "format": [
+    315,
+    220
+   ],
+   "logos": [],
+   "farbe": "#000000",
+   "farbe_quelle": "Platzhalter",
+   "tnb_gruppe": "RHZ",
+   "hotline": "RHZ",
+   "datenschutz": "",
+   "orte": [
+    "Musterort"
+   ],
+   "pruefen": [
+    "Keine Ad-Creator-Vorlage: Format (Platzhalter 315×220), Logo und Hausfarbe fehlen",
+    "Teilnahmebedingungen, Hotline- und Datenschutz-Text fehlen",
+    "Geldregen-Nummer fehlt"
+   ],
+   "quelle": "monday d) Gewinner 07_26 WQh5 („Rhein-Zeitung“) · rufnummern.json"
+  }
+ ]
+}

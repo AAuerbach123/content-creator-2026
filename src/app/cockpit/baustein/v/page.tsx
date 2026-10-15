@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSprache } from '@/components/SpracheProvider'
-import { cockpitVorlagenLaden, cockpitVorlageLoeschen } from '@/lib/db'
+import { cockpitVorlagenLaden, cockpitVorlageLoeschen } from '@/lib/cockpit/daten-client'
 import type { CockpitVorlage } from '@/lib/cockpit/typen'
 import VorlagePanel from '@/components/cockpit/VorlagePanel'
 import LeererZustand from '@/components/cockpit/LeererZustand'
