@@ -32,12 +32,12 @@ type SpieltagRoh = {
   deadline?: string
   vorherigeFassung?: { am: number; raetsel: Record<string, unknown>; gewinner: Array<{ name: string; ort: string; betrag: number; gewinnertext: string; fotoHash?: string }> }
 }
-type KampagneRoh = { id: string; spielId: string; monat: string; vorlageAbc?: string; verlage: string[] }
+type KampagneRoh = { id: string; spielId: string; monat: string; vorlageAbc?: string; verlage: string[]; gestaltung?: Variante }
 
 /** Was der Kunde sehen darf (nur Daten, die ohnehin in seinen Anzeigen stehen). */
 export async function portalDaten(link: PortalLink) {
   const kampagnen = (await dokListe('kampagne')).map((d) => d.daten as KampagneRoh)
-  const out: Array<{ kampagne: Pick<KampagneRoh, 'id' | 'spielId' | 'monat' | 'vorlageAbc' | 'verlage'>; spieltage: unknown[]; aenderungen: Record<string, unknown>; teilnehmer?: string[]; einfuehrung?: { titel: string; text: string } }> = []
+  const out: Array<{ kampagne: Pick<KampagneRoh, 'id' | 'spielId' | 'monat' | 'vorlageAbc' | 'verlage' | 'gestaltung'>; spieltage: unknown[]; aenderungen: Record<string, unknown>; teilnehmer?: string[]; einfuehrung?: { titel: string; text: string } }> = []
   for (const k of kampagnen) {
     const tage = (await dokListe('spieltag', { feld: 'kampagneId', wert: k.id })).map((d) => d.daten as SpieltagRoh)
     const sichtbar = tage.filter((s) => s.status === 'freigegeben' || (s.verlagsStatus && s.verlagsStatus[link.gruppe]))
@@ -46,7 +46,7 @@ export async function portalDaten(link: PortalLink) {
     const monat = (sichtbar[0]?.datum ?? k.monat).slice(0, 7)
     const ef = (await dokLaden('stamm', `einfuehrung:${k.spielId}:${monat}`))?.daten as { titel?: string; text?: string } | undefined
     out.push({
-      kampagne: { id: k.id, spielId: k.spielId, monat: k.monat, vorlageAbc: k.vorlageAbc, verlage: k.verlage },
+      kampagne: { id: k.id, spielId: k.spielId, monat: k.monat, vorlageAbc: k.vorlageAbc, verlage: k.verlage, gestaltung: k.gestaltung },
       aenderungen: stamm?.aenderungen ?? {},
       teilnehmer: stamm?.teilnehmer,
       einfuehrung: ef?.titel || ef?.text ? { titel: ef.titel ?? '', text: ef.text ?? '' } : undefined,
@@ -131,6 +131,7 @@ export async function portalAktion(link: PortalLink, a: PortalAktion): Promise<v
 import zeitungenJson from '../../../public/serie/zeitungen.json'
 import weitereJson from '../../../public/serie/zeitungen-weitere.json'
 import { anzeigeBauen } from '../serie/anzeige-bauen'
+import type { Variante } from '../serie/variante'
 import { poolBilden, standardTeilnehmer, type WeitereDatei } from '../serie/zeitungs-pool'
 import { spielFinden } from '../serie/spiele'
 import { htmlMaskieren } from '../serie/serie-ki'
@@ -168,7 +169,7 @@ export async function portalPdf(link: PortalLink, spieltagId: string, zeitungId:
   if (gewinner.length) inhalt.gewinner = gewinner
   if (s.nr === 1 && k.einfuehrung) inhalt.einfuehrung = k.einfuehrung
   const spiel = k.kampagne.spielId === 'geldregen' ? null : spielFinden(k.kampagne.spielId) ?? null
-  const html = anzeigeBauen({ daten: pool.daten, spiel, z, inhalt, vorschlag: ((k.kampagne.vorlageAbc as Vorschlag) ?? 'A'), gewinner: g, monat: s.datum.slice(0, 7), pfad: (n) => `${origin}/serie/assets/${n}`, kiText: true })
+  const html = anzeigeBauen({ daten: pool.daten, spiel, z, inhalt, vorschlag: ((k.kampagne.vorlageAbc as Vorschlag) ?? 'A'), gewinner: g, monat: s.datum.slice(0, 7), pfad: (n) => `${origin}/serie/assets/${n}`, kiText: true, variante: k.kampagne.gestaltung ?? null })
   const pdf = await pdfAusHtml(html, z.format[0], z.format[1], origin)
   return { pdf, dateiname: `Anzeige_Spieltag_${String(s.nr).padStart(2, '0')}_${s.datum}_${z.id}_${g}-Gewinner.pdf` }
 }

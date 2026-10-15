@@ -266,3 +266,12 @@ Offen (Entscheidung/Layout):
 - Live-Vorschau zeigt nur noch „Gestaltung X · ändern“ (kein lokaler Umschalter mehr, der nirgends galt).
 - Wechsel bei schon freigegebenen Spieltagen (ab heute): Nachfrage; diese Tage gehen auf „vorbereitet“, die Prüfung wird gelöscht, Verlagsstatus „TMI: prüfen“.
 - Offen: Für importierte Vorlagen (Datei) gibt es noch keinen eigenen Generator – die Anzeigen nutzen weiterhin A/B/C.
+
+## KI-Gestaltungsvarianten (15.10.2026) – umgesetzt
+
+- Schritt 1 „Vorlage“: unter den drei festen Vorschlägen erzeugt **„3 Varianten erzeugen“** (Claude, Route `/api/cockpit/varianten`, Recht „gestalten“) je Vorschlag A/B/C eine Variante: Name, Idee, Titel, Unterzeile, Grund- und Akzentfarbe (B/C: wahlweise statt Hausfarbe). Freiwilliges Feld „Wunsch oder Anlass“.
+- Raster, Rufnummern, TNB, Gewinnerblock bleiben unverändert (`src/lib/serie/variante.ts`, wirkt nach dem Generator). Ohne Variante bleibt Geldregen bytegleich (check-serie 2027-11: 3213 identisch).
+- Farben werden automatisch auf Lesbarkeit geprüft (weiß auf Grund ≥ 4,5:1, Akzent ≥ 3:1). „Anpassen“: Titel, Unterzeile, Farben von Hand.
+- Varianten, die nicht ins Format passen („passt nicht“), lassen sich nicht wählen.
+- Gilt in Vorschau, Gesamtprüfung, Kundenportal (inkl. Druck-PDF) und ZIP/monday-PDFs. Getestet: Variante „Adventsrot“ (B) → Gesamtprüfung 42 Anzeigen, 0 Fehler.
+- Offen: Hintergrundbilder/Illustrationen variieren (nur Farben + Texte); Unterzeile wird nicht automatisch gekürzt, wenn sie zu lang ist (Prüfung meldet es).

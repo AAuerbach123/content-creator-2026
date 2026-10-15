@@ -494,3 +494,10 @@ a.cockpit-chip:focus-visible { outline: none; box-shadow: var(--cockpit-fokus); 
 .cockpit-vorschlag { border: 1px solid var(--tm-linie); border-radius: var(--cockpit-radius-l); padding: 12px; background: var(--tm-weiss); min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 .cockpit-vorschlag.gewaehlt { border-color: var(--tm-rot); box-shadow: 0 0 0 2px var(--tm-rose); }
 .cockpit-vorschlag header, .cockpit-vorschlag footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.cockpit-vorschlag-titel { font-size: 17px; margin: 22px 0 10px; }
+.cockpit-variante-anpassen { font-size: 14px; }
+.cockpit-variante-anpassen summary { cursor: pointer; font-weight: 700; color: var(--tm-rot); min-height: 32px; display: flex; align-items: center; }
+.cockpit-variante-anpassen label { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; font-weight: 600; }
+.cockpit-variante-anpassen label.farbe { flex-direction: row; align-items: center; gap: 8px; margin: 4px 0; }
+.cockpit-variante-anpassen input[type=text] { min-height: 38px; padding: 6px 10px; border: 1px solid var(--tm-linie); border-radius: 8px; font: inherit; }
+.cockpit-variante-anpassen input[type=color] { width: 44px; height: 32px; border: 1px solid var(--tm-linie); border-radius: 6px; padding: 0; background: none; }

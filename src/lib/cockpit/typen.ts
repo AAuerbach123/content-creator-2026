@@ -4,6 +4,8 @@
 // Grosse Binärdaten (Fotos, Vorlagen-PDFs) nie in dieses Modell einbetten – nur als
 // Hash-Referenz (/api/cockpit/assets).
 
+import type { Variante } from '../serie/variante'
+
 export type SpielId = string
 
 /** Modell für den Verlag (AZS = Auszahlungsspiel · RSP = Rundum-Sorglos) */
@@ -47,6 +49,10 @@ export type Kampagne = {
   fristen?: { anruf?: string; foto?: string; deadline?: string }
   /** Verbindung zu monday (Board-Satz a–d), gesetzt von /cockpit/monday */
   monday?: MondayKarte
+  /** Gewählte KI-Gestaltungsvariante (Basis = vorlageAbc) – leer = Vorschlag unverändert */
+  gestaltung?: Variante
+  /** Zuletzt von der KI erzeugte Varianten (zum erneuten Ansehen) */
+  varianten?: Variante[]
   erstelltAm: number
   aktualisiertAm: number
 }

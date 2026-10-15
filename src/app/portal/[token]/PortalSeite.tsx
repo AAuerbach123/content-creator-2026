@@ -4,6 +4,7 @@
 // setzen Korrekturhinweise per Klick in die Anzeige und geben frei oder melden Fehler.
 
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import type { Variante } from '@/lib/serie/variante'
 import { anzeigeHtml, anzeigeHoehe, ANZEIGE_BREITE, type SerienBasis } from '@/lib/serie/serie-client'
 import { poolBilden, standardTeilnehmer, type WeitereDatei } from '@/lib/serie/zeitungs-pool'
 import { spielFinden, GELDREGEN_EINTRAG } from '@/lib/serie/spiele'
@@ -22,7 +23,7 @@ type PSpieltag = {
   vorher?: { am: number; raetsel: PSpieltag['raetsel']; gewinner: PSpieltag['gewinner'] } | null
 }
 type PKampagne = {
-  kampagne: { id: string; spielId: string; monat: string; vorlageAbc?: string; verlage: string[] }
+  kampagne: { id: string; spielId: string; monat: string; vorlageAbc?: string; verlage: string[]; gestaltung?: Variante }
   spieltage: PSpieltag[]
   aenderungen: Record<string, Partial<Zeitung>>
   teilnehmer?: string[]
@@ -127,7 +128,7 @@ export default function PortalSeite({ token }: { token: string }) {
     if (gewinner.length) inhalt.gewinner = gewinner
     if (s.nr === 1 && k.einfuehrung) inhalt.einfuehrung = k.einfuehrung
     const basis = { daten: pool, fragen: {}, tnbRef: {} } as unknown as SerienBasis
-    return anzeigeHtml({ basis, spiel, z, inhalt, vorschlag: (k.kampagne.vorlageAbc as Vorschlag) ?? 'A', gewinner: gewinnerFassung, monat: s.datum.slice(0, 7), kiText: true })
+    return anzeigeHtml({ basis, spiel, z, inhalt, vorschlag: (k.kampagne.vorlageAbc as Vorschlag) ?? 'A', gewinner: gewinnerFassung, monat: s.datum.slice(0, 7), kiText: true, variante: k.kampagne.gestaltung ?? null })
   }, [pool, k, s, z, fotos, gewinnerFassung, zeigeVorher])
 
   /** Was hat Telemedia seit Ihrer letzten Prüfung geändert? (Text-Vergleich der Fassungen) */

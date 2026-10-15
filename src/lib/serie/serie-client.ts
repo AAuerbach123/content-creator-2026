@@ -64,6 +64,8 @@ export type VorschauArgs = {
   monat: string
   /** true = Frage/Antworten stammen aus der KI (für Geldregen HTML-maskieren) */
   kiText?: boolean
+  /** KI-Gestaltungsvariante der Kampagne (gilt nur für ihren Basis-Vorschlag) */
+  variante?: import('./variante').Variante | null
 }
 
 function alsSpieltag(inh: Inhalt, maskieren: boolean): Spieltag {
@@ -80,7 +82,7 @@ function alsSpieltag(inh: Inhalt, maskieren: boolean): Spieltag {
 }
 
 export function anzeigeHtml(a: VorschauArgs): string {
-  return anzeigeBauen({ daten: a.basis.daten, spiel: a.spiel, z: a.z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: pfadBrowser, kiText: a.kiText })
+  return anzeigeBauen({ daten: a.basis.daten, spiel: a.spiel, z: a.z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: pfadBrowser, kiText: a.kiText, variante: a.variante })
 }
 
 /** Inhaltliche Prüfung ohne Browser (nur Geldregen: pruefen.ts). */

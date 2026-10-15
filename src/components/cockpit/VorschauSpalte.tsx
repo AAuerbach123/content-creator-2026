@@ -70,7 +70,7 @@ export default function VorschauSpalte({ kampagne, spieltag, onGestaltungAendern
           ))}
         </div>
         <span className="cockpit-chip grau" title={de ? 'Gilt für Vorschau, Prüfung, Kundenportal, PDFs und monday' : 'Applies everywhere'}>
-          {de ? `Gestaltung ${vorschlag}` : `Design ${vorschlag}`}
+          {kampagne.gestaltung && kampagne.gestaltung.basis === vorschlag ? `${de ? 'Gestaltung' : 'Design'} „${kampagne.gestaltung.name}“ (${vorschlag})` : (de ? `Gestaltung ${vorschlag}` : `Design ${vorschlag}`)}
           {onGestaltungAendern && (
             <button type="button" className="cockpit-knopf text" style={{ minHeight: 0, padding: '0 0 0 8px' }} onClick={onGestaltungAendern}>
               {de ? 'ändern' : 'change'}

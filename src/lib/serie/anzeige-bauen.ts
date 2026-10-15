@@ -6,6 +6,7 @@ import { htmlMaskieren } from './serie-ki'
 import { spielSeite } from './spiele/rahmen'
 import type { Inhalt, SpielDef } from './spiele/typen'
 import type { GewinnerAnzahl, PfadFn, SerienDaten, Spieltag, Vorschlag, Zeitung } from './types'
+import { varianteAnwenden, zeitungFuerVariante, type Variante } from './variante'
 
 export type BauArgs = {
   daten: SerienDaten
@@ -19,6 +20,8 @@ export type BauArgs = {
   pfad: PfadFn
   /** true = Frage/Antworten sind Benutzertext → für Geldregen HTML-maskieren */
   kiText?: boolean
+  /** KI-Gestaltungsvariante (gilt nur, wenn variante.basis === vorschlag) */
+  variante?: Variante | null
 }
 
 export function alsSpieltag(inh: Inhalt, maskieren: boolean): Spieltag {
@@ -35,9 +38,13 @@ export function alsSpieltag(inh: Inhalt, maskieren: boolean): Spieltag {
 }
 
 export function anzeigeBauen(a: BauArgs): string {
+  const z = zeitungFuerVariante(a.z, a.variante, a.vorschlag)
+  let html: string
   if (!a.spiel) {
     const t = alsSpieltag(a.inhalt, !!a.kiText)
-    return seite(a.daten, a.z, tagesdaten(a.z, t, a.inhalt.gewinner, a.inhalt.einfuehrung), a.vorschlag, a.gewinner, a.monat, a.pfad)
+    html = seite(a.daten, z, tagesdaten(z, t, a.inhalt.gewinner, a.inhalt.einfuehrung), a.vorschlag, a.gewinner, a.monat, a.pfad)
+  } else {
+    html = spielSeite({ spiel: a.spiel, daten: a.daten, z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: a.pfad })
   }
-  return spielSeite({ spiel: a.spiel, daten: a.daten, z: a.z, inhalt: a.inhalt, vorschlag: a.vorschlag, gewinner: a.gewinner, monat: a.monat, pfad: a.pfad })
+  return varianteAnwenden(html, a.variante, a.vorschlag)
 }

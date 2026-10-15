@@ -12,6 +12,7 @@ import type { EchterGewinner, GewinnerAnzahl, Vorschlag, Zeitung } from '../seri
 import { assetAlsDataUrl } from './daten-client'
 import { standardTeilnehmer } from '../serie/zeitungs-pool'
 import type { Kampagne, Spieltag } from './typen'
+import type { Variante } from '../serie/variante'
 import { datenMitStamm, einfuehrungLaden, stammLaden, type ZeitungenStamm } from './zeitungen-stamm'
 
 let basisCache: Promise<SerienBasis> | null = null
@@ -23,6 +24,8 @@ export type AnzeigenKontext = {
   stamm?: ZeitungenStamm
   zeitungen: Zeitung[]
   einfuehrung?: { titel: string; text: string }
+  /** KI-Gestaltungsvariante der Kampagne */
+  variante?: Variante | null
 }
 
 /** Basisdaten + Rufnummern/Teilnehmer des Spiels + Einführungstext für einen Monat. */
@@ -40,6 +43,7 @@ export async function kontextLaden(kampagne: Kampagne, monat: string): Promise<A
     stamm,
     zeitungen,
     einfuehrung: ef ? { titel: ef.titel, text: ef.text } : undefined,
+    variante: kampagne.gestaltung ?? null,
   }
 }
 
@@ -92,8 +96,9 @@ export async function inhaltFuer(kontext: AnzeigenKontext, s: Spieltag): Promise
   return inh
 }
 
-export function argsFuer(kontext: AnzeigenKontext, z: Zeitung, inhalt: Inhalt, vorschlag: Vorschlag, gewinner: GewinnerAnzahl, monat: string): VorschauArgs {
-  return { basis: kontext.basis, spiel: kontext.spiel, z, inhalt, vorschlag, gewinner, monat, kiText: true }
+/** variante: undefined = die der Kampagne, null = ohne Variante (reiner Vorschlag), sonst diese Variante */
+export function argsFuer(kontext: AnzeigenKontext, z: Zeitung, inhalt: Inhalt, vorschlag: Vorschlag, gewinner: GewinnerAnzahl, monat: string, variante?: Variante | null): VorschauArgs {
+  return { basis: kontext.basis, spiel: kontext.spiel, z, inhalt, vorschlag, gewinner, monat, kiText: true, variante: variante === undefined ? kontext.variante : variante }
 }
 
 export function htmlFuer(a: VorschauArgs): string {
