@@ -1,6 +1,6 @@
 // /api/cockpit/ich – wer ist angemeldet, welche Rolle, welcher Speicher-Modus.
 import { umgebung } from '@/lib/server/speicher'
-import { benutzerAus, darf, ZugangFehler } from '@/lib/server/zugang'
+import { benutzerAus, darf, darfVarianten, ZugangFehler } from '@/lib/server/zugang'
 
 export const runtime = 'nodejs'
 
@@ -15,6 +15,7 @@ export async function GET(request: Request) {
         gestalten: darf(b, 'gestalten'),
         freigeben: darf(b, 'freigeben'),
         admin: darf(b, 'admin'),
+        varianten: darfVarianten(b),
       },
       speicher: u.modus,
     })

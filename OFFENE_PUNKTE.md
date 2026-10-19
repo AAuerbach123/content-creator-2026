@@ -275,3 +275,11 @@ Offen (Entscheidung/Layout):
 - Varianten, die nicht ins Format passen („passt nicht“), lassen sich nicht wählen.
 - Gilt in Vorschau, Gesamtprüfung, Kundenportal (inkl. Druck-PDF) und ZIP/monday-PDFs. Getestet: Variante „Adventsrot“ (B) → Gesamtprüfung 42 Anzeigen, 0 Fehler.
 - Offen: Hintergrundbilder/Illustrationen variieren (nur Farben + Texte); Unterzeile wird nicht automatisch gekürzt, wenn sie zu lang ist (Prüfung meldet es).
+
+## Geldscheine frei platzierbar + nur Grafik (15.10.2026) – umgesetzt
+
+- Variante hat `scheine` (Wert 50/100/200, x, y, Breite, Drehung, Ebene). Die KI platziert sie beim Erzeugen zuerst – in einer Streuzone je Vorschlag und außerhalb der gemessenen Text-/Kachelflächen; ein Prüfschritt schiebt Scheine, die auf Text liegen, auf den nächsten freien Platz.
+- „Geldscheine platzieren“ (Dialog): Maus ziehen, Pfeiltasten, Größe/Drehung/Wert/Ebene, + 50/100/200 €, Kopieren, Löschen, „KI neu platzieren“, „Wie im Vorschlag“. Rot = liegt auf Text.
+- Rechte: KI-Varianten erzeugen, anpassen, Scheine platzieren nur Rolle **Grafik** (lokal auf dem Mac alle). Server prüft das in `/api/cockpit/varianten` und beim Speichern der Kampagne (`varianten` ändern = nur Grafik; eine vorhandene Variante wählen darf jede/r mit Bearbeiten-Recht). Admin ist bewusst ausgeschlossen.
+- Geldregen ohne Variante weiter bytegleich (Platzierung der Originale nur in `SCHEINE_ORIGINAL` ausgelagert).
+- Nicht online getestet: die Rollensperre (lokal gibt es keine Anmeldung). Bitte nach dem Online-Stellen einmal mit einer Redaktions-Adresse prüfen.

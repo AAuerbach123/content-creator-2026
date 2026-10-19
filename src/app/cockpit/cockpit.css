@@ -501,3 +501,16 @@ a.cockpit-chip:focus-visible { outline: none; box-shadow: var(--cockpit-fokus); 
 .cockpit-variante-anpassen label.farbe { flex-direction: row; align-items: center; gap: 8px; margin: 4px 0; }
 .cockpit-variante-anpassen input[type=text] { min-height: 38px; padding: 6px 10px; border: 1px solid var(--tm-linie); border-radius: 8px; font: inherit; }
 .cockpit-variante-anpassen input[type=color] { width: 44px; height: 32px; border: 1px solid var(--tm-linie); border-radius: 6px; padding: 0; background: none; }
+
+/* Geldscheine frei platzieren */
+.cockpit-dialog.cockpit-schein-dialog { width: min(1320px, 100%); max-height: calc(100vh - 32px); overflow: auto; }
+.cockpit-schein-flaeche { position: relative; overflow: hidden; margin: 0 auto; border: 1px solid var(--tm-linie); background: #fafafa; touch-action: none; }
+.cockpit-schein { position: absolute; background-size: cover; background-position: center; border-radius: 3px; cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,.25); transform-origin: center; touch-action: none; }
+.cockpit-schein:active { cursor: grabbing; }
+.cockpit-schein.aktiv { outline: 3px solid var(--tm-gold); outline-offset: 2px; }
+.cockpit-schein.konflikt { outline: 3px solid #C8102E; outline-offset: 2px; }
+.cockpit-schein-leiste { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.cockpit-schein-eigenschaften { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; font-size: 13px; }
+.cockpit-schein-eigenschaften label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; }
+.cockpit-schein-eigenschaften label span { font-weight: 400; color: var(--tm-grau); }
+.cockpit-schein-eigenschaften select { min-height: 36px; border: 1px solid var(--tm-linie); border-radius: 8px; padding: 4px 8px; }

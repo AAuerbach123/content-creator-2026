@@ -8,7 +8,7 @@
 // Gesamtprüfung, Kundenportal und Druck-PDFs. Sind schon Spieltage ab heute freigegeben, fragt das Cockpit nach:
 // Diese Tage gehen zurück auf „neu prüfen und freigeben“, die Verlage prüfen sie erneut.
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useSprache } from '@/components/SpracheProvider'
 import AnzeigeVorschau, { type PruefStatus } from '@/app/serie/AnzeigeVorschau'
 import { argsFuer, hoeheFuer, htmlFuer, inhaltFuer, kontextLaden, type AnzeigenKontext } from '@/lib/cockpit/anzeigen'
@@ -17,8 +17,10 @@ import { heuteIso } from '@/lib/cockpit/tagesstatus'
 import type { Kampagne, Spieltag, VerlagsStatus } from '@/lib/cockpit/typen'
 import type { Inhalt } from '@/lib/serie/spiele/typen'
 import type { GewinnerAnzahl, Vorschlag } from '@/lib/serie/types'
-import { farbenAbsichern, type Variante } from '@/lib/serie/variante'
+import { farbenAbsichern, scheineOriginal, type Rechteck, type Schein, type Variante } from '@/lib/serie/variante'
 import Hinweis from './Hinweis'
+import GeldscheinEditor, { belegtMessen } from './GeldscheinEditor'
+import { useIch } from './IchKontext'
 
 const VORSCHLAEGE: Vorschlag[] = ['A', 'B', 'C']
 const GELDREGEN_ORIGINAL = {
@@ -62,6 +64,11 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
   const [wunsch, setWunsch] = useState('')
   const [erzeugt, setErzeugt] = useState(false)
   const [varianten, setVarianten] = useState<Variante[]>(kampagne.varianten ?? [])
+  const [editor, setEditor] = useState<string | null>(null)
+  const origIframes = useRef<Partial<Record<Vorschlag, HTMLIFrameElement | null>>>({})
+  const { ich } = useIch()
+  /** Varianten erzeugen/ändern/Geldscheine platzieren: nur Rolle Grafik (lokal alle) */
+  const darfV = Boolean(ich?.rechte.varianten)
 
   useEffect(() => { setVarianten(kampagne.varianten ?? []) }, [kampagne.varianten])
 
@@ -122,6 +129,27 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
     }
   }
 
+  const belegtAlle = (): Partial<Record<Vorschlag, Rechteck[]>> =>
+    Object.fromEntries(VORSCHLAEGE.map((v) => [v, belegtMessen(origIframes.current[v] ?? null)])) as Partial<Record<Vorschlag, Rechteck[]>>
+
+  const scheineNeu = async (v: Variante, belegt: Rechteck[]): Promise<Schein[] | null> => {
+    const r = await fetch('/api/cockpit/varianten', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ modus: 'scheine', basis: v.basis, spielName: kontext?.spiel?.name ?? 'Geldregen', hoechstgewinn: hoechstgewinn(kampagne), wunsch: [wunsch, v.name, v.idee].filter(Boolean).join(' – '), belegt: { [v.basis]: belegt } }),
+    })
+    const j = (await r.json()) as { scheine?: Schein[]; fehler?: string }
+    if (!r.ok || !j.scheine) throw new Error(j.fehler ?? `HTTP ${r.status}`)
+    return j.scheine
+  }
+
+  const variantenSpeichern = async (liste: Variante[]) => {
+    setVarianten(liste)
+    const k: Kampagne = { ...kampagne, varianten: liste, aktualisiertAm: Date.now() }
+    await kampagneSpeichern(k)
+    onGewaehlt(k, [])
+  }
+
   const erzeugen = async () => {
     setErzeugt(true)
     setMeldung(null)
@@ -136,7 +164,7 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
       const r = await fetch('/api/cockpit/varianten', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ spielName: spiel?.name ?? 'Geldregen', zeitraum, hoechstgewinn: hg, original, wunsch }),
+        body: JSON.stringify({ spielName: spiel?.name ?? 'Geldregen', zeitraum, hoechstgewinn: hg, original, wunsch, mitScheinen: !spiel, belegt: belegtAlle() }),
       })
       const j = (await r.json()) as { varianten?: Variante[]; fehler?: string }
       if (!r.ok || !j.varianten) throw new Error(j.fehler ?? `HTTP ${r.status}`)
@@ -162,7 +190,7 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
 
   if (fehler) return <Hinweis art="rot">{fehler}</Hinweis>
 
-  const karte = (schluessel: string, titel: string, untertitel: string | undefined, html: string, a: Auswahl, extra?: ReactNode) => {
+  const karte = (schluessel: string, titel: string, untertitel: string | undefined, html: string, a: Auswahl, extra?: ReactNode, onIframe?: (f: HTMLIFrameElement | null) => void) => {
     const p = pruef[schluessel]
     const e = p?.ergebnis
     const ampel = !p || p.laedt ? 'grau' : !e ? 'gelb' : !e.echt_ok ? 'rot' : 'gruen'
@@ -183,6 +211,7 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
             titel={titel}
             maxHoehe={anordnung === 'neben' ? 520 : 900}
             onPruefung={(s) => setPruef((alt) => ({ ...alt, [schluessel]: s }))}
+            onIframe={onIframe}
           />
         )}
         {extra}
@@ -251,7 +280,7 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
         <p style={{ color: 'var(--tm-grau)' }}>{de ? 'Vorschläge werden erstellt …' : 'Building proposals …'}</p>
       ) : (
         <div className={`cockpit-vorschlaege ${anordnung}`}>
-          {VORSCHLAEGE.map((v) => karte(`o-${v}`, de ? `Vorschlag ${v}` : `Proposal ${v}`, de ? 'Original' : 'original', originale[v], { vorschlag: v, variante: null }))}
+          {VORSCHLAEGE.map((v) => karte(`o-${v}`, de ? `Vorschlag ${v}` : `Proposal ${v}`, de ? 'Original' : 'original', originale[v], { vorschlag: v, variante: null }, undefined, (f) => { origIframes.current[v] = f }))}
         </div>
       )}
 
@@ -261,7 +290,8 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
           ? 'Die KI macht aus jedem Vorschlag eine Variante mit neuen Farben, eigenem Titel und eigener Unterzeile. Raster, Rufnummern und Teilnahmebedingungen bleiben unverändert.'
           : 'The AI creates one variant per proposal with new colours, title and subline. Layout, numbers and terms stay unchanged.'}
       </p>
-      <div className="cockpit-vorschlag-steuer">
+      {!darfV && <Hinweis>{de ? 'Varianten erzeugt und ändert die Grafik. Du kannst eine vorhandene Variante wählen.' : 'Variants are created by the design team.'}</Hinweis>}
+      {darfV && <div className="cockpit-vorschlag-steuer">
         <div className="cockpit-feld" style={{ marginBottom: 0 }}>
           <label htmlFor="vw-wunsch">{de ? 'Wunsch oder Anlass (freiwillig)' : 'Wish or occasion (optional)'}</label>
           <input id="vw-wunsch" type="text" value={wunsch} onChange={(e) => setWunsch(e.target.value)} placeholder={de ? 'z. B. Advent, festlich, warme Farben' : 'e.g. Christmas, warm colours'} />
@@ -269,11 +299,13 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
         <button type="button" className="cockpit-knopf primaer" disabled={erzeugt} onClick={() => void erzeugen()}>
           {erzeugt ? (de ? 'KI arbeitet …' : 'AI working …') : varianten.length ? (de ? '3 neue Varianten erzeugen' : 'Create 3 new variants') : (de ? '3 Varianten erzeugen' : 'Create 3 variants')}
         </button>
-      </div>
+      </div>}
       {varianten.length > 0 && z && inhalt && (
         <div className={`cockpit-vorschlaege ${anordnung}`}>
           {varianten.map((x) =>
             karte(`v-${x.id}`, `${x.name} · ${de ? 'aus' : 'from'} ${x.basis}`, x.idee, variantenHtml[x.id] ?? '', { vorschlag: x.basis, variante: x },
+              !darfV ? undefined : <>
+              <button type="button" className="cockpit-knopf sekundaer" onClick={() => setEditor(x.id)}>{de ? 'Geldscheine platzieren' : 'Place banknotes'}</button>
               <details className="cockpit-variante-anpassen">
                 <summary>{de ? 'Anpassen' : 'Adjust'}</summary>
                 <label>{de ? 'Titel („|“ = neue Zeile)' : 'Title'}<input type="text" value={x.titel ?? ''} onChange={(e) => anpassen(x.id, { titel: e.target.value })} /></label>
@@ -287,11 +319,31 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
                 </div>
                 <button type="button" className="cockpit-knopf sekundaer" onClick={() => void anpassungSpeichern()}>{de ? 'Anpassung speichern' : 'Save'}</button>
                 <p style={{ fontSize: 12, color: 'var(--tm-grau)', margin: 0 }}>{de ? 'Farben werden automatisch so angepasst, dass Schrift gut lesbar bleibt. Ist die Variante schon gewählt, mit „Diese Variante nehmen“ erneut übernehmen.' : 'Colours are adjusted for legibility.'}</p>
-              </details>,
+              </details>
+              </>,
             ),
           )}
         </div>
       )}
+      {(() => {
+        const x = editor ? varianten.find((v) => v.id === editor) : undefined
+        if (!x || !z || !kontext || !inhalt) return null
+        const original = kontext.spiel ? [] : scheineOriginal(x.basis)
+        return (
+          <GeldscheinEditor
+            html={bauen(x.basis, { ...x, scheine: [] })}
+            hoehe={hoeheFuer(z)}
+            scheine={x.scheine ?? original}
+            original={original}
+            onAbbrechen={() => setEditor(null)}
+            onKi={(belegt) => scheineNeu(x, belegt)}
+            onFertig={(liste) => {
+              setEditor(null)
+              void variantenSpeichern(varianten.map((v) => (v.id === x.id ? { ...v, scheine: liste } : v)))
+            }}
+          />
+        )
+      })()}
       {inhalt?.muster && <p style={{ fontSize: 12, color: '#6B4A00' }}>{de ? 'Noch kein eigenes Rätsel – gezeigt wird das Muster aus der Präsentation (gelb).' : 'No puzzle yet – showing the sample.'}</p>}
     </section>
   )

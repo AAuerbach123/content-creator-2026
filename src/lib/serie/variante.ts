@@ -1,6 +1,6 @@
 // KI-Gestaltungsvarianten auf Basis der festen Vorschläge A/B/C.
 //
-// Eine Variante ändert nur Farben, Titel und Unterzeile – Raster, Kacheln, Rufnummern, Teilnahmebedingungen
+// Eine Variante ändert Farben, Titel, Unterzeile und die Lage der Geldscheine – Raster, Kacheln, Rufnummern, Teilnahmebedingungen
 // und Gewinnerblock bleiben wie im geprüften Vorschlag. Ohne Variante entsteht die Anzeige unverändert
 // (Geldregen bleibt bytegleich, Regel 5).
 //
@@ -9,7 +9,7 @@
 //  • Vorschlag B/C: diese nutzen die Hausfarbe der Zeitung – die Variante kann sie durch eine Kampagnenfarbe ersetzen.
 //  • Titel/Unterzeile: der erste Titel (`.hl`) und die erste Unterzeile (`.sub`) der Anzeige werden ersetzt.
 
-import { mischen } from './generator'
+import { BODY_H, mischen, scheine, SCHEINE_ORIGINAL, W } from './generator'
 import { htmlMaskieren } from './serie-ki'
 import type { Vorschlag, Zeitung } from './types'
 
@@ -29,6 +29,51 @@ export type Variante = {
   eigeneFarbe?: boolean
   /** kurze Idee/Begründung der KI */
   idee?: string
+  /** Geldscheine frei platziert (Anzeigen-Pixel). Fehlt = Platzierung des Vorschlags, [] = keine Scheine */
+  scheine?: Schein[]
+}
+
+export type ScheinWert = 50 | 100 | 200
+export type Schein = { wert: ScheinWert; x: number; y: number; breite: number; drehung: number; ebene: 1 | 2 | 3 }
+export type Rechteck = { x: number; y: number; w: number; h: number }
+
+/** Seitenverhältnis der Scheinbilder */
+export const SCHEIN_VERHAELTNIS = 290 / 520
+export const ANZEIGE_W = W
+export const ANZEIGE_BODY_H = BODY_H
+
+/** Bereich, in dem die KI zuerst platziert (frei von Text im Original). Der Grafiker darf überall hin schieben. */
+export const STREUZONE: Record<Vorschlag, Rechteck> = {
+  A: { x: 690, y: -110, w: 880, h: 380 },
+  B: { x: 0, y: 300, w: 520, h: 200 },
+  C: { x: 600, y: -110, w: 975, h: 330 },
+}
+
+export function scheineOriginal(v: Vorschlag): Schein[] {
+  return SCHEINE_ORIGINAL[v].map(([wert, x, y, breite, drehung, ebene]) => ({ wert: wert as ScheinWert, x, y, breite, drehung, ebene: Math.min(3, Math.max(1, ebene)) as 1 | 2 | 3 }))
+}
+
+/** Werte begrenzen: Scheine dürfen bis 40 % aus der Anzeige ragen (angeschnitten), Größe 90–420 px, Drehung ±45°. */
+export function scheinAbsichern(x: Partial<Schein>): Schein {
+  const wert = ([50, 100, 200] as const).includes(Number(x.wert) as ScheinWert) ? (Number(x.wert) as ScheinWert) : 100
+  const breite = Math.round(Math.min(420, Math.max(90, Number(x.breite) || 220)))
+  const hoehe = breite * SCHEIN_VERHAELTNIS
+  const px = Math.round(Math.min(W - breite * 0.6, Math.max(-breite * 0.4, Number(x.x) || 0)))
+  const py = Math.round(Math.min(BODY_H - hoehe * 0.6, Math.max(-hoehe * 0.4, Number(x.y) || 0)))
+  const drehung = Math.round(Math.min(45, Math.max(-45, Number(x.drehung) || 0)))
+  const ebene = (Math.min(3, Math.max(1, Math.round(Number(x.ebene) || 1)))) as 1 | 2 | 3
+  return { wert, x: px, y: py, breite, drehung, ebene }
+}
+
+/** Umriss eines Scheins (ohne Drehung, für die Überdeckungs-Warnung genügt das). */
+export function scheinRechteck(sc: Schein): Rechteck {
+  return { x: sc.x, y: sc.y, w: sc.breite, h: sc.breite * SCHEIN_VERHAELTNIS }
+}
+
+export function ueberdeckung(a: Rechteck, b: Rechteck): number {
+  const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)
+  const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y)
+  return w > 0 && h > 0 ? (w * h) / (a.w * a.h) : 0
 }
 
 const HEX = /^#[0-9a-fA-F]{6}$/
@@ -137,5 +182,13 @@ export function varianteAnwenden(html: string, v: Variante | null | undefined, v
   if (v.unterzeile?.trim()) {
     h = h.replace(/(<div class="sub"[^>]*>)([\s\S]*?)(<\/div>)/, (_x, auf, _alt, zu) => `${auf}${textHtml(v.unterzeile!)}${zu}`)
   }
+  if (v.scheine) h = scheineSetzen(h, v.scheine)
   return h
+}
+
+/** Alle Geldscheine entfernen und die neue Platzierung an den Anfang des Gestaltungsbereichs setzen. */
+export function scheineSetzen(html: string, liste: Schein[]): string {
+  const ohne = html.replace(/<div class="bn(?:50|100|200)o?" style="[^"]*"><\/div>/g, '')
+  const neu = scheine(liste.map((x) => scheinAbsichern(x)).map((x) => [x.wert, x.x, x.y, x.breite, x.drehung, x.ebene]), false)
+  return ohne.replace('<div class="body">', `<div class="body">${neu}`)
 }

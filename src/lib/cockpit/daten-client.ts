@@ -207,7 +207,7 @@ export async function assetAlsDataUrl(hash: string): Promise<string | undefined>
 
 export type Ich = {
   benutzer: { email: string; name: string; rolle: 'admin' | 'redaktion' | 'grafik' | 'pruefer' | 'lesen'; modus: 'access' | 'lokal' | 'passwort' }
-  rechte: { bearbeiten: boolean; gestalten: boolean; freigeben: boolean; admin: boolean }
+  rechte: { bearbeiten: boolean; gestalten: boolean; freigeben: boolean; admin: boolean; varianten?: boolean }
   speicher: 'd1' | 'datei' | 'fehlt'
 }
 

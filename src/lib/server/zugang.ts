@@ -39,6 +39,11 @@ export function darf(b: Benutzer, recht: Recht): boolean {
   return RECHTE[b.rolle]?.includes(recht) ?? false
 }
 
+/** Gestaltungsvarianten (KI erzeugen, anpassen, Geldscheine platzieren): nur Rolle „Grafik“ – lokal auf dem Mac ohne Anmeldung ebenfalls. */
+export function darfVarianten(b: Benutzer): boolean {
+  return b.rolle === 'grafik' || b.modus === 'lokal'
+}
+
 /** Standardrolle für angemeldete Personen ohne Eintrag: Redaktion (Tagesarbeit möglich, keine Admin-Funktionen). */
 export const STANDARD_ROLLE: Rolle = 'redaktion'
 

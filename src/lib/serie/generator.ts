@@ -93,6 +93,15 @@ export function bild(e: GewinnerEintrag, w: number, h: number, r = '50%', extra 
 /** Geldscheine; schatten=false (Standard) für helle/farbige Hintergründe.
  *  Ohne Schatten zusätzlich Bilder ohne eingebrannten Schattenrand (bn*o.jpg, Rand unten/rechts abgeschnitten).
  *  Hintergrund: Chrome legt box-shadow als Rasterbild ins PDF → in Vorschau/Acrobat graue Kästen. */
+export type ScheinTupel = [number, number, number, number, number, number] // Wert, x, y, Breite, Drehung°, Ebene
+
+/** Geldschein-Platzierung der festen Vorschläge (Anzeigen-Pixel, 1575 breit). */
+export const SCHEINE_ORIGINAL: Record<'A' | 'B' | 'C', ScheinTupel[]> = {
+  A: [[200, 760, -80, 290, -18, 1], [100, 1010, 20, 260, 20, 2], [50, 725, 105, 185, 8, 1], [100, 880, 128, 220, -8, 3], [50, 1150, -70, 210, -28, 1], [200, 1135, 118, 190, 12, 2]],
+  B: [[100, 20, 338, 190, -12, 2], [200, 265, 330, 190, 10, 1], [50, 150, 380, 160, -3, 3]],
+  C: [[100, 640, -40, 230, 16, 1], [200, 860, -95, 250, -12, 1], [50, 1060, 10, 190, 22, 1], [200, 1240, -70, 240, -9, 1], [100, 1360, 70, 210, 17, 2]],
+}
+
 export function scheine(liste: [number, number, number, number, number, number][], schatten = false): string {
   const s = schatten ? 'box-shadow:0 10px 24px rgba(0,0,0,.30);' : ''
   const o = schatten ? '' : 'o'
@@ -317,7 +326,7 @@ function vorschlagA(daten: SerienDaten, z: Zeitung, td: Tagesdaten, nGew: Gewinn
 .va .zf{color:#DCE3F2;font-size:15.5px;line-height:1.35;border-left:4px solid ${GOLD};padding-left:14px} .va .zf b{color:${GOLD}}
 .va .gew{display:flex;gap:8px;align-items:center} .va .gq{color:#fff;font-size:15px;line-height:1.25;flex:1;min-width:0} .va .gq b{color:${GOLD};font-size:22px;display:block} .va .gq small{color:#C9D3E8;font-size:14px;display:block}`
   // Scheine enden über den Geldpaket-Kacheln
-  const sch = scheine([[200, 760, -80, 290, -18, 1], [100, 1010, 20, 260, 20, 2], [50, 725, 105, 185, 8, 1], [100, 880, 128, 220, -8, 3], [50, 1150, -70, 210, -28, 1], [200, 1135, 118, 190, 12, 2]])
+  const sch = scheine(SCHEINE_ORIGINAL.A)
   const kopf = `<div class="abs blk" data-n="Kopf" style="left:48px;top:28px"><div class="kick">${z.kicker} · ${td.tag}. SPIELTAG</div>
   ${goldTitel('Geldregen', 146, 600)}<div class="sub">Mit einem Anruf bis zu <b>10.000 €</b> gewinnen</div></div>`
   const links = `<div class="abs blk" data-n="Frage/Schritte" style="left:48px;top:268px;width:560px">
@@ -384,7 +393,7 @@ function vorschlagB(daten: SerienDaten, z: Zeitung, td: Tagesdaten, nGew: Gewinn
 .vb .zf{font-size:14px;line-height:1.3;color:#333;background:${T2};border-radius:12px;padding:10px 16px} .vb .zf b{color:${F}}
 .vb .gname{font-size:18px;line-height:1.2;flex:1;min-width:0} .vb .gname b{font-size:24px;display:block}
 .vb .tband{border-top:6px solid ${F}}`
-  const sch = scheine([[100, 20, 338, 190, -12, 2], [200, 265, 330, 190, 10, 1], [50, 150, 380, 160, -3, 3]], false)
+  const sch = scheine(SCHEINE_ORIGINAL.B, false)
   let gew: string
   if (START_HINWEIS && td.tag === 1) {
     gew =
@@ -465,7 +474,7 @@ function vorschlagC(daten: SerienDaten, z: Zeitung, td: Tagesdaten, nGew: Gewinn
 .vc .steps li b{flex:none;width:30px;height:30px;border-radius:8px;background:#fff;color:${F};display:flex;align-items:center;justify-content:center;font-size:17px}
 .vc .zf{font-size:16px;line-height:1.35;color:#fff} .vc .zf b{color:${GOLD}}
 .vc .gq{font-size:15px;line-height:1.25;color:#fff;flex:1;min-width:0} .vc .gq b{font-size:22px;color:${GOLD};display:block}`
-  const sch = scheine([[100, 640, -40, 230, 16, 1], [200, 860, -95, 250, -12, 1], [50, 1060, 10, 190, 22, 1], [200, 1240, -70, 240, -9, 1], [100, 1360, 70, 210, 17, 2]], false)
+  const sch = scheine(SCHEINE_ORIGINAL.C, false)
   const kopf = `<div class="abs blk" data-n="Kopf" style="left:44px;top:34px"><div class="lbl" style="font-size:19px">${z.kicker} · ${td.tag}. SPIELTAG</div>
   <div class="hl rc" style="margin-top:4px">GELDREGEN</div><div class="sub">Mit einem Anruf bis zu <b class="rc">10.000 €</b> gewinnen</div></div>`
   const links = `<div class="abs blk" data-n="Frage/Schritte" style="left:44px;top:255px;width:520px">

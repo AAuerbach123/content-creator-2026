@@ -91,6 +91,20 @@ export async function PUT(request: Request) {
   if (!id || typeof id !== 'string' || id.length > 200) return Response.json({ fehler: 'id fehlt.' }, { status: 400 })
   if (body.daten === undefined) return Response.json({ fehler: 'daten fehlen.' }, { status: 400 })
   const version = typeof body.version === 'number' ? body.version : 0
+  if (typ === 'kampagne') {
+    // Gestaltungsvarianten ändern darf nur die Grafik; wählen (gestaltung = eine vorhandene Variante) darf jede/r mit Bearbeiten-Recht
+    const { darfVarianten } = await import('@/lib/server/zugang')
+    if (!darfVarianten(z.benutzer)) {
+      const alt = (await dokLaden('kampagne', id).catch(() => null))?.daten as { varianten?: unknown[]; gestaltung?: unknown } | undefined
+      const neu = body.daten as { varianten?: unknown[]; gestaltung?: unknown }
+      const j = (x: unknown) => JSON.stringify(x ?? null)
+      const variantenGeaendert = j(alt?.varianten) !== j(neu?.varianten)
+      const gestaltungFremd = neu?.gestaltung != null && j(neu.gestaltung) !== j(alt?.gestaltung) && !(neu.varianten ?? []).some((v) => j(v) === j(neu.gestaltung))
+      if (variantenGeaendert || gestaltungFremd) {
+        return Response.json({ fehler: 'Gestaltungsvarianten erzeugen und ändern darf nur die Grafik.' }, { status: 403 })
+      }
+    }
+  }
   try {
     const dok = await dokSpeichern(typ, id, body.daten, version, z.benutzer.email)
     if (typ !== 'benutzerEinstellung') {
