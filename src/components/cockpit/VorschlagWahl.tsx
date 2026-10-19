@@ -36,6 +36,8 @@ type Props = {
   spieltage: Spieltag[]
   spieltag?: Spieltag
   onGewaehlt: (k: Kampagne, geaenderteTage: Spieltag[]) => void
+  /** Noch keine Kampagne: nur die drei Vorschläge vergleichen (Musterdaten); die Wahl geht an die Vorlage. */
+  vorschau?: { gewaehlt?: Vorschlag; onWahl: (v: Vorschlag) => Promise<void> | void }
 }
 
 function hoechstgewinn(k: Kampagne): string {
@@ -44,12 +46,12 @@ function hoechstgewinn(k: Kampagne): string {
   return `${n.toLocaleString('de-DE')} €`
 }
 
-export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehlt }: Props) {
+export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehlt, vorschau }: Props) {
   const { sprache } = useSprache()
   const de = sprache === 'de'
   const beispiel = spieltag ?? spieltage[0]
   const monat = beispiel?.datum.slice(0, 7) ?? kampagne.monat.slice(0, 7)
-  const gewaehlt = ((kampagne.vorlageAbc as Vorschlag) ?? 'A') as Vorschlag
+  const gewaehlt = ((vorschau ? vorschau.gewaehlt : kampagne.vorlageAbc) ?? 'A') as Vorschlag
 
   const [kontext, setKontext] = useState<AnzeigenKontext | null>(null)
   const [fehler, setFehler] = useState<string | null>(null)
@@ -98,10 +100,15 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
     return spieltage.filter((s) => s.status === 'freigegeben' && s.datum >= heute)
   }, [spieltage])
 
-  const istAktiv = (a: Auswahl) => Boolean(kampagne.vorlageAbc) && a.vorschlag === gewaehlt && (a.variante ? kampagne.gestaltung?.id === a.variante.id && JSON.stringify(kampagne.gestaltung) === JSON.stringify(a.variante) : !kampagne.gestaltung)
+  const istAktiv = (a: Auswahl) => vorschau ? Boolean(vorschau.gewaehlt) && !a.variante && a.vorschlag === vorschau.gewaehlt : Boolean(kampagne.vorlageAbc) && a.vorschlag === gewaehlt && (a.variante ? kampagne.gestaltung?.id === a.variante.id && JSON.stringify(kampagne.gestaltung) === JSON.stringify(a.variante) : !kampagne.gestaltung)
 
   const uebernehmen = async (a: Auswahl, bestaetigt = false) => {
     if (istAktiv(a)) return
+    if (vorschau) {
+      await vorschau.onWahl(a.vorschlag)
+      setMeldung(de ? `Vorschlag ${a.vorschlag} ist vorgemerkt. Er wird beim Anlegen der Kampagne (Schritt 2) übernommen.` : `Proposal ${a.vorschlag} noted.`)
+      return
+    }
     if (betroffen.length && !bestaetigt) { setFrage(a); return }
     setSpeichert(true)
     setMeldung(null)
@@ -284,6 +291,9 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
         </div>
       )}
 
+      {vorschau ? (
+        <Hinweis>{de ? 'Gezeigt werden Musterdaten. KI-Varianten und Geldscheine gibt es, sobald in Schritt 2 die Kampagne angelegt ist.' : 'Sample data. AI variants are available once the campaign exists (step 2).'}</Hinweis>
+      ) : <>
       <h3 className="cockpit-vorschlag-titel">{de ? 'KI-Varianten' : 'AI variants'}</h3>
       <p style={{ margin: '0 0 10px', color: 'var(--tm-grau)', fontSize: 14 }}>
         {de
@@ -325,6 +335,7 @@ export default function VorschlagWahl({ kampagne, spieltage, spieltag, onGewaehl
           )}
         </div>
       )}
+      </>}
       {(() => {
         const x = editor ? varianten.find((v) => v.id === editor) : undefined
         if (!x || !z || !kontext || !inhalt) return null

@@ -32,7 +32,7 @@ echo ""; echo "3/4  Erstelle den Commit …"
 git add -A
 git status --short | head -20
 echo "     … insgesamt $(git status --short | wc -l | tr -d ' ') Dateien"
-git commit -q -m "feat(cockpit): Gestaltung – Vorschläge A/B/C + KI-Varianten (Farben, Titel, Geldscheine), Geldscheine frei platzierbar, nur Grafik; fix: KI-Gewinnertext, Gesamtprüfung ignoriert Fotodaten; Access-Werte; Erklärfilm-Drehbuch" \
+git commit -q -m "feat(cockpit): Schritt 1 zeigt Vorschläge A/B/C schon vor der Kampagne (Musterdaten), Wahl wird vorgemerkt" \
   || abbruch "Commit fehlgeschlagen (evtl. nichts zu sichern)."
 echo "     ✓ Commit erstellt: $(git log -1 --format='%h %s' | cut -c1-90)"
 

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSprache } from '@/components/SpracheProvider'
 import { GELDREGEN_EINTRAG, SPIELE } from '@/lib/serie/spiele'
-import { cockpitVorlageLaden, cockpitVorlagenLaden, kampagneFuerSpiel, spieltageLaden, spieltagSpeichern } from '@/lib/cockpit/daten-client'
+import { cockpitVorlageLaden, cockpitVorlagenLaden, cockpitVorlageSpeichern, kampagneFuerSpiel, spieltageLaden, spieltagSpeichern } from '@/lib/cockpit/daten-client'
 import { gewinnerNachSerie } from '@/lib/cockpit/zu-serie'
 import { heuteZuTun } from '@/lib/cockpit/tagesstatus'
 import SpieltagLeiste from '@/components/cockpit/SpieltagLeiste'
@@ -77,9 +77,29 @@ export default function SpielSeite({ spielId }: Props) {
           const alle = await cockpitVorlagenLaden()
           if (alle.length) setVorlage(alle[0])
         }
+      } else {
+        // noch keine Kampagne: vorgemerkte Wahl dieses Spiels (Schritt 1)
+        const v = await cockpitVorlageLaden(`vorlage-${spielId}`).catch(() => undefined)
+        if (v) setVorlage(v)
       }
     })
   }, [spielId])
+
+  // Vorschau ohne Kampagne: Muster-Kampagne + ein Muster-Spieltag, damit A/B/C schon in Schritt 1 als echte Anzeige erscheinen
+  const vorschauDaten = useMemo(() => {
+    if (!meta) return null
+    const monat = meta.monate[0] ?? '2027-01'
+    const jetzt = Date.now()
+    const k: Kampagne = {
+      id: 'vorschau-' + spielId, spielId, monat, verlage: [], modell: 'RSP',
+      preise: meta.istGeldregen
+        ? { art: 'geldpakete', stufen: [{ anzahl: 1, betrag: 10000 }, { anzahl: 1, betrag: 2500 }, { anzahl: 1, betrag: 1000 }, { anzahl: 2, betrag: 500 }, { anzahl: 4, betrag: 250 }, { anzahl: 8, betrag: 100 }] }
+        : { art: 'tagespreis', tagespreis: 500 },
+      antwortformat: meta.istGeldregen ? 'zwei-endziffer' : 'loesungswort', spielSpezifisch: {}, erstelltAm: jetzt, aktualisiertAm: jetzt,
+    }
+    const t: Spieltag = { id: k.id + '-t02', kampagneId: k.id, nr: 2, datum: monat + '-02', raetsel: {}, gewinner: [], status: 'raetsel-fehlt', erstelltAm: jetzt, aktualisiertAm: jetzt }
+    return { k, t }
+  }, [meta, spielId])
 
   if (!meta) {
     return (
@@ -132,6 +152,21 @@ export default function SpielSeite({ spielId }: Props) {
               onGewaehlt={(k, geaendert) => {
                 setKampagne(k)
                 if (geaendert.length) setSpieltage((alt) => alt.map((x) => geaendert.find((g) => g.id === x.id) ?? x))
+              }}
+            />
+          ) : vorschauDaten ? (
+            <VorschlagWahl
+              kampagne={vorschauDaten.k}
+              spieltage={[vorschauDaten.t]}
+              spieltag={vorschauDaten.t}
+              onGewaehlt={() => undefined}
+              vorschau={{
+                gewaehlt: vorlage?.quelle === 'abc' ? vorlage.abc : undefined,
+                onWahl: async (v) => {
+                  const neu: CockpitVorlage = { id: `vorlage-${spielId}`, name: `${meta.name} · Vorschlag ${v}`, quelle: 'abc', abc: v, gesperrt: false, erstelltAm: Date.now() }
+                  await cockpitVorlageSpeichern(neu)
+                  setVorlage(neu)
+                },
               }}
             />
           ) : undefined}
